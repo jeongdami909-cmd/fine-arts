@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>De Lacey Fine Art | Experience Art</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Whisper&display=swap" rel="stylesheet"/>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            galleryGold: '#eebd2b',
+            galleryDark: '#1a1a1a',
+            galleryGray: '#fafafa',
+          },
+          fontFamily: {
+            serif: ['"Noto Serif"', 'serif'],
+            diary: ['"Whisper"', 'cursive'],
+          },
+        }
+      }
+    }
+  </script>
+  
+  <style data-purpose="custom-styles">
+    body {
+      font-family: 'Noto Serif', serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .letter-spacing-wide {
+      letter-spacing: 0.15em;
+    }
+    .line-clamp-custom {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* 불투명 유리 (Glassmorphism) 스타일 */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+      cursor: grab;
+    }
+    .glass-panel:active {
+      cursor: grabbing;
+    }
+
+    /* 물에 비치는 듯한 은은한 투명 버튼 효과 */
+    .water-btn {
+      color: transparent;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.3), 0 0 2px rgba(255, 255, 255, 0.6);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .water-btn:hover {
+      text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(255, 255, 255, 0.8);
+      transform: translateY(-1px);
+    }
+    .water-btn-dark {
+      color: transparent;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.3);
+    }
+    .water-btn-dark:hover {
+      text-shadow: 0 0 1px rgba(0, 0, 0, 0.7), 0 2px 3px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-galleryGray text-galleryDark">
+
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center" data-purpose="site-header">
+    <div class="flex items-center space-x-2">
+      <div class="flex flex-col items-center cursor-pointer">
+        <span class="text-galleryGold text-2xl leading-none italic font-bold">De</span>
+        <span class="text-xs uppercase tracking-widest font-semibold mt-1">Lacey Fine Art</span>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button aria-label="Open Menu" class="flex items-center space-x-3 group">
+        <span class="text-[10px] uppercase tracking-[0.2em] font-bold group-hover:text-galleryGold transition-colors">Menu</span>
+        <div class="space-y-1.5">
+          <span class="block w-6 h-0.5 bg-galleryDark group-hover:bg-galleryGold transition-colors"></span>
+          <span class="block w-6 h-0.5 bg-galleryDark group-hover:bg-galleryGold transition-colors"></span>
+        </div>
+      </button>
+    </div>
+  </header>
+  <main>
+    <section class="relative bg-white py-24 px-6 text-center overflow-hidden border-b border-gray-100" data-purpose="intro-hero">
+      <div class="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none">
+        <span class="text-[250px] font-serif italic text-galleryGold">De</span>
+      </div>
+      <div class="relative z-10 max-w-xl mx-auto">
+        <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-6">Experience the essence of art</p>
+        <div class="w-8 h-px bg-galleryGold mx-auto mb-8"></div>
+        <h2 class="text-4xl md:text-5xl font-serif mb-2 tracking-tight">De</h2>
+        <h1 class="text-3xl md:text-5xl font-serif uppercase tracking-widest mb-6">Lacey Fine Art</h1>
+        <p class="text-sm text-gray-500 italic leading-relaxed mb-10">
+          Where classical beauty meets modern interpretation. Discover pieces that resonate with your soul.
+        </p>
+        <button class="border border-galleryGold text-galleryGold px-8 py-3 text-xs uppercase tracking-[0.2em] font-bold hover:bg-galleryGold hover:text-white transition-all duration-300">
+          Explore Gallery
+        </button>
+      </div>
+    </section>
+    <section class="py-20 px-4 max-w-6xl mx-auto" data-purpose="about-section">
+      <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-2xl flex items-center justify-center">
+        <img alt="Abstract vibrant art composition" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1600"/>
+        
+        <div id="draggable-desc" class="glass-panel absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
+          <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4">Who We Are</p>
+          <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">Lacey<br/>Fine Art</h2>
+          <div class="w-6 h-px bg-galleryGold mb-6"></div>
+          <p class="text-[10px] uppercase tracking-widest text-gray-600 mb-4">Art Studio Since 2000</p>
+          <p class="text-sm text-gray-800 leading-loose">
+            Set up in the year 2000 by Brothers Gordon and Martin Farmer, De Lacey Fine Art quickly came to the forefront of Modern British Art. Drag this note to explore the canvas beneath.
+          </p>
+          <div class="mt-6 flex space-x-1 items-center justify-center opacity-40">
+            <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
+            <span class="text-[9px] uppercase tracking-widest">Drag to move</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-16 bg-white border-t border-gray-100" data-purpose="bulletin-board">
+      <div class="text-center mb-12">
+        <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">Exhibition Board</h3>
+        <p class="text-xs text-gray-400 mt-2 italic">Curated moments & reflections</p>
+      </div>
+      
+      <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+        
+        <div class="group flex flex-col border border-gray-100 bg-galleryGray shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative h-64 overflow-hidden bg-gray-200">
+            <img alt="Gallery View 1" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&q=80&w=800"/>
+            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <span class="water-btn">Edit</span>
+              <span class="water-btn">Delete</span>
+            </div>
+          </div>
+          <div class="relative p-6 bg-white flex-grow">
+            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <span class="water-btn water-btn-dark">Edit</span>
+              <span class="water-btn water-btn-dark">Delete</span>
+            </div>
+            <h4 class="text-lg font-serif mb-2">The Silent Echo</h4>
+            <p class="text-sm text-gray-500 leading-relaxed pr-12">
+              A minimalist approach to the urban landscape. The contrast between light and shadow creates a profound sense of isolation.
+            </p>
+          </div>
+        </div>
+
+        <div class="group flex flex-col border border-gray-100 bg-galleryGray shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative h-64 overflow-hidden bg-gray-200">
+            <img alt="Gallery View 2" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800"/>
+            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <span class="water-btn">Edit</span>
+              <span class="water-btn">Delete</span>
+            </div>
+          </div>
+          <div class="relative p-6 bg-white flex-grow">
+            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <span class="water-btn water-btn-dark">Edit</span>
+              <span class="water-btn water-btn-dark">Delete</span>
+            </div>
+            <h4 class="text-lg font-serif mb-2">Abstract Fluidity</h4>
+            <p class="text-sm text-gray-500 leading-relaxed pr-12">
+              Exploring the boundaries of form and color. This piece represents the chaos and harmony coexisting in nature.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    </main>
+
+  <footer class="bg-galleryDark text-white py-16 px-4 text-center" data-purpose="footer">
+    <div class="flex flex-col items-center mb-10">
+      <span class="text-galleryGold text-4xl italic font-bold leading-none">De</span>
+      <span class="text-xl uppercase tracking-[0.4em] font-serif mt-2">Lacey Fine Art</span>
+      <p class="text-[10px] uppercase tracking-widest text-gray-500 mt-6">Copyright 2026. All Rights Reserved</p>
+    </div>
+
+    <div class="flex justify-center mb-12">
+      <a aria-label="Twitter" class="text-gray-500 hover:text-galleryGold transition-colors" href="#">
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.599 3.419-2.044 1.602-4.629 2.411-7.218 2.102 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+      </a>
+    </div>
+
+    <div class="flex justify-center">
+      <a href="https://www.google.com" target="_blank" class="group relative inline-block">
+        <span class="font-diary text-3xl text-gray-400 group-hover:text-white transition-colors duration-300">
+          Search on Google...
+        </span>
+        <div class="absolute -bottom-1 left-0 w-full h-[1px] bg-gray-600 group-hover:bg-white transition-colors duration-300"></div>
+      </a>
+    </div>
+  </footer>
+  <script>
+    function makeDraggable(elmnt) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      
+      elmnt.onmousedown = dragMouseDown;
+      
+      // Touch support for mobile
+      elmnt.ontouchstart = dragTouchStart;
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function dragTouchStart(e) {
+        e = e || window.event;
+        var touch = e.touches[0];
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        document.ontouchend = closeDragElement;
+        document.ontouchmove = elementTouchDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function elementTouchDrag(e) {
+        e = e || window.event;
+        var touch = e.touches[0];
+        pos1 = pos3 - touch.clientX;
+        pos2 = pos4 - touch.clientY;
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        document.ontouchend = null;
+        document.ontouchmove = null;
+      }
+    }
+
+    // Initialize draggable panel
+    window.onload = function() {
+      var draggableDesc = document.getElementById("draggable-desc");
+      if(draggableDesc) {
+        makeDraggable(draggableDesc);
+      }
+    }
+  </script>
+</body>
+</html>
