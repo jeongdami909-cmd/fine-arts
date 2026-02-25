@@ -13,7 +13,6 @@
         extend: {
           colors: {
             galleryGold: '#cfa752',
-            // 기존 진한 청록색에서 -> 은은한 은빛 민트색으로 변경
             galleryTeal: '#d0e4e0', 
             galleryDarkTeal: '#5f9ea0',
             galleryDarkestTeal: '#1a4142',
@@ -31,7 +30,7 @@
     body {
       font-family: 'Noto Serif', serif;
       -webkit-font-smoothing: antialiased;
-      /* 배경색 변경: 옅은 은빛 민트 */
+      /* 기본 은은한 민트색 (사진이 없을 때 기본 바탕) */
       background-color: #d0e4e0; 
       overflow-x: hidden;
     }
@@ -54,14 +53,12 @@
       box-shadow: -4px 0 16px rgba(0, 0, 0, 0.05); 
     }
 
-    /* 슬라이딩 애니메이션 */
     .slide-panel {
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .arrow-icon {
       transition: transform 0.6s ease;
     }
-    /* 손잡이(3.5rem)만 남기고 밀어내기 */
     .slide-hide {
       transform: translateX(calc(100% - 3.5rem));
     }
@@ -105,7 +102,16 @@
 
   <input type="file" id="hidden-file-input" class="hidden" accept="image/*">
 
-  <header class="sticky top-0 z-50 py-6 px-8 flex justify-between items-start bg-[#d0e4e0]/80 backdrop-blur-md border-b border-white/20">
+  <div class="fixed inset-0 z-[-1] pointer-events-none">
+    <img id="global-bg" src="" alt="" class="w-full h-full object-cover opacity-90 transition-opacity duration-1000" />
+  </div>
+
+  <div class="fixed bottom-6 right-6 z-50">
+    <button class="water-btn !bg-white/80 backdrop-blur-md shadow-xl !px-4 !py-3 !text-sm" onclick="triggerFileUpload('global-bg')">
+      📸 바탕화면 변경
+    </button>
+  </div>
+  <header class="sticky top-0 z-40 py-6 px-8 flex justify-between items-start bg-[#d0e4e0]/70 backdrop-blur-md border-b border-white/30 shadow-sm">
     <div class="flex flex-col items-start relative group logo-container">
       <div class="absolute -top-4 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-10">
         <button class="water-btn !text-[10px] !px-2 !py-1" onclick="openTextEditor(this.closest('.logo-container'))">수정</button>
@@ -117,11 +123,11 @@
           <path d="M25 15V35" stroke="#cfa752" stroke-width="2"/>
         </svg>
       </div>
-      <h1 class="text-xs tracking-widest font-bold text-white drop-shadow-sm text-target">LACEY FINE ART</h1>
+      <h1 class="text-xs tracking-widest font-bold text-[#1a4142] drop-shadow-sm text-target">LACEY FINE ART</h1>
     </div>
     
     <div class="relative">
-      <button id="menu-toggle" class="flex items-center space-x-2 water-btn !bg-white/30 !text-white !border-white/50 hover:!bg-white/60 hover:!text-[#1a4142]">
+      <button id="menu-toggle" class="flex items-center space-x-2 water-btn !bg-white/50 !text-[#1a4142] hover:!bg-white/80">
         <span class="text-xs font-bold tracking-widest">MENU</span>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
       </button>
@@ -164,18 +170,18 @@
   <main class="px-4 md:px-8 max-w-6xl mx-auto">
     
     <section class="py-12">
-      <div class="glass-panel rounded-3xl p-8 relative flex flex-col items-center text-center draggable" id="draggable-desc">
+      <div class="glass-panel rounded-3xl p-8 relative flex flex-col items-center text-center draggable mx-auto max-w-xl shadow-lg border-white/60 bg-white/40" id="draggable-desc">
         <div class="absolute top-4 right-4 flex space-x-2 z-30">
           <button class="water-btn" onclick="openTextEditor(this.closest('#draggable-desc'))">수정</button>
           <button class="water-btn" onclick="deleteElement(this.closest('#draggable-desc'))">삭제</button>
         </div>
         
-        <p class="text-[10px] uppercase tracking-[0.3em] font-bold text-white/80 mb-4 text-target">WHO WE ARE</p>
-        <h2 class="text-4xl font-serif text-white drop-shadow-md mb-2 text-target">[라벨 입력]</h2>
+        <p class="text-[10px] uppercase tracking-[0.3em] font-bold text-[#1a4142]/70 mb-4 text-target">WHO WE ARE</p>
+        <h2 class="text-4xl font-serif text-[#1a4142] drop-shadow-sm mb-2 text-target">[라벨 입력]</h2>
         <h2 class="text-3xl font-serif text-[#1a4142] mb-6 text-target">[소개글 타이틀 입력]</h2>
         <div class="w-12 h-1 bg-[#cfa752] mb-6 rounded-full"></div>
-        <p class="text-sm text-[#1a4142] leading-relaxed max-w-md text-target">
-          [여기에 갤러리 소개글을 입력하세요. 이 창은 꾹 눌러서 이동할 수 있습니다.]
+        <p class="text-sm text-[#1a4142] leading-relaxed max-w-md text-target font-medium">
+          [이 창은 꾹 눌러서 이동할 수 있습니다. 바깥 바탕화면은 우측 하단 버튼으로 채워보세요.]
         </p>
       </div>
     </section>
@@ -185,8 +191,8 @@
         <div class="absolute -top-4 -right-16 opacity-0 group-hover/title:opacity-100 transition-opacity">
             <button class="water-btn !py-1 !px-2" onclick="openTextEditor(this.closest('.title-container'))">수정</button>
         </div>
-        <h3 class="text-white text-xs uppercase tracking-[0.3em] font-bold drop-shadow-sm text-target">EXHIBITION</h3>
-        <p class="text-[10px] text-white/70 mt-2 text-target">안내창 왼쪽 모서리를 눌러 사진을 확인하세요</p>
+        <h3 class="text-[#1a4142] text-xs uppercase tracking-[0.3em] font-bold drop-shadow-sm text-target">EXHIBITION</h3>
+        <p class="text-[10px] text-[#1a4142]/70 mt-2 text-target font-bold">안내창 왼쪽 모서리를 눌러 사진을 확인하세요</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -218,7 +224,7 @@
                 <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full"></div>
                 <div class="overflow-y-auto pr-2">
                   <p class="text-sm text-[#1a4142] leading-relaxed font-medium text-target">
-                    [이곳에 첫 번째 작품의 설명을 적어주세요. 배경색이 은은한 은빛 민트색으로 변경되었습니다.]
+                    [이곳에 첫 번째 작품의 설명을 적어주세요. 우측 상단의 '글 수정' 버튼을 누르면 입력창이 열립니다.]
                   </p>
                 </div>
              </div>
@@ -242,7 +248,7 @@
                 <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full"></div>
                 <div class="overflow-y-auto pr-2">
                   <p class="text-sm text-[#1a4142] leading-relaxed font-medium text-target">
-                    [모든 기능(사진 교체, 글 수정/삭제)은 그대로 유지됩니다.]
+                    [두 번째 작품 설명입니다. 삭제를 누르면 이 그림칸 전체가 사라집니다.]
                   </p>
                 </div>
              </div>
@@ -266,7 +272,7 @@
                 <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full"></div>
                 <div class="overflow-y-auto pr-2">
                   <p class="text-sm text-[#1a4142] leading-relaxed font-medium text-target">
-                    [전체적으로 더 차분하고 고급스러운 분위기로 바뀌었습니다.]
+                    [모든 버튼이 실제 수정/삭제 기능과 연결되어 있습니다. 테스트해보세요!]
                   </p>
                 </div>
              </div>
@@ -278,7 +284,7 @@
 
   </main>
 
-  <footer class="py-12 text-center border-t border-white/20">
+  <footer class="py-12 text-center border-t border-white/20 relative z-10 bg-[#d0e4e0]/50 backdrop-blur-sm mt-10">
     <div class="flex justify-center mb-4">
       <svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M25 45C36.0457 45 45 36.0457 45 25C45 13.9543 36.0457 5 25 5C13.9543 5 5 13.9543 5 25C5 36.0457 13.9543 45 25 45Z" stroke="#cfa752" stroke-width="2"/>
@@ -286,11 +292,11 @@
         <path d="M25 15V35" stroke="#cfa752" stroke-width="2"/>
       </svg>
     </div>
-    <h2 class="text-xl text-white font-serif mb-2 drop-shadow-sm">LACEY FINE ART</h2>
-    <p class="text-[10px] uppercase tracking-widest text-white/70 mb-6">COPYRIGHT 2026. ALL RIGHTS RESERVED</p>
+    <h2 class="text-xl text-[#1a4142] font-serif mb-2 drop-shadow-sm">LACEY FINE ART</h2>
+    <p class="text-[10px] uppercase tracking-widest text-[#1a4142]/70 mb-6 font-bold">COPYRIGHT 2026. ALL RIGHTS RESERVED</p>
     
     <div class="flex justify-center mb-10">
-      <a href="https://twitter.com" target="_blank" class="text-white hover:text-[#cfa752] transition-colors">
+      <a href="https://twitter.com" target="_blank" class="text-[#1a4142] hover:text-[#cfa752] transition-colors">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.599 3.419-2.044 1.602-4.629 2.411-7.218 2.102 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
       </a>
     </div>
@@ -300,10 +306,10 @@
           <button class="water-btn !py-1 !px-2 !text-[10px]" onclick="openTextEditor(this.closest('.group\\/search').querySelector('span'))">수정</button>
       </div>
       <a href="https://www.google.com" target="_blank" class="relative inline-block">
-        <span class="font-diary text-2xl text-[#1a4142]/80 hover:text-white transition-colors duration-300 text-target">
+        <span class="font-diary text-3xl text-[#1a4142]/90 hover:text-[#cfa752] transition-colors duration-300 text-target">
           Search on Google...
         </span>
-        <div class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1a4142]/30 group-hover:bg-white transition-colors duration-300"></div>
+        <div class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1a4142]/40 group-hover:bg-[#cfa752] transition-colors duration-300"></div>
       </a>
     </div>
   </footer>
@@ -373,7 +379,7 @@
       if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
     }
 
-    // 4. 사진 교체 기능
+    // 4. 사진 교체 기능 (배경 사진 포함)
     let currentImgId = null;
     const fileInput = document.getElementById('hidden-file-input');
 
