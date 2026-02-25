@@ -26,6 +26,7 @@
   </script>
   
   <style data-purpose="custom-styles">
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Noto Serif KR', serif;
       -webkit-font-smoothing: antialiased;
@@ -34,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 소개글 필기체 (주홍빛 레드) */
     .intro-handwriting {
       font-family: 'Whisper', cursive; 
       color: #FF6347; 
@@ -45,31 +45,27 @@
       line-height: 1.2;
     }
 
-    /* 🌟 덜 투명하고 살짝 은은한 소개글 본문 */
     .intro-desc {
       color: rgba(255, 250, 240, 1); 
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3), 0 0 6px rgba(255, 255, 255, 0.4); 
       font-weight: 400;
     }
 
-    /* 기본 텍스트 타겟 속성 (긴 글 줄바꿈 보존 적용) */
     .text-target {
       color: rgba(245, 245, 245, 0.95); 
       font-weight: 300; 
       text-shadow: 0 0 2px rgba(212, 175, 55, 0.4), 1px 1px 1px rgba(0, 0, 0, 0.1);
       letter-spacing: 0.05em;
       transition: all 0.2s ease;
-      white-space: pre-wrap; /* 엔터 줄바꿈 그대로 보존 */
-      word-break: break-word; /* 글자가 영역을 넘지 않도록 줄바꿈 */
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    /* 얇고 깔끔한 커스텀 스크롤바 (디자인 유지) */
     .custom-scroll::-webkit-scrollbar { width: 5px; }
     .custom-scroll::-webkit-scrollbar-track { background: transparent; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
     .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
 
-    /* 유리 패널 스타일 */
     .glass-panel {
       background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -86,7 +82,6 @@
     .arrow-icon { transition: transform 0.6s ease; }
     .slide-hide { transform: translateX(calc(100% - 3.5rem)); }
 
-    /* 일반 버튼 스타일 */
     .water-btn {
       display: inline-flex; align-items: center; justify-content: center;
       padding: 0.35rem 0.75rem; color: #3b6b6d;
@@ -102,7 +97,6 @@
       border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px);
     }
 
-    /* 밀리의 서재풍 뷰어 모달 하단 시트 애니메이션 */
     .bottom-sheet {
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,17 +145,16 @@
     </div>
     
     <div class="relative">
-      <button id="menu-toggle" class="flex items-center space-x-2 water-btn !bg-white/40 !text-[#1a4142] hover:!bg-white/70">
-        <span class="text-xs font-bold tracking-widest">MENU</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-      </button>
+      <button id="menu-toggle" class="flex items-center justify-center water-btn !bg-white/40 hover:!bg-white/70 w-12 h-10">
+        </button>
 
       <div id="dropdown-menu" class="hidden absolute right-0 mt-4 w-72 bg-white/95 backdrop-blur-md border border-gray-200 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden">
         <div class="p-4 bg-gray-50 text-xs font-bold uppercase tracking-widest border-b border-gray-200 text-gray-500">Directory</div>
         <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto custom-scroll">
+          
           <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item">
             <div class="flex justify-between items-center w-full">
-              <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target">[상위 메뉴 입력]</a>
+              <a href="#gallery-section" class="text-sm font-serif font-bold transition-colors flex-grow text-target">🌍 나라별 (Country)</a>
               <div class="flex space-x-1 ml-2">
                 <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
                 <button class="water-btn !text-[9px] !px-2 !py-1 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.flex').querySelector('a'))">스타일</button>
@@ -169,14 +162,44 @@
             </div>
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
               <div class="relative flex justify-between items-center child-menu-item">
-                <a href="javascript:void(0)" class="text-xs transition-colors flex-grow text-target">- [하위 메뉴 입력]</a>
+                <a href="#gallery-section" class="text-xs transition-colors flex-grow text-target">- [나라 입력 1]</a>
                 <div class="flex space-x-1 ml-2">
                     <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
-                    <button class="water-btn !text-[9px] !px-2 !py-1 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.flex').querySelector('a'))">스타일</button>
+                </div>
+              </div>
+              <div class="relative flex justify-between items-center child-menu-item">
+                <a href="#gallery-section" class="text-xs transition-colors flex-grow text-target">- [나라 입력 2]</a>
+                <div class="flex space-x-1 ml-2">
+                    <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
                 </div>
               </div>
             </div>
           </div>
+
+          <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item">
+            <div class="flex justify-between items-center w-full">
+              <a href="#gallery-section" class="text-sm font-serif font-bold transition-colors flex-grow text-target">⏳ 시대별 (Era)</a>
+              <div class="flex space-x-1 ml-2">
+                <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                <button class="water-btn !text-[9px] !px-2 !py-1 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.flex').querySelector('a'))">스타일</button>
+              </div>
+            </div>
+            <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
+              <div class="relative flex justify-between items-center child-menu-item">
+                <a href="#gallery-section" class="text-xs transition-colors flex-grow text-target">- [시대 입력 1]</a>
+                <div class="flex space-x-1 ml-2">
+                    <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                </div>
+              </div>
+              <div class="relative flex justify-between items-center child-menu-item">
+                <a href="#gallery-section" class="text-xs transition-colors flex-grow text-target">- [시대 입력 2]</a>
+                <div class="flex space-x-1 ml-2">
+                    <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -202,7 +225,7 @@
       </div>
     </section>
 
-    <section class="pb-20">
+    <section class="pb-20" id="gallery-section">
       <div class="text-center mb-8 title-container relative w-max mx-auto group/title">
         <div class="absolute -top-4 -right-28 opacity-0 group-hover/title:opacity-100 transition-opacity flex space-x-1">
             <button class="water-btn !py-1 !px-2" onclick="openTextEditor(this.closest('.title-container'))">수정</button>
@@ -213,8 +236,8 @@
 
       <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
-          <img id="art-img-base" src="" alt="Art Blank" class="absolute inset-0 w-full h-full object-cover bg-white/50">
+        <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-transparent gallery-item">
+          <img id="art-img-base" src="" alt="Art Blank" class="absolute inset-0 w-full h-full object-contain bg-transparent">
           <div class="absolute top-4 left-4 z-0 flex flex-col space-y-1 items-start">
              <div class="flex space-x-2">
                <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('art-img-base')">사진 넣기</button>
@@ -239,14 +262,14 @@
              </div>
           </div>
         </div>
-        </div>
+      </div>
     </section>
   </main>
 
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg">
     <div class="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-2xl border border-gray-200">
       <h3 class="text-lg font-bold mb-4 text-[#1a4142] font-serif">📝 글쓰기 (내용 수정)</h3>
-      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-[#d0e4e0] rounded-xl focus:ring-2 focus:ring-[#d0e4e0] focus:border-transparent resize-none font-serif text-gray-700 bg-gray-50/50 custom-scroll" placeholder="여기에 내용을 입력하세요..."></textarea>
+      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-[#d0e4e0] rounded-xl focus:ring-2 focus:ring-[#d0e4e0] focus:border-transparent resize-none font-serif text-gray-700 bg-gray-50/50 custom-scroll"></textarea>
       <div class="flex justify-end space-x-3 mt-4">
         <button class="px-5 py-2 bg-gray-200 text-gray-700 rounded-full font-bold text-sm" onclick="closeTextEditor()">취소</button>
         <button class="px-5 py-2 bg-[#8ac6b8] text-white rounded-full font-bold text-sm" onclick="saveTextChanges()">확인 (적용)</button>
@@ -257,68 +280,21 @@
   <div id="style-editor-modal" class="fixed inset-0 z-[10000] hidden items-end md:items-center justify-center diary-modal-bg">
     <div id="style-bottom-sheet" class="bottom-sheet bg-white w-full md:w-[90%] md:max-w-md p-6 rounded-t-3xl md:rounded-2xl shadow-2xl border border-gray-200">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-bold text-[#1a4142] font-serif flex items-center gap-2">
-          <span>🎨</span> 뷰어 설정
-        </h3>
+        <h3 class="text-lg font-bold text-[#1a4142] font-serif flex items-center gap-2">🎨 뷰어 설정</h3>
         <button class="text-gray-400 hover:text-gray-700 font-bold p-2" onclick="closeStyleEditor()">✕</button>
       </div>
-      
       <div class="space-y-5 max-h-[65vh] overflow-y-auto px-1 pb-4 custom-scroll">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-bold text-gray-700 block">글자색 선택</label>
-          <input type="color" id="val-color" class="w-12 h-8 cursor-pointer rounded-md border-0 p-0">
-        </div>
-        
-        <div>
-          <label class="text-sm font-bold text-gray-700 mb-2 block">글자 스타일 (폰트)</label>
-          <select id="val-font" class="w-full border-gray-300 bg-gray-50 rounded-lg text-sm p-2 focus:ring-galleryGold focus:border-galleryGold">
-            <option value="'Noto Serif KR', serif">기본 명조 (우아함)</option>
-            <option value="'Gowun Dodum', sans-serif">고운 돋움 (깔끔함)</option>
-            <option value="'Whisper', cursive">필기체 (감성적)</option>
-          </select>
-        </div>
-
-        <div>
-          <div class="flex justify-between mb-1">
-            <label class="text-sm font-bold text-gray-700">글씨 크기</label>
-            <span id="label-size" class="text-xs text-gray-500">16px</span>
-          </div>
-          <input type="range" id="val-size" min="10" max="60" value="16" class="w-full accent-galleryGold">
-        </div>
-
-        <div>
-          <div class="flex justify-between mb-1">
-            <label class="text-sm font-bold text-gray-700">자간 (글자 간격)</label>
-            <span id="label-spacing" class="text-xs text-gray-500">0px</span>
-          </div>
-          <input type="range" id="val-spacing" min="-3" max="10" step="0.5" value="0" class="w-full accent-galleryGold">
-        </div>
-
-        <div>
-          <div class="flex justify-between mb-1">
-            <label class="text-sm font-bold text-gray-700">문단 간격</label>
-            <span id="label-line" class="text-xs text-gray-500">1.5</span>
-          </div>
-          <input type="range" id="val-line" min="1" max="3" step="0.1" value="1.5" class="w-full accent-galleryGold">
-        </div>
-
-        <div>
-          <div class="flex justify-between mb-1">
-            <label class="text-sm font-bold text-gray-700">상하 여백 간격</label>
-            <span id="label-padding" class="text-xs text-gray-500">0px</span>
-          </div>
-          <input type="range" id="val-padding" min="0" max="50" value="0" class="w-full accent-galleryGold">
-        </div>
+        <div class="flex justify-between items-center"><label class="text-sm font-bold text-gray-700 block">글자색 선택</label><input type="color" id="val-color" class="w-12 h-8 cursor-pointer"></div>
+        <div><label class="text-sm font-bold text-gray-700 mb-2 block">글자 스타일 (폰트)</label><select id="val-font" class="w-full border-gray-300 bg-gray-50 rounded-lg text-sm p-2"><option value="'Noto Serif KR', serif">기본 명조</option><option value="'Gowun Dodum', sans-serif">고운 돋움</option><option value="'Whisper', cursive">필기체</option></select></div>
+        <div><div class="flex justify-between mb-1"><label class="text-sm font-bold text-gray-700">글씨 크기</label><span id="label-size" class="text-xs text-gray-500">16px</span></div><input type="range" id="val-size" min="10" max="60" value="16" class="w-full accent-galleryGold"></div>
+        <div><div class="flex justify-between mb-1"><label class="text-sm font-bold text-gray-700">자간</label><span id="label-spacing" class="text-xs text-gray-500">0px</span></div><input type="range" id="val-spacing" min="-3" max="10" step="0.5" value="0" class="w-full accent-galleryGold"></div>
+        <div><div class="flex justify-between mb-1"><label class="text-sm font-bold text-gray-700">문단 간격</label><span id="label-line" class="text-xs text-gray-500">1.5</span></div><input type="range" id="val-line" min="1" max="3" step="0.1" value="1.5" class="w-full accent-galleryGold"></div>
       </div>
-      
-      <div class="mt-4 flex justify-end">
-        <button class="px-5 py-3 bg-galleryGold text-white rounded-xl font-bold w-full text-center shadow-md" onclick="closeStyleEditor()">설정 완료</button>
-      </div>
+      <div class="mt-4 flex justify-end"><button class="px-5 py-3 bg-galleryGold text-white rounded-xl font-bold w-full shadow-md" onclick="closeStyleEditor()">설정 완료</button></div>
     </div>
   </div>
 
   <script>
-    // ---------------- 메뉴 & 패널 기본 동작 ----------------
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
       e.stopPropagation(); document.getElementById('dropdown-menu').classList.toggle('hidden');
     });
@@ -340,18 +316,15 @@
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; 
       function dragMouseDown(e) { if(e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') return; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
-      function dragTouchStart(e) { if(e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') return; var touch = e.touches[0]; pos3 = touch.clientX; pos4 = touch.clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
+      function dragTouchStart(e) { if(e.target.tagName.toLowerCase() === 'button') return; var touch = e.touches[0]; pos3 = touch.clientX; pos4 = touch.clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
       function elementDrag(e) { e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function elementTouchDrag(e) { var touch = e.touches[0]; pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY; pos3 = touch.clientX; pos4 = touch.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
     }
 
-    // ---------------- 사진 교체 ----------------
     let currentImgId = null;
     const fileInput = document.getElementById('hidden-file-input');
-
     function triggerFileUpload(imgId) { currentImgId = imgId; fileInput.click(); }
-
     fileInput.addEventListener('change', function(e) {
       if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
@@ -361,14 +334,14 @@
           img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width; let height = img.height;
-            const MAX_SIZE = 800; // 해상도 제한
+            const MAX_SIZE = 800;
             if (width > height && width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } 
             else if (height > width && height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, width, height);
             ctx.drawImage(img, 0, 0, width, height);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.6); 
-            
+            const compressedData = canvas.toDataURL('image/webp', 0.8); 
             if (currentImgId === 'global-bg') {
               document.body.style.backgroundImage = `url('${compressedData}')`;
               document.body.style.backgroundSize = 'cover';
@@ -388,245 +361,92 @@
       fileInput.value = ''; 
     });
 
-    // ---------------- 🌟 갤러리 탭 추가 기능 ----------------
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
-      const uniqueId = 'art-img-' + Date.now(); // 겹치지 않는 고유 ID 생성
-      
+      const uniqueId = 'art-img-' + Date.now();
       const newBoardHtml = `
-        <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
-          <img id="${uniqueId}" src="" alt="Art Blank" class="absolute inset-0 w-full h-full object-cover bg-white/50">
+        <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-transparent gallery-item">
+          <img id="${uniqueId}" src="" alt="" class="absolute inset-0 w-full h-full object-contain bg-transparent">
           <div class="absolute top-4 left-4 z-0 flex flex-col space-y-1 items-start">
              <div class="flex space-x-2">
                <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('${uniqueId}')">사진 넣기</button>
-               <button class="ghost-btn !px-3 !py-1.5 !text-[10px] !bg-white/80 !text-[#cfa752] !border-[#cfa752] !font-bold" onclick="saveToBrowser()">고정 확인</button>
+               <button class="ghost-btn !px-3 !py-1.5 !text-[10px] !bg-white/80 !text-[#cfa752] !font-bold" onclick="saveToBrowser()">고정 확인</button>
              </div>
              <button class="ghost-btn !px-3 !py-1.5 !text-[10px] mt-1" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
           </div>
-
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
-             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
-                <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-             </div>
+             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 border-r border-white/60 shrink-0" onclick="toggleSlide(this)"><svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content overflow-hidden">
-                <div class="absolute top-4 right-4 flex space-x-1 z-20">
-                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
-                  <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
-                </div>
+                <div class="absolute top-4 right-4 flex space-x-1 z-20"><button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button><button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button></div>
                 <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target shrink-0">[새 작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto pr-2 custom-scroll">
-                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">[새로운 게시판입니다. 여기에 긴 글을 자유롭게 적어주세요. 길어지면 자동으로 스크롤이 생깁니다.]</p>
-                </div>
+                <div class="flex-1 overflow-y-auto pr-2 custom-scroll"><p class="text-sm leading-relaxed font-medium text-[#555] text-target">[새로운 게시판입니다. 내용을 입력하세요.]</p></div>
              </div>
           </div>
-        </div>
-      `;
+        </div>`;
       grid.insertAdjacentHTML('beforeend', newBoardHtml);
-      alert("새로운 갤러리 탭이 추가되었습니다! 화면 아래로 스크롤해 보세요.");
     }
 
-    // ---------------- 텍스트 수정 편집기 ----------------
     const textModal = document.getElementById('text-editor-modal');
     const modalTextarea = document.getElementById('modal-textarea');
     let currentTextTargets = [];
-
     function openTextEditor(containerElement) {
-        currentTextTargets = [];
-        let combinedText = "";
-        let targets = [];
+        currentTextTargets = []; let combinedText = ""; let targets = [];
         if (containerElement.classList.contains('text-target')) { targets = [containerElement]; } 
-        else {
-            targets = Array.from(containerElement.querySelectorAll('.text-target'));
-            if (targets.length === 0 && containerElement.tagName === 'A') targets = [containerElement];
-        }
-
-        targets.forEach((target, index) => {
-            currentTextTargets.push(target);
-            if (index === targets.length - 1) {
-                combinedText += target.innerText; 
-            } else {
-                combinedText += target.innerText.replace(/\n/g, ' ').trim() + "\n";
-            }
-        });
-
-      modalTextarea.value = combinedText;
-      textModal.classList.remove('hidden'); textModal.classList.add('flex');
+        else { targets = Array.from(containerElement.querySelectorAll('.text-target')); if (targets.length === 0 && containerElement.tagName === 'A') targets = [containerElement]; }
+        targets.forEach((target, index) => { currentTextTargets.push(target); combinedText += target.innerText + (index < targets.length - 1 ? "\n" : ""); });
+        modalTextarea.value = combinedText; textModal.classList.remove('hidden'); textModal.classList.add('flex');
     }
-
-    function closeTextEditor() {
-      textModal.classList.add('hidden'); textModal.classList.remove('flex');
-      currentTextTargets = [];
-    }
-
+    function closeTextEditor() { textModal.classList.add('hidden'); textModal.classList.remove('flex'); }
     function saveTextChanges() {
       const newTextLines = modalTextarea.value.split('\n');
-      currentTextTargets.forEach((target, index) => {
-          if (index === currentTextTargets.length - 1) {
-              target.innerText = newTextLines.slice(index).join('\n');
-          } else {
-              target.innerText = (newTextLines[index] || "").trim();
-          }
-      });
+      currentTextTargets.forEach((target, index) => { target.innerText = newTextLines[index] || ""; });
       closeTextEditor();
     }
+    function deleteElement(element) { if (confirm('삭제할까요?')) element.remove(); }
 
-    function deleteElement(element) {
-      if (confirm('정말로 삭제하시겠습니까?')) element.remove();
-    }
-
-    // ---------------- 🌟 뷰어 (스타일) 편집기 기능 ----------------
     const styleModal = document.getElementById('style-editor-modal');
     const styleSheet = document.getElementById('style-bottom-sheet');
     let styleTargets = []; 
-
-    const sColor = document.getElementById('val-color');
-    const sFont = document.getElementById('val-font');
-    const sSize = document.getElementById('val-size');
-    const sSpacing = document.getElementById('val-spacing');
-    const sLine = document.getElementById('val-line');
-    const sPadding = document.getElementById('val-padding');
-    
-    const lSize = document.getElementById('label-size');
-    const lSpacing = document.getElementById('label-spacing');
-    const lLine = document.getElementById('label-line');
-    const lPadding = document.getElementById('label-padding');
-
     function openStyleEditor(containerElement) {
-        styleTargets = [];
-        if (containerElement.classList.contains('text-target')) { styleTargets = [containerElement]; } 
-        else {
-            styleTargets = containerElement.querySelectorAll('.text-target');
-            if (styleTargets.length === 0 && containerElement.tagName === 'A') styleTargets = [containerElement];
-        }
-
-        styleModal.classList.remove('hidden'); 
-        styleModal.classList.add('flex');
+        styleTargets = containerElement.classList.contains('text-target') ? [containerElement] : containerElement.querySelectorAll('.text-target');
+        styleModal.classList.remove('hidden'); styleModal.classList.add('flex');
         setTimeout(() => styleSheet.classList.add('open'), 10);
     }
+    function closeStyleEditor() { styleSheet.classList.remove('open'); setTimeout(() => { styleModal.classList.add('hidden'); styleModal.classList.remove('flex'); }, 300); }
+    document.getElementById('val-color').addEventListener('input', (e) => { styleTargets.forEach(t => t.style.color = e.target.value); });
+    document.getElementById('val-font').addEventListener('change', (e) => { styleTargets.forEach(t => t.style.fontFamily = e.target.value); });
+    document.getElementById('val-size').addEventListener('input', (e) => { styleTargets.forEach(t => t.style.fontSize = e.target.value + 'px'); document.getElementById('label-size').innerText = e.target.value + 'px'; });
 
-    function closeStyleEditor() {
-      styleSheet.classList.remove('open');
-      setTimeout(() => {
-        styleModal.classList.add('hidden'); 
-        styleModal.classList.remove('flex');
-        styleTargets = [];
-      }, 300);
-    }
-
-    sColor.addEventListener('input', (e) => { styleTargets.forEach(t => t.style.color = e.target.value); });
-    sFont.addEventListener('change', (e) => { styleTargets.forEach(t => t.style.fontFamily = e.target.value); });
-    sSize.addEventListener('input', (e) => {
-      styleTargets.forEach(t => t.style.fontSize = e.target.value + 'px');
-      lSize.innerText = e.target.value + 'px';
-    });
-    sSpacing.addEventListener('input', (e) => {
-      styleTargets.forEach(t => t.style.letterSpacing = e.target.value + 'px');
-      lSpacing.innerText = e.target.value + 'px';
-    });
-    sLine.addEventListener('input', (e) => {
-      styleTargets.forEach(t => t.style.lineHeight = e.target.value);
-      lLine.innerText = e.target.value;
-    });
-    sPadding.addEventListener('input', (e) => {
-      styleTargets.forEach(t => {
-         t.style.paddingTop = e.target.value + 'px';
-         t.style.paddingBottom = e.target.value + 'px';
-      });
-      lPadding.innerText = e.target.value + 'px';
-    });
-
-    // ---------------- 🌟 추가/삭제된 게시판까지 통째로 완벽 저장 ----------------
     function saveToBrowser() {
       try {
-        // 1. 레이아웃 뼈대 저장 (추가/삭제된 게시판 정보 기록, 용량 초과 방지를 위해 이미지는 제외)
         const mainClone = document.getElementById('main-content').cloneNode(true);
         mainClone.querySelectorAll('img').forEach(img => { if (img.src.startsWith('data:image')) img.src = ''; });
         localStorage.setItem('main_layout', mainClone.innerHTML);
-
-        // 2. 글 및 스타일 저장
-        const textMap = {};
-        const styleMap = {};
-        document.querySelectorAll('.text-target').forEach((el, index) => {
-            textMap['text-' + index] = el.innerHTML; 
-            styleMap['style-' + index] = el.getAttribute('style') || '';
-        });
+        const textMap = {}; const styleMap = {};
+        document.querySelectorAll('.text-target').forEach((el, index) => { textMap['text-' + index] = el.innerHTML; styleMap['style-' + index] = el.getAttribute('style') || ''; });
         localStorage.setItem('gallery_texts', JSON.stringify(textMap));
         localStorage.setItem('gallery_styles', JSON.stringify(styleMap));
-
-        // 3. 사진 저장 (Base64)
-        const imgMap = {};
-        document.querySelectorAll('img').forEach(img => {
-            if (img.id && img.src.startsWith('data:image')) {
-                imgMap[img.id] = img.src;
-            }
-        });
+        const imgMap = {}; document.querySelectorAll('img').forEach(img => { if (img.id && img.src.startsWith('data:image')) imgMap[img.id] = img.src; });
         localStorage.setItem('gallery_images', JSON.stringify(imgMap));
-
-        const bgImg = document.getElementById('global-bg').src;
-        if (bgImg.startsWith('data:image')) {
-            localStorage.setItem('gallery_bg', bgImg);
-        } else {
-            localStorage.removeItem('gallery_bg');
-        }
-
-        alert("✅ 추가된 게시판, 사진, 글 모두 완벽하게 저장되었습니다!");
-      } catch (e) {
-        alert("⚠️ 사진 용량이 너무 커서 모두 저장하지 못했습니다. 용량이 작은 사진을 이용해주세요.");
-      }
+        if (document.getElementById('global-bg').src.startsWith('data:image')) localStorage.setItem('gallery_bg', document.getElementById('global-bg').src);
+        alert("✅ 저장 완료!");
+      } catch (e) { alert("용량 초과! 사진 크기를 줄여주세요."); }
     }
 
-    // ---------------- 🌟 저장된 내용 불러오기 ----------------
     function loadFromBrowser() {
-      try {
-        // 1. 레이아웃 뼈대 먼저 복구 (게시판 개수 맞추기)
-        const savedLayout = localStorage.getItem('main_layout');
-        if (savedLayout) {
-            document.getElementById('main-content').innerHTML = savedLayout;
-        }
-
-        // 2. 뼈대에 맞게 글과 스타일 복구
-        const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
-        const savedStyles = JSON.parse(localStorage.getItem('gallery_styles'));
-        if (savedTexts) {
-            document.querySelectorAll('.text-target').forEach((el, index) => {
-                if (savedTexts['text-' + index]) el.innerHTML = savedTexts['text-' + index];
-                if (savedStyles && savedStyles['style-' + index]) el.setAttribute('style', savedStyles['style-' + index]);
-            });
-        }
-
-        // 3. 사진 복구
-        const savedImages = JSON.parse(localStorage.getItem('gallery_images'));
-        if (savedImages) {
-            Object.keys(savedImages).forEach(id => {
-                const img = document.getElementById(id);
-                if (img) img.src = savedImages[id];
-            });
-        }
-
-        // 4. 배경화면 복구
-        const savedBg = localStorage.getItem('gallery_bg');
-        if (savedBg) {
-             document.body.style.backgroundImage = `url('${savedBg}')`;
-             document.body.style.backgroundSize = 'cover';
-             document.body.style.backgroundPosition = 'center';
-             document.body.style.backgroundAttachment = 'fixed';
-             document.getElementById('global-bg').src = savedBg;
-             document.getElementById('global-bg').style.display = 'block';
-        }
-
-        // 불러오기 완료 후 드래그 기능 재활성화
-        if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
-
-      } catch (e) {
-        console.log("저장된 데이터 없음");
-      }
+      const savedLayout = localStorage.getItem('main_layout');
+      if (savedLayout) document.getElementById('main-content').innerHTML = savedLayout;
+      const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
+      const savedStyles = JSON.parse(localStorage.getItem('gallery_styles'));
+      if (savedTexts) { document.querySelectorAll('.text-target').forEach((el, index) => { if (savedTexts['text-' + index]) el.innerHTML = savedTexts['text-' + index]; if (savedStyles && savedStyles['style-' + index]) el.setAttribute('style', savedStyles['style-' + index]); }); }
+      const savedImages = JSON.parse(localStorage.getItem('gallery_images'));
+      if (savedImages) { Object.keys(savedImages).forEach(id => { const img = document.getElementById(id); if (img) img.src = savedImages[id]; }); }
+      const savedBg = localStorage.getItem('gallery_bg');
+      if (savedBg) { document.body.style.backgroundImage = `url('${savedBg}')`; document.body.style.backgroundSize = 'cover'; document.body.style.backgroundAttachment = 'fixed'; document.getElementById('global-bg').src = savedBg; document.getElementById('global-bg').style.display = 'block'; }
+      if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-        loadFromBrowser();
-    });
+    window.addEventListener('DOMContentLoaded', loadFromBrowser);
   </script>
 </body>
 </html>
-
-
