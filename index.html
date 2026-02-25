@@ -30,49 +30,44 @@
       font-family: 'Noto Serif', serif;
       -webkit-font-smoothing: antialiased;
     }
-    .letter-spacing-wide {
-      letter-spacing: 0.15em;
-    }
-    .line-clamp-custom {
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
     
     /* 불투명 유리 (Glassmorphism) 스타일 */
     .glass-panel {
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    }
+    .draggable {
       cursor: grab;
     }
-    .glass-panel:active {
+    .draggable:active {
       cursor: grabbing;
     }
 
     /* 물에 비치는 듯한 은은한 투명 버튼 효과 */
     .water-btn {
       color: transparent;
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.3), 0 0 2px rgba(255, 255, 255, 0.6);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.8);
       transition: all 0.4s ease;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: bold;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
     }
     .water-btn:hover {
-      text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(255, 255, 255, 0.8);
+      text-shadow: 0 0 1px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(255, 255, 255, 1);
       transform: translateY(-1px);
     }
+    
+    /* 밝은 배경용 물비늘 버튼 */
     .water-btn-dark {
       color: transparent;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.3);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.4);
     }
     .water-btn-dark:hover {
-      text-shadow: 0 0 1px rgba(0, 0, 0, 0.7), 0 2px 3px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 2px 3px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
@@ -117,7 +112,7 @@
       <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-2xl flex items-center justify-center">
         <img alt="Abstract vibrant art composition" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1600"/>
         
-        <div id="draggable-desc" class="glass-panel absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
+        <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
           <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4">Who We Are</p>
           <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">Lacey<br/>Fine Art</h2>
           <div class="w-6 h-px bg-galleryGold mb-6"></div>
@@ -132,50 +127,54 @@
         </div>
       </div>
     </section>
-    <section class="py-16 bg-white border-t border-gray-100" data-purpose="bulletin-board">
-      <div class="text-center mb-12">
-        <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">Exhibition Board</h3>
-        <p class="text-xs text-gray-400 mt-2 italic">Curated moments & reflections</p>
+    <section class="relative py-24 bg-gray-900 overflow-hidden" data-purpose="bulletin-board">
+      <div class="absolute inset-0 opacity-40">
+        <img alt="Gallery Background" class="w-full h-full object-cover blur-sm" src="https://images.unsplash.com/photo-1518998053401-878c730c5e69?auto=format&fit=crop&q=80&w=1600"/>
       </div>
       
-      <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="relative z-10 text-center mb-14">
+        <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">Exhibition Board</h3>
+        <p class="text-xs text-gray-300 mt-2 italic">Curated moments & reflections</p>
+      </div>
+      
+      <div class="relative z-10 max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
         
-        <div class="group flex flex-col border border-gray-100 bg-galleryGray shadow-sm hover:shadow-md transition-shadow">
-          <div class="relative h-64 overflow-hidden bg-gray-200">
-            <img alt="Gallery View 1" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&q=80&w=800"/>
-            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="water-btn">Edit</span>
-              <span class="water-btn">Delete</span>
+        <div class="glass-panel rounded-xl overflow-hidden shadow-lg flex flex-col">
+          <div class="relative h-64 overflow-hidden group/img">
+            <img alt="Gallery View 1" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" src="https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&q=80&w=800"/>
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex justify-end items-start p-4 space-x-4">
+              <span class="water-btn">수정</span>
+              <span class="water-btn">삭제</span>
             </div>
           </div>
-          <div class="relative p-6 bg-white flex-grow">
-            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="water-btn water-btn-dark">Edit</span>
-              <span class="water-btn water-btn-dark">Delete</span>
+          <div class="relative p-8 flex-grow group/text">
+            <div class="absolute top-4 right-4 flex space-x-4 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
+              <span class="water-btn water-btn-dark">수정</span>
+              <span class="water-btn water-btn-dark">삭제</span>
             </div>
-            <h4 class="text-lg font-serif mb-2">The Silent Echo</h4>
-            <p class="text-sm text-gray-500 leading-relaxed pr-12">
-              A minimalist approach to the urban landscape. The contrast between light and shadow creates a profound sense of isolation.
+            <h4 class="text-xl font-serif mb-3 text-gray-900">The Silent Echo</h4>
+            <p class="text-sm text-gray-700 leading-relaxed pr-12">
+              A minimalist approach to the urban landscape. The contrast between light and shadow creates a profound sense of isolation. (여기에 내용을 수정하여 입력하세요.)
             </p>
           </div>
         </div>
 
-        <div class="group flex flex-col border border-gray-100 bg-galleryGray shadow-sm hover:shadow-md transition-shadow">
-          <div class="relative h-64 overflow-hidden bg-gray-200">
-            <img alt="Gallery View 2" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800"/>
-            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="water-btn">Edit</span>
-              <span class="water-btn">Delete</span>
+        <div class="glass-panel rounded-xl overflow-hidden shadow-lg flex flex-col">
+          <div class="relative h-64 overflow-hidden group/img">
+            <img alt="Gallery View 2" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800"/>
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex justify-end items-start p-4 space-x-4">
+              <span class="water-btn">수정</span>
+              <span class="water-btn">삭제</span>
             </div>
           </div>
-          <div class="relative p-6 bg-white flex-grow">
-            <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="water-btn water-btn-dark">Edit</span>
-              <span class="water-btn water-btn-dark">Delete</span>
+          <div class="relative p-8 flex-grow group/text">
+            <div class="absolute top-4 right-4 flex space-x-4 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
+              <span class="water-btn water-btn-dark">수정</span>
+              <span class="water-btn water-btn-dark">삭제</span>
             </div>
-            <h4 class="text-lg font-serif mb-2">Abstract Fluidity</h4>
-            <p class="text-sm text-gray-500 leading-relaxed pr-12">
-              Exploring the boundaries of form and color. This piece represents the chaos and harmony coexisting in nature.
+            <h4 class="text-xl font-serif mb-3 text-gray-900">Abstract Fluidity</h4>
+            <p class="text-sm text-gray-700 leading-relaxed pr-12">
+              Exploring the boundaries of form and color. This piece represents the chaos and harmony coexisting in nature. (여기에 내용을 수정하여 입력하세요.)
             </p>
           </div>
         </div>
@@ -199,7 +198,7 @@
 
     <div class="flex justify-center">
       <a href="https://www.google.com" target="_blank" class="group relative inline-block">
-        <span class="font-diary text-3xl text-gray-400 group-hover:text-white transition-colors duration-300">
+        <span class="font-diary text-4xl text-gray-400 group-hover:text-white transition-colors duration-300">
           Search on Google...
         </span>
         <div class="absolute -bottom-1 left-0 w-full h-[1px] bg-gray-600 group-hover:bg-white transition-colors duration-300"></div>
@@ -211,9 +210,7 @@
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       
       elmnt.onmousedown = dragMouseDown;
-      
-      // Touch support for mobile
-      elmnt.ontouchstart = dragTouchStart;
+      elmnt.ontouchstart = dragTouchStart; // 모바일 터치 지원
 
       function dragMouseDown(e) {
         e = e || window.event;
@@ -263,7 +260,7 @@
       }
     }
 
-    // Initialize draggable panel
+    // 드래그 기능 초기화
     window.onload = function() {
       var draggableDesc = document.getElementById("draggable-desc");
       if(draggableDesc) {
