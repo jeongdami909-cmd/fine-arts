@@ -151,9 +151,7 @@
     </div>
     
     <div class="relative">
-      <button id="menu-toggle" class="flex items-center space-x-2 water-btn !bg-white/40 !text-[#1a4142] hover:!bg-white/70">
-        <span class="text-xs font-bold tracking-widest">MENU</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+      <button id="menu-toggle" class="flex items-center space-x-2 water-btn !bg-white/40 !text-[#1a4142] hover:!bg-white/70" style="min-height: 32px;">
       </button>
 
       <div id="dropdown-menu" class="hidden absolute right-0 mt-4 w-72 bg-white/95 backdrop-blur-md border border-gray-200 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden">
@@ -406,7 +404,7 @@
 
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
-                <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 0 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content overflow-hidden">
                 <div class="absolute top-4 right-4 flex space-x-1 z-20">
@@ -538,12 +536,10 @@
     // ---------------- 🌟 추가/삭제된 게시판까지 통째로 완벽 저장 ----------------
     function saveToBrowser() {
       try {
-        // 1. 레이아웃 뼈대 저장 (추가/삭제된 게시판 정보 기록, 용량 초과 방지를 위해 이미지는 제외)
         const mainClone = document.getElementById('main-content').cloneNode(true);
         mainClone.querySelectorAll('img').forEach(img => { if (img.src.startsWith('data:image')) img.src = ''; });
         localStorage.setItem('main_layout', mainClone.innerHTML);
 
-        // 2. 글 및 스타일 저장
         const textMap = {};
         const styleMap = {};
         document.querySelectorAll('.text-target').forEach((el, index) => {
@@ -553,7 +549,6 @@
         localStorage.setItem('gallery_texts', JSON.stringify(textMap));
         localStorage.setItem('gallery_styles', JSON.stringify(styleMap));
 
-        // 3. 사진 저장 (Base64)
         const imgMap = {};
         document.querySelectorAll('img').forEach(img => {
             if (img.id && img.src.startsWith('data:image')) {
@@ -578,13 +573,11 @@
     // ---------------- 🌟 저장된 내용 불러오기 ----------------
     function loadFromBrowser() {
       try {
-        // 1. 레이아웃 뼈대 먼저 복구 (게시판 개수 맞추기)
         const savedLayout = localStorage.getItem('main_layout');
         if (savedLayout) {
             document.getElementById('main-content').innerHTML = savedLayout;
         }
 
-        // 2. 뼈대에 맞게 글과 스타일 복구
         const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
         const savedStyles = JSON.parse(localStorage.getItem('gallery_styles'));
         if (savedTexts) {
@@ -594,7 +587,6 @@
             });
         }
 
-        // 3. 사진 복구
         const savedImages = JSON.parse(localStorage.getItem('gallery_images'));
         if (savedImages) {
             Object.keys(savedImages).forEach(id => {
@@ -603,7 +595,6 @@
             });
         }
 
-        // 4. 배경화면 복구
         const savedBg = localStorage.getItem('gallery_bg');
         if (savedBg) {
              document.body.style.backgroundImage = `url('${savedBg}')`;
@@ -614,7 +605,6 @@
              document.getElementById('global-bg').style.display = 'block';
         }
 
-        // 불러오기 완료 후 드래그 기능 재활성화
         if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
 
       } catch (e) {
