@@ -5,109 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Gallery</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-    }
-
-    /* 전체 배경 영역 */
+    body { margin: 0; padding: 0; font-family: sans-serif; }
+    
     .main-background {
-      width: 100%;
-      min-height: 100vh;
-      background-color: #fdfdfd; /* 사진이 없을 때 기본 미색 */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+      width: 100%; min-height: 100vh;
+      background-color: #fdfdfd; background-size: cover;
+      background-position: center; background-attachment: fixed;
+      display: flex; flex-direction: column; position: relative;
+    }
+    
+    /* 우측 상단 버튼 그룹 */
+    .top-btns {
+      position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 10;
+    }
+    
+    .action-btn {
+      background: rgba(255, 255, 255, 0.8); border: 1px solid #888;
+      color: #333; font-size: 11px; padding: 6px 12px;
+      border-radius: 4px; cursor: pointer; font-weight: bold;
     }
 
-    /* 화면 우측 상단: 배경 사진 넣는 버튼 */
-    .bg-upload-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid #888;
-      color: #333;
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    /* 상단 게시하기 영역 */
-    header {
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    header span {
-      font-weight: bold;
-      color: #333;
-    }
-
-    /* 게시판 설명창: 다이어리 불투명 달력 느낌 (옅은 회색 유리) */
+    header { padding: 20px; display: flex; align-items: center; gap: 10px; }
+    header span { font-weight: bold; color: #333; }
+    
+    /* 불투명한 다이어리 창 */
     .glass-board {
-      background: rgba(211, 211, 211, 0.5);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      margin: 20px;
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      flex-grow: 1;
+      background: rgba(211, 211, 211, 0.5); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px); margin: 20px; padding: 20px;
+      border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.3); flex-grow: 1;
+    }
+    
+    /* 글씨 수정 창 */
+    .editable-text {
+      margin-top: 0; color: #333; line-height: 1.6; outline: none; min-height: 50px;
     }
 
-    .item p {
-      margin-top: 0;
-      color: #333;
-    }
-
-    /* 작고 은은한 버튼들 */
     .small-btn, .mini-btn {
-      background: rgba(255, 255, 255, 0.5);
-      border: 1px solid #888;
-      color: #333;
-      cursor: pointer;
-      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.5); border: 1px solid #888;
+      color: #333; cursor: pointer; border-radius: 4px;
     }
     .post-btn { font-size: 12px; padding: 4px 8px; }
     .mini-btn { font-size: 11px; padding: 2px 6px; margin-right: 5px; }
 
-    /* 하단 (트위터 및 구글 검색창) */
-    footer {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .sns-link a {
-      text-decoration: none;
-      color: #555;
-      font-size: 12px;
-    }
-
-    /* 필기체 구글 검색창 */
+    footer { padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+    .sns-link a { text-decoration: none; color: #555; font-size: 12px; }
+    
     .cursive-font {
-      font-family: 'Cursive', cursive, sans-serif;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #888;
-      font-size: 14px;
-      color: #333;
-      width: 150px;
-      text-align: center;
-      padding-bottom: 2px;
+      font-family: 'Cursive', cursive, sans-serif; background: transparent;
+      border: none; border-bottom: 1px solid #888; font-size: 14px;
+      color: #333; width: 150px; text-align: center; padding-bottom: 2px;
     }
-    .cursive-font:focus {
-      outline: none;
-    }
+    .cursive-font:focus { outline: none; }
   </style>
 </head>
 <body>
@@ -116,7 +64,10 @@
 
   <div class="main-background" id="main-bg">
     
-    <button class="bg-upload-btn" onclick="document.getElementById('bg-file-input').click()">배경 사진 넣기</button>
+    <div class="top-btns">
+      <button class="action-btn" onclick="saveData()">💾 저장하기</button>
+      <button class="action-btn" onclick="document.getElementById('bg-file-input').click()">배경 사진 넣기</button>
+    </div>
     
     <header>
       <span>게시하기</span>
@@ -126,8 +77,10 @@
     <main>
       <section class="glass-board">
         <div class="item">
-          <p>게시물 내용이 여기에 들어갑니다. 불투명한 회색 유리 느낌의 배경입니다.</p>
-          <div class="edit-delete-group">
+          <p id="board-text" class="editable-text" contenteditable="true">
+            여기를 눌러서 글을 쓰고, 사진을 넣은 뒤 꼭 우측 상단의 '저장하기' 버튼을 눌러주세요.
+          </p>
+          <div class="edit-delete-group" style="margin-top: 15px;">
             <button class="mini-btn">수정</button>
             <button class="mini-btn">삭제</button>
           </div>
@@ -146,16 +99,75 @@
   </div>
 
   <script>
-    // '배경 사진 넣기' 버튼을 누르면 기기의 사진을 불러와 배경으로 깔아주는 기능
-    document.getElementById('bg-file-input').addEventListener('change', function(e) {
-      if (e.target.files && e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          document.getElementById('main-bg').style.backgroundImage = `url('${event.target.result}')`;
-        }
-        reader.readAsDataURL(e.target.files[0]);
+    // 1. 페이지 켤 때 기존에 저장된 사진과 글씨 불러오기
+    window.onload = function() {
+      const savedBg = localStorage.getItem('mySavedGalleryBg');
+      if (savedBg) {
+        document.getElementById('main-bg').style.backgroundImage = `url('${savedBg}')`;
       }
+      const savedText = localStorage.getItem('mySavedGalleryText');
+      if (savedText) {
+        document.getElementById('board-text').innerHTML = savedText;
+      }
+    };
+
+    // 2. 사진 넣을 때 메모리 초과 방지를 위한 '자동 압축' 기능
+    document.getElementById('bg-file-input').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // 사진 크기를 가로세로 최대 1000픽셀로 줄여서 메모리 터지는 것 방지
+          const MAX_SIZE = 1000;
+          if (width > height && width > MAX_SIZE) {
+            height *= MAX_SIZE / width;
+            width = MAX_SIZE;
+          } else if (height > MAX_SIZE) {
+            width *= MAX_SIZE / height;
+            height = MAX_SIZE;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // 압축된 사진 데이터
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+          // 바탕화면에 바로 적용
+          document.getElementById('main-bg').style.backgroundImage = `url('${compressedDataUrl}')`;
+          
+          // 임시 보관 (아직 완전히 저장된 건 아님)
+          window.tempBgData = compressedDataUrl;
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+      this.value = ''; // 초기화
     });
+
+    // 3. 💾 저장하기 버튼 (사진과 글을 브라우저에 꽉 묶어둠)
+    function saveData() {
+      try {
+        if (window.tempBgData) {
+          localStorage.setItem('mySavedGalleryBg', window.tempBgData);
+        }
+        const currentText = document.getElementById('board-text').innerHTML;
+        localStorage.setItem('mySavedGalleryText', currentText);
+        
+        alert('성공적으로 저장되었습니다! 새로고침을 해보세요.');
+      } catch (e) {
+        alert('오류: 사진 용량이 너무 크거나 브라우저 설정 문제로 저장에 실패했습니다.');
+      }
+    }
   </script>
 
 </body>
