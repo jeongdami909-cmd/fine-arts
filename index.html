@@ -55,6 +55,7 @@
       font-size: 0.8rem;
       font-weight: bold;
       letter-spacing: 0.1em;
+      white-space: nowrap;
     }
     .water-btn:hover {
       text-shadow: 0 0 1px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(255, 255, 255, 1);
@@ -80,14 +81,55 @@
         <span class="text-xs uppercase tracking-widest font-semibold mt-1">Lacey Fine Art</span>
       </div>
     </div>
-    <div class="flex items-center space-x-4">
-      <button aria-label="Open Menu" class="flex items-center space-x-3 group">
+    
+    <div class="relative">
+      <button id="menu-toggle" aria-label="Open Menu" class="flex items-center space-x-3 group">
         <span class="text-[10px] uppercase tracking-[0.2em] font-bold group-hover:text-galleryGold transition-colors">Menu</span>
         <div class="space-y-1.5">
           <span class="block w-6 h-0.5 bg-galleryDark group-hover:bg-galleryGold transition-colors"></span>
           <span class="block w-6 h-0.5 bg-galleryDark group-hover:bg-galleryGold transition-colors"></span>
         </div>
       </button>
+
+      <div id="dropdown-menu" class="hidden absolute right-0 mt-6 w-72 bg-white/95 backdrop-blur-md border border-gray-200 shadow-2xl rounded-md flex flex-col z-50 overflow-hidden">
+        <div class="p-4 bg-galleryGray text-xs font-bold uppercase tracking-widest border-b border-gray-200 text-gray-500">
+          Navigation Directory
+        </div>
+        
+        <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+          <div class="group/menu relative flex flex-col border-b border-gray-100 pb-3">
+            <div class="flex justify-between items-center w-full">
+              <a href="#bulletin-board" class="text-sm font-serif font-bold text-gray-800 hover:text-galleryGold transition-colors flex-grow">
+                Main Exhibition (상위)
+              </a>
+              <div class="opacity-0 group-hover/menu:opacity-100 flex space-x-3 transition-opacity duration-300 ml-2">
+                <span class="water-btn water-btn-dark text-[10px]">수정</span>
+                <span class="water-btn water-btn-dark text-[10px]">삭제</span>
+              </div>
+            </div>
+            
+            <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
+              <div class="group/child relative flex justify-between items-center">
+                <a href="#bulletin-board" class="text-xs text-gray-600 hover:text-galleryGold transition-colors flex-grow">
+                  - Sub Gallery (하위)
+                </a>
+                <div class="opacity-0 group-hover/child:opacity-100 flex space-x-2 transition-opacity duration-300">
+                  <span class="water-btn water-btn-dark text-[9px]">수정</span>
+                  <span class="water-btn water-btn-dark text-[9px]">삭제</span>
+                </div>
+              </div>
+              
+              <button class="text-[10px] text-gray-400 hover:text-galleryGold font-bold tracking-wider text-left w-full transition-colors">
+                + 하위 추가
+              </button>
+            </div>
+          </div>
+          
+          <button class="w-full text-center py-2 text-xs font-bold text-galleryGold hover:text-white hover:bg-galleryGold border border-galleryGold transition-all rounded-sm mt-2">
+            + 새 메뉴 카테고리 추가
+          </button>
+        </div>
+      </div>
     </div>
   </header>
   <main>
@@ -112,7 +154,13 @@
       <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-2xl flex items-center justify-center">
         <img alt="Abstract vibrant art composition" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1600"/>
         
-        <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
+        <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center group/glass">
+          
+          <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover/glass:opacity-100 transition-opacity duration-500 z-30">
+            <span class="water-btn water-btn-dark">수정</span>
+            <span class="water-btn water-btn-dark">삭제</span>
+          </div>
+
           <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4">Who We Are</p>
           <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">Lacey<br/>Fine Art</h2>
           <div class="w-6 h-px bg-galleryGold mb-6"></div>
@@ -127,7 +175,7 @@
         </div>
       </div>
     </section>
-    <section class="relative py-24 bg-gray-900 overflow-hidden" data-purpose="bulletin-board">
+    <section id="bulletin-board" class="relative py-24 bg-gray-900 overflow-hidden" data-purpose="bulletin-board">
       <div class="absolute inset-0 opacity-40">
         <img alt="Gallery Background" class="w-full h-full object-cover blur-sm" src="https://images.unsplash.com/photo-1518998053401-878c730c5e69?auto=format&fit=crop&q=80&w=1600"/>
       </div>
@@ -183,7 +231,13 @@
     </section>
     </main>
 
-  <footer class="bg-galleryDark text-white py-16 px-4 text-center" data-purpose="footer">
+  <footer class="bg-galleryDark text-white py-16 px-4 text-center relative group/footer" data-purpose="footer">
+    
+    <div class="absolute top-8 right-8 flex space-x-4 opacity-0 group-hover/footer:opacity-100 transition-opacity duration-500 z-10">
+      <span class="water-btn">수정</span>
+      <span class="water-btn">삭제</span>
+    </div>
+
     <div class="flex flex-col items-center mb-10">
       <span class="text-galleryGold text-4xl italic font-bold leading-none">De</span>
       <span class="text-xl uppercase tracking-[0.4em] font-serif mt-2">Lacey Fine Art</span>
@@ -206,6 +260,23 @@
     </div>
   </footer>
   <script>
+    // 1. Menu Toggle Script
+    document.getElementById('menu-toggle').addEventListener('click', function(e) {
+      e.stopPropagation(); // 클릭 이벤트 버블링 방지
+      const menu = document.getElementById('dropdown-menu');
+      menu.classList.toggle('hidden');
+    });
+
+    // 외부 클릭 시 메뉴 닫기
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('dropdown-menu');
+      const toggleBtn = document.getElementById('menu-toggle');
+      if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    // 2. Draggable Element Script
     function makeDraggable(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       
