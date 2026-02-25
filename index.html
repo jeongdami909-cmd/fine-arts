@@ -30,10 +30,12 @@
       background-color: #d0e4e0; 
       transition: background-image 0.5s ease-in-out;
       overflow-x: hidden;
-      min-height: 150vh;
+      min-height: 160vh;
     }
 
-    /* 🌟 스크롤바 최소화 (미술관 감성) */
+    /* 작품 섹션 이동 시 헤더에 가려지지 않게 여백 설정 */
+    #gallery-section { scroll-margin-top: 100px; }
+
     ::-webkit-scrollbar { width: 2px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(207, 167, 82, 0.2); }
@@ -43,11 +45,7 @@
       overflow: hidden; transition: all 0.3s ease;
     }
     
-    .intro-handwriting {
-      font-family: 'Whisper', cursive; color: #FF6347; 
-      font-size: 1.5rem;
-    }
-
+    .intro-handwriting { font-family: 'Whisper', cursive; color: #FF6347; font-size: 1.5rem; }
     .intro-desc { color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
     .glass-panel {
@@ -61,15 +59,15 @@
       backdrop-filter: blur(12px);
     }
 
-    /* 🌟 버튼: 평소엔 거의 안보이다가 활성화 시 선명하게 */
+    /* 🌟 버튼: 모바일 가독성을 위해 기본 투명도를 0.5로 상향 */
     .mini-btn {
       font-size: 8px; font-weight: 800; color: #1a4142;
-      background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.4);
-      padding: 1px 6px; border-radius: 3px; opacity: 0.25; transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 2px 6px; border-radius: 3px; opacity: 0.5; transition: all 0.3s;
       cursor: pointer; letter-spacing: 0.1em;
     }
-    .group:hover .mini-btn, .mini-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.8); }
-    .gold-btn { color: #cfa752; border-color: #cfa752; opacity: 0.4; }
+    .mini-btn:hover, .mini-btn:active { opacity: 1; background: rgba(255, 255, 255, 0.9); }
+    .gold-btn { color: #cfa752; border-color: #cfa752; opacity: 0.6; }
 
     .slide-panel { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
@@ -101,8 +99,9 @@
   </div>
 
   <header class="fixed top-0 left-0 w-full z-40 py-5 px-8 flex justify-between items-center bg-white/5 backdrop-blur-sm">
-    <div class="relative group logo-container">
-      <h1 class="text-[9px] tracking-[0.5em] font-bold text-[#1a4142] opacity-70 text-target" id="header-title" onclick="openTextEditor(this)">LACEY FINE ART</h1>
+    <div class="relative group logo-container flex items-center space-x-2">
+      <h1 class="text-[9px] tracking-[0.5em] font-bold text-[#1a4142] opacity-70 text-target" id="header-title">LACEY FINE ART</h1>
+      <button class="mini-btn !opacity-0 group-hover:!opacity-60" onclick="openTextEditor(document.getElementById('header-title'))">✎</button>
     </div>
     
     <div class="relative">
@@ -111,18 +110,30 @@
       </button>
 
       <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden">
-        <div class="p-3 bg-gray-50/50 text-[8px] font-bold text-gray-400 uppercase tracking-widest">Index</div>
+        <div class="p-3 bg-gray-50/50 text-[8px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Index Navigation</div>
         <div class="p-4 space-y-6">
           <div class="flex flex-col space-y-2">
-             <a href="#gallery-section" class="text-[11px] font-bold text-target opacity-80" onclick="openTextEditor(this)">🌍 COUNTRY</a>
+             <div class="flex justify-between items-center group/menu">
+                <a href="#gallery-section" class="text-[11px] font-bold text-target opacity-80 flex-grow" onclick="closeMenu()">🌍 COUNTRY</a>
+                <button class="mini-btn !p-1 ml-1 !opacity-0 group-hover/menu:!opacity-40" onclick="openTextEditor(this.previousElementSibling)">✎</button>
+             </div>
              <div class="pl-2 space-y-1">
-                <a href="#gallery-section" class="text-[10px] text-target opacity-50" onclick="openTextEditor(this)">- [NAME]</a>
+                <div class="flex justify-between items-center group/sub">
+                   <a href="#gallery-section" class="text-[10px] text-target opacity-50 flex-grow" onclick="closeMenu()">- [COUNTRY NAME]</a>
+                   <button class="mini-btn !p-1 ml-1 !opacity-0 group-hover/sub:!opacity-40" onclick="openTextEditor(this.previousElementSibling)">✎</button>
+                </div>
              </div>
           </div>
           <div class="flex flex-col space-y-2 border-t border-gray-100 pt-4">
-             <a href="#gallery-section" class="text-[11px] font-bold text-target opacity-80" onclick="openTextEditor(this)">⏳ ERA</a>
+             <div class="flex justify-between items-center group/menu">
+                <a href="#gallery-section" class="text-[11px] font-bold text-target opacity-80 flex-grow" onclick="closeMenu()">⏳ ERA</a>
+                <button class="mini-btn !p-1 ml-1 !opacity-0 group-hover/menu:!opacity-40" onclick="openTextEditor(this.previousElementSibling)">✎</button>
+             </div>
              <div class="pl-2 space-y-1">
-                <a href="#gallery-section" class="text-[10px] text-target opacity-50" onclick="openTextEditor(this)">- [NAME]</a>
+                <div class="flex justify-between items-center group/sub">
+                   <a href="#gallery-section" class="text-[10px] text-target opacity-50 flex-grow" onclick="closeMenu()">- [ERA NAME]</a>
+                   <button class="mini-btn !p-1 ml-1 !opacity-0 group-hover/sub:!opacity-40" onclick="openTextEditor(this.previousElementSibling)">✎</button>
+                </div>
              </div>
           </div>
         </div>
@@ -136,18 +147,18 @@
     
     <section class="mb-24">
       <div class="glass-panel rounded-3xl p-8 relative flex flex-col items-center text-center draggable mx-auto max-w-md shadow-lg group" id="draggable-desc">
-        <div class="absolute top-3 right-4 flex space-x-1">
-          <button class="mini-btn" onclick="playTTS(this.closest('#draggable-desc'))">🔊</button>
-          <button class="mini-btn" onclick="openStyleEditor(this.closest('#draggable-desc'))">🎨</button>
-          <button class="mini-btn gold-btn" onclick="openTextEditor(this.closest('#draggable-desc'))">📝</button>
+        <div class="absolute top-4 right-4 flex space-x-1.5">
+          <button class="mini-btn !opacity-60" onclick="playTTS(this.closest('#draggable-desc'))">🔊</button>
+          <button class="mini-btn !opacity-60" onclick="openStyleEditor(this.closest('#draggable-desc'))">🎨</button>
+          <button class="mini-btn gold-btn !opacity-80" onclick="openTextEditor(this.closest('#draggable-desc'))">📝</button>
         </div>
         
-        <p class="intro-handwriting text-target mb-1" onclick="openTextEditor(this)">[Label]</p>
-        <h2 class="text-xl font-serif text-target mb-4 opacity-90" onclick="openTextEditor(this)">[Title]</h2>
+        <p class="intro-handwriting text-target mb-1">[Label]</p>
+        <h2 class="text-xl font-serif text-target mb-4 opacity-90">[Title]</h2>
         <div class="w-6 h-[1px] bg-galleryGold mb-5 opacity-40"></div>
         <div class="w-full">
-            <p class="text-xs leading-relaxed text-target intro-desc collapsed-text" onclick="openTextEditor(this)">[Description]</p>
-            <button class="text-[9px] opacity-40 mt-3 hover:opacity-100 transition-opacity" onclick="toggleExpand(this)">READ MORE</button>
+            <p class="text-xs leading-relaxed text-target intro-desc collapsed-text">[Description]</p>
+            <button class="text-[9px] opacity-40 mt-3 hover:opacity-100" onclick="toggleExpand(this)">READ MORE</button>
         </div>
       </div>
     </section>
@@ -160,12 +171,10 @@
       <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         <div class="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-xl bg-transparent gallery-item group/item">
           <img id="art-img-base" src="" alt="" class="absolute inset-0 w-full h-full object-contain bg-transparent">
-          
-          <div class="absolute top-4 left-4 z-20 flex flex-col space-y-1 opacity-0 group-hover/item:opacity-100 transition-all">
+          <div class="absolute top-4 left-4 z-20 flex flex-col space-y-1 opacity-0 group-hover/item:opacity-100">
              <button class="mini-btn" onclick="triggerFileUpload('art-img-base')">IMG</button>
              <button class="mini-btn" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
           </div>
-
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex flex-col justify-center items-center cursor-pointer bg-white/10 border-r border-white/10 backdrop-blur-sm" onclick="toggleSlide(this)">
                 <svg class="w-4 h-4 text-[#1a4142] arrow-icon rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -176,9 +185,9 @@
                   <button class="mini-btn gold-btn" onclick="openStyleEditor(this.closest('.flex-1'))">🎨</button>
                   <button class="mini-btn" onclick="openTextEditor(this.closest('.flex-1'))">📝</button>
                 </div>
-                <h4 class="text-lg font-serif mb-5 mt-4 text-[#1a4142] text-target" onclick="openTextEditor(this)">[Title]</h4>
+                <h4 class="text-lg font-serif mb-5 mt-4 text-[#1a4142] text-target">[Title]</h4>
                 <div class="flex-1 overflow-y-auto pr-2 custom-scroll">
-                  <p class="text-[13px] leading-relaxed text-target opacity-80 collapsed-text" onclick="openTextEditor(this)">[Description]</p>
+                  <p class="text-[13px] leading-relaxed text-target opacity-80 collapsed-text">[Description]</p>
                   <button class="text-[9px] opacity-40 mt-3" onclick="toggleExpand(this)">MORE</button>
                 </div>
              </div>
@@ -189,7 +198,7 @@
   </main>
 
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg">
-    <div class="bg-white/95 backdrop-blur-xl w-[90%] max-w-sm p-8 rounded-3xl shadow-2xl">
+    <div class="bg-white/95 backdrop-blur-xl w-[90%] max-w-sm p-8 rounded-3xl shadow-2xl border border-white/20">
       <h3 class="text-[9px] font-bold mb-5 tracking-[0.2em] text-gray-400">EDIT CONTENT</h3>
       <textarea id="modal-textarea" class="w-full h-48 p-4 border-0 rounded-2xl font-serif text-sm text-gray-700 bg-gray-50 focus:ring-1 focus:ring-galleryGold outline-none"></textarea>
       <div class="flex justify-end space-x-2 mt-8">
@@ -216,18 +225,20 @@
   </div>
 
   <script>
-    // ---------------- 🌟 메뉴 리스너 (강화) ----------------
     const menuToggle = document.getElementById('menu-toggle');
     const dropdownMenu = document.getElementById('dropdown-menu');
 
+    // 🌟 메뉴 열기/닫기
     menuToggle.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdownMenu.classList.toggle('hidden');
     });
 
+    function closeMenu() { dropdownMenu.classList.add('hidden'); }
+
     document.addEventListener('click', (e) => {
         if (!dropdownMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-            dropdownMenu.classList.add('hidden');
+            closeMenu();
         }
     });
 
@@ -267,27 +278,25 @@
         };
     }
 
-    // ---------------- 🌟 게시판 추가 ----------------
     function addNewBoard() {
       const id = 'art-' + Date.now();
       const html = `<div class="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-xl bg-transparent gallery-item group/item">
           <img id="${id}" src="" class="absolute inset-0 w-full h-full object-contain bg-transparent">
-          <div class="absolute top-4 left-4 z-20 flex flex-col space-y-1 opacity-0 group-hover/item:opacity-100 transition-all">
+          <div class="absolute top-4 left-4 z-20 flex flex-col space-y-1 opacity-0 group-hover/item:opacity-100">
              <button class="mini-btn" onclick="triggerFileUpload('${id}')">IMG</button>
              <button class="mini-btn" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
-             <div class="w-10 h-full flex justify-center items-center cursor-pointer bg-white/10 border-r border-white/10 backdrop-blur-sm" onclick="toggleSlide(this)"><svg class="w-4 h-4 arrow-icon rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 5l7 7-7 7"/></svg></div>
+             <div class="w-10 h-full flex flex-col justify-center items-center cursor-pointer bg-white/10 border-r border-white/10 backdrop-blur-sm" onclick="toggleSlide(this)"><svg class="w-4 h-4 text-[#1a4142] arrow-icon rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 5l7 7-7 7"/></svg></div>
              <div class="flex-1 h-full px-8 py-12 flex flex-col relative glass-panel-light overflow-hidden shadow-2xl">
                 <div class="absolute top-4 right-4 flex space-x-1"><button class="mini-btn" onclick="playTTS(this.closest('.flex-1'))">🔊</button><button class="mini-btn gold-btn" onclick="openStyleEditor(this.closest('.flex-1'))">🎨</button><button class="mini-btn" onclick="openTextEditor(this.closest('.flex-1'))">📝</button></div>
-                <h4 class="text-lg font-serif mb-5 mt-4 text-target" onclick="openTextEditor(this)">[New Title]</h4>
-                <div class="flex-1 overflow-y-auto pr-2 custom-scroll"><p class="text-[13px] text-target opacity-80 collapsed-text" onclick="openTextEditor(this)">[Description]</p><button class="text-[9px] opacity-40 mt-3" onclick="toggleExpand(this)">MORE</button></div>
+                <h4 class="text-lg font-serif mb-5 mt-4 text-target">[New Title]</h4>
+                <div class="flex-1 overflow-y-auto pr-2 custom-scroll"><p class="text-[13px] text-target opacity-80 collapsed-text">[Description]</p><button class="text-[9px] opacity-40 mt-3" onclick="toggleExpand(this)">MORE</button></div>
              </div>
           </div></div>`;
       document.getElementById('gallery-grid').insertAdjacentHTML('beforeend', html);
     }
 
-    // ---------------- 🌟 사진 제어 ----------------
     let curId = null;
     function triggerFileUpload(id) { curId = id; document.getElementById('hidden-file-input').click(); }
     document.getElementById('hidden-file-input').onchange = (e) => {
@@ -315,7 +324,6 @@
     };
     function removeBackground() { document.body.style.backgroundImage = 'none'; document.getElementById('global-bg').style.display='none'; }
 
-    // ---------------- 🌟 텍스트/스타일 편집 ----------------
     let editTargs = [];
     const textModal = document.getElementById('text-editor-modal');
     function openTextEditor(el) {
@@ -324,7 +332,7 @@
       document.getElementById('modal-textarea').value = editTargs.map(t => t.innerText).join('\n');
       textModal.classList.remove('hidden'); textModal.classList.add('flex');
     }
-    function closeTextEditor() { textModal.classList.add('hidden'); textModal.classList.remove('flex'); }
+    function closeTextEditor() { textModal.classList.remove('hidden'); textModal.classList.add('flex'); }
     function saveTextChanges() {
       const lines = document.getElementById('modal-textarea').value.split('\n');
       editTargs.forEach((t, i) => { if(lines[i] !== undefined) t.innerText = lines[i]; });
@@ -347,30 +355,29 @@
     document.getElementById('val-size').oninput=(e)=>{styleTargs.forEach(t=>t.style.fontSize=e.target.value+'px'); document.getElementById('label-size').innerText=e.target.value+'px';};
     document.getElementById('val-line').oninput=(e)=>{styleTargs.forEach(t=>t.style.lineHeight=e.target.value); document.getElementById('label-line').innerText=e.target.value;};
 
-    // ---------------- 🌟 저장/로드 ----------------
     function saveToBrowser() {
       try {
-        localStorage.setItem('gallery_grid_v4', document.getElementById('gallery-grid').innerHTML);
+        localStorage.setItem('gallery_grid_v5', document.getElementById('gallery-grid').innerHTML);
         const textMap={}; const styleMap={};
         document.querySelectorAll('.text-target').forEach((el, i) => { textMap[i]=el.innerHTML; styleMap[i]=el.getAttribute('style')||''; });
-        localStorage.setItem('gallery_texts_v4', JSON.stringify(textMap));
-        localStorage.setItem('gallery_styles_v4', JSON.stringify(styleMap));
+        localStorage.setItem('gallery_texts_v5', JSON.stringify(textMap));
+        localStorage.setItem('gallery_styles_v5', JSON.stringify(styleMap));
         const imgMap={}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgMap[img.id]=img.src; });
-        localStorage.setItem('gallery_images_v4', JSON.stringify(imgMap));
-        localStorage.setItem('gallery_bg_v4', document.getElementById('global-bg').src);
-        alert("✅ SITE DATA LOCKED.");
+        localStorage.setItem('gallery_images_v5', JSON.stringify(imgMap));
+        localStorage.setItem('gallery_bg_v5', document.getElementById('global-bg').src);
+        alert("✅ SITE LOCKED.");
       } catch(e) { alert("ERROR: MEMORY FULL."); }
     }
 
     function loadFromBrowser() {
-      const layout = localStorage.getItem('gallery_grid_v4');
+      const layout = localStorage.getItem('gallery_grid_v5');
       if (layout) document.getElementById('gallery-grid').innerHTML = layout;
-      const texts = JSON.parse(localStorage.getItem('gallery_texts_v4'));
-      const styles = JSON.parse(localStorage.getItem('gallery_styles_v4'));
+      const texts = JSON.parse(localStorage.getItem('gallery_texts_v5'));
+      const styles = JSON.parse(localStorage.getItem('gallery_styles_v5'));
       if (texts) document.querySelectorAll('.text-target').forEach((el, i) => { if(texts[i]) el.innerHTML=texts[i]; if(styles[i]) el.setAttribute('style', styles[i]); });
-      const imgs = JSON.parse(localStorage.getItem('gallery_images_v4'));
+      const imgs = JSON.parse(localStorage.getItem('gallery_images_v5'));
       if (imgs) Object.keys(imgs).forEach(id => { const img=document.getElementById(id); if(img) img.src=imgs[id]; });
-      const bg = localStorage.getItem('gallery_bg_v4');
+      const bg = localStorage.getItem('gallery_bg_v5');
       if (bg && bg.startsWith('data:image')) {
         document.body.style.backgroundImage = `url('${bg}')`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed';
         document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block';
