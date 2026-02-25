@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Lacey Fine Art | Gallery</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&family=Whisper&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;1,300&family=Whisper&display=swap" rel="stylesheet"/>
   
   <script>
     tailwind.config = {
@@ -14,11 +14,10 @@
           colors: {
             galleryGold: '#cfa752',
             galleryTeal: '#d0e4e0', 
-            galleryDarkTeal: '#5f9ea0',
           },
           fontFamily: {
             serif: ['"Noto Serif"', 'serif'],
-            diary: ['"Whisper"', 'cursive'],
+            diary: ['"Whisper"', 'cursive'], /* 필기체 폰트 */
           },
         }
       }
@@ -33,70 +32,55 @@
       transition: background-image 0.5s ease-in-out;
       overflow-x: hidden;
     }
-    
-    /* 🌟 요청하신 글씨 스타일: 옅은 살구색(주황빛) + 아주 가는 폰트 + 은은한 은빛 테두리 */
+
+    /* 🌟 요청하신 스타일: 주홍빛 레드 + 필기체 + 작은 글씨 */
+    .intro-handwriting {
+      font-family: 'Whisper', cursive; /* 필기체 적용 */
+      color: #FF6347; /* 주홍빛 레드 (Tomato Color) */
+      font-size: 1.8rem; /* 글씨 크기 조금 줄임 (기존 3~4rem -> 1.8rem) */
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5); /* 잘 보이게 살짝 받침 */
+      line-height: 1.2;
+    }
+
+    /* 기존 본문용: 옅은 살구색 + 얇은 고딕/명조 */
     .text-target {
-      color: rgba(255, 218, 185, 0.95); /* 옅은 살구/주황색 (Peach Puff) */
-      font-weight: 200; /* Extra Light (아주 가는 글씨) */
-      /* 텍스트 주변에 은은한 은빛(흰색+연한회색)이 번지는 효과 */
-      text-shadow: 0 0 2px rgba(255, 255, 255, 0.6), 1px 1px 1px rgba(192, 192, 192, 0.3);
-      letter-spacing: 0.08em; 
-      line-height: 1.8; 
+      color: rgba(255, 228, 196, 0.95); /* Bisque/Apricot */
+      font-weight: 300; 
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.1), 0 0 5px rgba(255, 255, 255, 0.2);
     }
 
-    /* 제목은 존재감을 위해 살짝만 덜 가늘게, 은빛을 조금 더 강조 */
-    h1.text-target, h2.text-target, h3.text-target {
-       font-weight: 300; 
-       text-shadow: 0 0 4px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(192, 192, 192, 0.4);
-    }
-
-    /* 기본 반투명 유리 패널 */
+    /* 유리 패널 스타일 */
     .glass-panel {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.4);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
     }
-
     .glass-panel-light {
       background: rgba(240, 240, 240, 0.85);
-      backdrop-filter: blur(12px); 
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border-left: 1px solid rgba(230, 230, 230, 0.9);
-      box-shadow: -4px 0 16px rgba(0, 0, 0, 0.05); 
     }
 
     .slide-panel { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     .arrow-icon { transition: transform 0.6s ease; }
     .slide-hide { transform: translateX(calc(100% - 3.5rem)); }
 
-    /* 기본 수정/삭제 버튼 */
+    /* 버튼 스타일 */
     .water-btn {
       display: inline-flex; align-items: center; justify-content: center;
       padding: 0.35rem 0.75rem; color: #3b6b6d;
       background-color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.9);
-      border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-      white-space: nowrap; cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); transition: all 0.3s ease;
+      border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
     }
-    .water-btn:hover {
-      background-color: rgba(255, 255, 255, 1); color: #1a4142;
-      transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    /* 🌟 투명 & 얇은 회색 메뉴 버튼 (배경 변경, 저장용) */
+    
     .ghost-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      padding: 0.4rem 1rem; color: rgba(120, 130, 130, 0.8);
-      background-color: transparent; border: 1px solid rgba(150, 160, 160, 0.4);
-      border-radius: 20px; font-size: 0.75rem; font-weight: 300; letter-spacing: 0.05em;
-      white-space: nowrap; cursor: pointer; backdrop-filter: blur(2px);
-      transition: all 0.3s ease;
-    }
-    .ghost-btn:hover {
-      color: rgba(80, 90, 90, 1); background-color: rgba(255, 255, 255, 0.2);
-      border-color: rgba(150, 160, 160, 0.6);
+      padding: 0.4rem 1rem; color: rgba(80, 90, 90, 0.8);
+      background-color: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px);
     }
 
     .draggable { cursor: grab; }
@@ -104,11 +88,11 @@
 
     .diary-modal-bg {
       background-color: rgba(60, 60, 60, 0.65);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
     }
   </style>
 </head>
-<body class="text-[#1a4142]" id="gallery-body">
+<body class="text-[#1a4142]">
 
   <input type="file" id="hidden-file-input" style="display: none;" accept="image/*">
 
@@ -119,7 +103,9 @@
   <div class="fixed top-[90px] right-4 md:right-8 z-[9999] flex flex-col space-y-2">
     <button class="ghost-btn shadow-sm" onclick="triggerFileUpload('global-bg')">배경 사진 넣기</button>
     <button class="ghost-btn shadow-sm" onclick="removeBackground()">배경 삭제</button>
-    <button class="ghost-btn shadow-sm font-bold text-[#5f9ea0] border-[#5f9ea0]/50" onclick="saveAndDownloadGallery()">상태 저장하기</button>
+    <button class="ghost-btn shadow-md border-galleryGold text-galleryGold bg-white/60 font-bold" onclick="saveToBrowser()">
+      ✅ 사이트에 고정 (저장)
+    </button>
   </div>
 
   <header class="sticky top-0 z-40 py-6 px-8 flex justify-between items-start bg-[#d0e4e0]/60 backdrop-blur-md border-b border-white/20 shadow-sm">
@@ -144,27 +130,17 @@
       </button>
 
       <div id="dropdown-menu" class="hidden absolute right-0 mt-4 w-72 bg-white/95 backdrop-blur-md border border-gray-200 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden">
-        <div class="p-4 bg-gray-50 text-xs font-bold uppercase tracking-widest border-b border-gray-200 text-gray-500">
-          Directory
-        </div>
+        <div class="p-4 bg-gray-50 text-xs font-bold uppercase tracking-widest border-b border-gray-200 text-gray-500">Directory</div>
         <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-          <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item group/pmenu">
+          <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item">
             <div class="flex justify-between items-center w-full">
-              <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target menu-text-1" style="color: #555; text-shadow: none;">
-                [상위 메뉴 입력]
-              </a>
-              <div class="flex space-x-1 opacity-0 group-hover/pmenu:opacity-100 transition-opacity">
-                <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('.text-target'))">수정</button>
-              </div>
+              <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target">[상위 메뉴 입력]</a>
+              <button class="water-btn !text-[9px] !px-2 !py-1 ml-2" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
             </div>
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
-              <div class="relative flex justify-between items-center child-menu-item group/cmenu">
-                <a href="javascript:void(0)" class="text-xs transition-colors flex-grow text-target menu-text-2" style="color: #777; text-shadow: none;">
-                  - [하위 메뉴 입력]
-                </a>
-                <div class="flex space-x-1 opacity-0 group-hover/cmenu:opacity-100 transition-opacity">
-                  <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('.text-target'))">수정</button>
-                </div>
+              <div class="relative flex justify-between items-center child-menu-item">
+                <a href="javascript:void(0)" class="text-xs transition-colors flex-grow text-target">- [하위 메뉴 입력]</a>
+                <button class="water-btn !text-[9px] !px-2 !py-1 ml-2" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
               </div>
             </div>
           </div>
@@ -181,12 +157,12 @@
           <button class="water-btn" onclick="deleteElement(this.closest('#draggable-desc'))">삭제</button>
         </div>
         
-        <p class="text-[10px] uppercase tracking-[0.3em] font-bold mb-4 text-target intro-label">WHO WE ARE</p>
-        <h2 class="text-4xl font-serif drop-shadow-sm mb-2 text-target intro-title">[라벨 입력]</h2>
-        <h2 class="text-3xl font-serif mb-6 text-target intro-subtitle">[소개글 타이틀 입력]</h2>
+        <p class="mb-2 intro-handwriting text-target">[라벨 입력]</p>
+        <h2 class="mb-4 intro-handwriting text-target" style="font-size: 2.2rem;">[소개글 타이틀 입력]</h2>
+        
         <div class="w-12 h-1 bg-[#cfa752] mb-6 rounded-full opacity-80"></div>
-        <p class="text-sm leading-relaxed max-w-md text-target intro-desc">
-          [여기에 갤러리 소개글을 입력하세요. 얇고 은은한 주황빛(살구색) 폰트가 적용되었습니다.]
+        <p class="text-sm leading-relaxed max-w-md text-target intro-desc" style="font-family: 'Noto Serif', serif; color: #1a4142;">
+          [여기에 상세 소개글을 입력하세요. 이 박스는 꾹 눌러서 이동할 수 있습니다.]
         </p>
       </div>
     </section>
@@ -196,8 +172,7 @@
         <div class="absolute -top-4 -right-16 opacity-0 group-hover/title:opacity-100 transition-opacity">
             <button class="water-btn !py-1 !px-2" onclick="openTextEditor(this.closest('.title-container'))">수정</button>
         </div>
-        <h3 class="text-xs uppercase tracking-[0.3em] font-bold drop-shadow-sm text-target gal-title">EXHIBITION</h3>
-        <p class="text-[10px] mt-2 text-target gal-subtitle">안내창 왼쪽 모서리를 눌러 사진을 확인하세요</p>
+        <h3 class="text-xs uppercase tracking-[0.3em] font-bold drop-shadow-sm text-target gal-title" style="color: #1a4142;">EXHIBITION</h3>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -213,17 +188,15 @@
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                <div class="space-y-1.5"><div class="w-1.5 h-8 bg-[#1a4142]/40 rounded-full"></div><div class="w-1.5 h-8 bg-[#1a4142]/40 rounded-full"></div></div>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-1" style="color:#555; text-shadow:none;">[작품 제목 1]</h4>
-                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full opacity-60"></div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 1]</h4>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-target item-desc-1" style="color:#666; text-shadow:none;">
-                    [모든 수정을 마친 후 '상태 저장하기'를 누르면, 수정된 내용이 포함된 파일이 자동으로 다운로드 됩니다!]
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
+                    [작품 설명입니다. 글 수정 후 꼭 우측 상단 '사이트에 고정'을 눌러주세요.]
                   </p>
                 </div>
              </div>
@@ -239,17 +212,15 @@
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                <div class="space-y-1.5"><div class="w-1.5 h-8 bg-[#1a4142]/40 rounded-full"></div><div class="w-1.5 h-8 bg-[#1a4142]/40 rounded-full"></div></div>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-2" style="color:#555; text-shadow:none;">[작품 제목 2]</h4>
-                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full opacity-60"></div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 2]</h4>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-target item-desc-2" style="color:#666; text-shadow:none;">
-                    [다운로드된 파일을 언제든 열면 내가 저장한 사진과 글씨가 그대로 나타납니다. 영원히 간직하세요!]
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
+                    [작품 설명입니다. 사진과 글은 브라우저에 안전하게 저장됩니다.]
                   </p>
                 </div>
              </div>
@@ -265,17 +236,15 @@
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                <div class="space-y-1.5"><div class="w-1.5 h-8 bg-[#1a4142]/40 rounded-full"></div><div class="w-1.5 h-8 bg-[#1a4142]/40 rounded-full"></div></div>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-3" style="color:#555; text-shadow:none;">[작품 제목 3]</h4>
-                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full opacity-60"></div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 3]</h4>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-target item-desc-3" style="color:#666; text-shadow:none;">
-                    [브라우저 용량 제한 문제를 완전히 해결하기 위해 파일 다운로드 방식을 결합했습니다.]
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
+                    [작품 설명입니다. 오른쪽 상단 고정 버튼을 활용하세요.]
                   </p>
                 </div>
              </div>
@@ -287,22 +256,8 @@
   </main>
 
   <footer class="py-12 text-center border-t border-white/20 relative z-10 bg-[#d0e4e0]/50 backdrop-blur-sm mt-10">
-    <div class="flex justify-center mb-4">
-      <svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25 45C36.0457 45 45 36.0457 45 25C45 13.9543 36.0457 5 25 5C13.9543 5 5 13.9543 5 25C5 36.0457 13.9543 45 25 45Z" stroke="#cfa752" stroke-width="2"/>
-        <path d="M15 25H35" stroke="#cfa752" stroke-width="2"/>
-        <path d="M25 15V35" stroke="#cfa752" stroke-width="2"/>
-      </svg>
-    </div>
-    <h2 class="text-xl font-serif mb-2 drop-shadow-sm text-target footer-title">LACEY FINE ART</h2>
-    <p class="text-[10px] uppercase tracking-widest text-[#1a4142]/70 mb-6 font-bold text-target footer-copy">COPYRIGHT 2026. ALL RIGHTS RESERVED</p>
-    
-    <div class="flex justify-center mb-10">
-      <a href="javascript:void(0)" onclick="window.open('https://twitter.com', '_blank')" class="text-[#1a4142] hover:text-[#cfa752] transition-colors">
-        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.599 3.419-2.044 1.602-4.629 2.411-7.218 2.102 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
-      </a>
-    </div>
-
+    <h2 class="text-xl font-serif mb-2 drop-shadow-sm text-[#1a4142]">LACEY FINE ART</h2>
+    <p class="text-[10px] uppercase tracking-widest text-[#1a4142]/70 mb-6 font-bold">COPYRIGHT 2026. ALL RIGHTS RESERVED</p>
     <div class="flex justify-center relative w-max mx-auto group/search">
       <div class="absolute -top-8 right-0 flex space-x-2 opacity-0 group-hover/search:opacity-100 transition-opacity duration-300">
           <button class="water-btn !py-1 !px-2 !text-[10px]" onclick="openTextEditor(this.closest('.group\\/search').querySelector('span'))">수정</button>
@@ -328,10 +283,9 @@
   </div>
 
   <script>
-    // 메뉴 슬라이드 기능
+    // 메뉴
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
-      e.stopPropagation();
-      document.getElementById('dropdown-menu').classList.toggle('hidden');
+      e.stopPropagation(); document.getElementById('dropdown-menu').classList.toggle('hidden');
     });
     document.addEventListener('click', function(e) {
       const menu = document.getElementById('dropdown-menu');
@@ -340,7 +294,6 @@
       }
     });
 
-    // 패널 열고 닫기
     function toggleSlide(handle) {
       const panel = handle.closest('.slide-panel');
       panel.classList.toggle('slide-hide'); 
@@ -348,7 +301,6 @@
       arrow.classList.toggle('rotate-180'); 
     }
 
-    // 드래그 기능 (상단 안내창)
     function makeDraggable(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; 
@@ -358,41 +310,34 @@
       function elementTouchDrag(e) { var touch = e.touches[0]; pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY; pos3 = touch.clientX; pos4 = touch.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
     }
+    window.onload = function() {
+      if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
+    }
 
-    // 이미지 교체 및 자동 압축 (저장 용량 최적화)
+    // 🌟 사진 처리 (압축 로직 강화)
     let currentImgId = null;
     const fileInput = document.getElementById('hidden-file-input');
 
-    function triggerFileUpload(imgId) {
-      currentImgId = imgId;
-      fileInput.click(); 
-    }
+    function triggerFileUpload(imgId) { currentImgId = imgId; fileInput.click(); }
 
     fileInput.addEventListener('change', function(e) {
       if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
         const reader = new FileReader();
-        
         reader.onload = function(event) {
           const img = new Image();
           img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width; let height = img.height;
-            // 🌟 용량 최적화: 최대 너비/높이를 600px로 더욱 강하게 압축
+            // 용량 최적화 (Max 600px)
             const MAX_SIZE = 600; 
-
-            if (width > height && width > MAX_SIZE) {
-                height *= MAX_SIZE / width; width = MAX_SIZE;
-            } else if (height > width && height > MAX_SIZE) {
-                width *= MAX_SIZE / height; height = MAX_SIZE;
-            }
+            if (width > height && width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } 
+            else if (height > width && height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
+            const compressedData = canvas.toDataURL('image/jpeg', 0.5); // 화질 50%
             
-            // 🌟 화질 압축: 0.5 (50%) 수준으로 낮춰 용량 대폭 절감
-            const compressedData = canvas.toDataURL('image/jpeg', 0.5);
-
             if (currentImgId === 'global-bg') {
               document.body.style.backgroundImage = `url('${compressedData}')`;
               document.body.style.backgroundSize = 'cover';
@@ -405,7 +350,6 @@
               if (imgElement) imgElement.src = compressedData;
             }
           }
-          img.onerror = function() { alert("이미지를 불러오는데 실패했습니다."); }
           img.src = event.target.result;
         }
         reader.readAsDataURL(file);
@@ -419,7 +363,7 @@
         document.getElementById('global-bg').style.display = 'none';
     }
 
-    // 텍스트 모달창 처리
+    // 텍스트 편집
     const textModal = document.getElementById('text-editor-modal');
     const modalTextarea = document.getElementById('modal-textarea');
     let currentTextTargets = [];
@@ -433,13 +377,7 @@
             targets = [containerElement];
         } else {
             targets = containerElement.querySelectorAll('.text-target');
-            if (targets.length === 0) {
-               const title = containerElement.querySelector('h4');
-               const desc = containerElement.querySelector('p');
-               if(title) targets = [title];
-               if(desc) targets = [...targets, desc];
-               if(containerElement.tagName === 'A') targets = [containerElement];
-            }
+            if (targets.length === 0 && containerElement.tagName === 'A') targets = [containerElement];
         }
 
         targets.forEach((target, index) => {
@@ -470,88 +408,80 @@
       if (confirm('정말로 삭제하시겠습니까?')) element.remove();
     }
 
-    // ==========================================
-    // 🌟 궁극의 저장 기능: 파일로 영원히 간직하기
-    // ==========================================
-    function saveAndDownloadGallery() {
+    // 🌟🌟🌟 강력한 브라우저 저장 기능 (LocalStorage) 🌟🌟🌟
+    function saveToBrowser() {
       try {
-        // 1. 브라우저 내부 임시 저장 (기존 기능)
-        const textElements = document.querySelectorAll('.text-target');
-        const textsArray = Array.from(textElements).map(el => el.innerHTML);
-        localStorage.setItem('myGalleryTexts', JSON.stringify(textsArray));
+        // 1. 텍스트 저장
+        const textMap = {};
+        document.querySelectorAll('.text-target').forEach((el, index) => {
+            // 위치(index)나 고유 식별자가 없으므로 순서대로 저장
+            // 더 정확히 하려면 각 요소에 ID를 부여해야 하나, 지금 구조에선 순서가 최선
+            textMap['text-' + index] = el.innerHTML; 
+        });
+        localStorage.setItem('gallery_texts', JSON.stringify(textMap));
 
-        const imagesData = {};
+        // 2. 이미지 저장
+        const imgMap = {};
         document.querySelectorAll('img').forEach(img => {
-            if(img.id && img.src.startsWith('data:image')) { 
-                imagesData[img.id] = img.src;
+            if (img.id && img.src.startsWith('data:image')) {
+                imgMap[img.id] = img.src;
             }
         });
-        localStorage.setItem('myGalleryImages', JSON.stringify(imagesData));
-        
-        const bgImage = document.getElementById('global-bg').src;
-        if(bgImage.startsWith('data:image')) {
-            localStorage.setItem('myGalleryBg', bgImage);
+        localStorage.setItem('gallery_images', JSON.stringify(imgMap));
+
+        // 3. 배경 저장
+        const bgImg = document.getElementById('global-bg').src;
+        if (bgImg.startsWith('data:image')) {
+            localStorage.setItem('gallery_bg', bgImg);
         } else {
-            localStorage.removeItem('myGalleryBg');
+            localStorage.removeItem('gallery_bg');
         }
 
-        // 2. 현재 상태 그대로 HTML 파일로 다운로드 (핵심)
-        // 현재 화면의 HTML을 통째로 가져와서 하나의 완성된 웹페이지 파일로 만듭니다.
-        const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-        
-        // 텍스트 파일(Blob) 객체 생성
-        const blob = new Blob([htmlContent], {type: "text/html;charset=utf-8"});
-        const url = URL.createObjectURL(blob);
-        
-        // 가상의 다운로드 링크를 만들어서 클릭 이벤트 발생
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "My_Beautiful_Gallery.html"; // 저장될 파일 이름
-        document.body.appendChild(a);
-        a.click();
-        
-        // 뒷정리
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        alert("성공!\n\n1. 현재 브라우저에 임시 저장되었습니다.\n2. 'My_Beautiful_Gallery.html' 파일이 기기에 다운로드 되었습니다. 이 파일을 열면 영원히 사라지지 않습니다!");
-
-      } catch (err) {
-        console.error(err);
-        alert("저장 중 오류가 발생했습니다. 용량이 너무 큰 이미지가 포함되어 있을 수 있습니다.");
+        alert("✅ 이 기기(브라우저)에 성공적으로 고정되었습니다!\n이제 창을 닫거나 새로고침해도 내용이 유지됩니다.");
+      } catch (e) {
+        alert("⚠️ 저장 용량 부족! 사진 크기를 줄여주세요.");
+        console.error(e);
       }
     }
 
-    // 페이지 로드 시 기존 저장된 데이터 복구
-    function loadGallery() {
+    // 🌟 저장된 내용 불러오기
+    function loadFromBrowser() {
       try {
-        const savedTexts = JSON.parse(localStorage.getItem('myGalleryTexts'));
+        // 텍스트 복구
+        const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
         if (savedTexts) {
-            document.querySelectorAll('.text-target').forEach((el, idx) => {
-                if (savedTexts[idx] !== undefined) el.innerHTML = savedTexts[idx];
+            document.querySelectorAll('.text-target').forEach((el, index) => {
+                if (savedTexts['text-' + index]) el.innerHTML = savedTexts['text-' + index];
             });
         }
-        const savedImages = JSON.parse(localStorage.getItem('myGalleryImages'));
+
+        // 이미지 복구
+        const savedImages = JSON.parse(localStorage.getItem('gallery_images'));
         if (savedImages) {
             Object.keys(savedImages).forEach(id => {
                 const img = document.getElementById(id);
-                if(img) img.src = savedImages[id];
+                if (img) img.src = savedImages[id];
             });
         }
-        const savedBg = localStorage.getItem('myGalleryBg');
+
+        // 배경 복구
+        const savedBg = localStorage.getItem('gallery_bg');
         if (savedBg) {
-            document.body.style.backgroundImage = `url('${savedBg}')`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundPosition = 'center';
-            document.body.style.backgroundAttachment = 'fixed';
-            document.getElementById('global-bg').src = savedBg;
-            document.getElementById('global-bg').style.display = 'block';
+             document.body.style.backgroundImage = `url('${savedBg}')`;
+             document.body.style.backgroundSize = 'cover';
+             document.body.style.backgroundPosition = 'center';
+             document.body.style.backgroundAttachment = 'fixed';
+             document.getElementById('global-bg').src = savedBg;
+             document.getElementById('global-bg').style.display = 'block';
         }
-      } catch (e) { console.log("로드 중 오류 발생 (무시 가능)"); }
+      } catch (e) {
+        console.log("저장된 내용 없음 or 로드 실패");
+      }
     }
 
+    // 시작 시 불러오기 실행
     window.addEventListener('DOMContentLoaded', () => {
-        loadGallery(); 
+        loadFromBrowser();
         if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
     });
   </script>
