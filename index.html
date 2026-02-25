@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Lacey Fine Art | Gallery</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;1,300&family=Whisper&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Serif+KR:wght@300;400;700&family=Whisper&display=swap" rel="stylesheet"/>
   
   <script>
     tailwind.config = {
@@ -16,8 +16,9 @@
             galleryTeal: '#d0e4e0', 
           },
           fontFamily: {
-            serif: ['"Noto Serif"', 'serif'],
-            diary: ['"Whisper"', 'cursive'], /* 필기체 폰트 */
+            serif: ['"Noto Serif KR"', 'serif'],
+            sans: ['"Gowun Dodum"', 'sans-serif'],
+            diary: ['"Whisper"', 'cursive'],
           },
         }
       }
@@ -26,29 +27,34 @@
   
   <style data-purpose="custom-styles">
     body {
-      font-family: 'Noto Serif', serif;
+      font-family: 'Noto Serif KR', serif;
       -webkit-font-smoothing: antialiased;
       background-color: #d0e4e0; 
       transition: background-image 0.5s ease-in-out;
       overflow-x: hidden;
     }
 
-    /* 🌟 요청하신 스타일: 주홍빛 레드 + 필기체 + 작은 글씨 */
+    /* 🌟 소개글 필기체 (주홍빛 레드) */
     .intro-handwriting {
-      font-family: 'Whisper', cursive; /* 필기체 적용 */
-      color: #FF6347; /* 주홍빛 레드 (Tomato Color) */
-      font-size: 1.8rem; /* 글씨 크기 조금 줄임 (기존 3~4rem -> 1.8rem) */
+      font-family: 'Whisper', cursive; 
+      color: #FF6347; 
+      font-size: 1.8rem; 
       font-weight: 500;
       letter-spacing: 0.05em;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5); /* 잘 보이게 살짝 받침 */
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); 
       line-height: 1.2;
     }
 
-    /* 기존 본문용: 옅은 살구색 + 얇은 고딕/명조 */
+    /* 🌟 덜 투명하고 살짝 은은한 소개글 본문 */
+    .intro-desc {
+      color: rgba(255, 250, 240, 1); /* 투명도를 없애고 확실히 보이는 아이보리/흰색계열 */
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3), 0 0 6px rgba(255, 255, 255, 0.4); /* 그림자로 가독성을 높이고 은은한 빛(글로우) 추가 */
+      font-weight: 400;
+    }
+
+    /* 기본 텍스트 타겟 속성 (사용자가 언제든 뷰어로 바꿀 수 있음) */
     .text-target {
-      color: rgba(255, 228, 196, 0.95); /* Bisque/Apricot */
-      font-weight: 300; 
-      text-shadow: 0 0 2px rgba(0, 0, 0, 0.1), 0 0 5px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
     }
 
     /* 유리 패널 스타일 */
@@ -68,12 +74,13 @@
     .arrow-icon { transition: transform 0.6s ease; }
     .slide-hide { transform: translateX(calc(100% - 3.5rem)); }
 
-    /* 버튼 스타일 */
+    /* 일반 버튼 스타일 */
     .water-btn {
       display: inline-flex; align-items: center; justify-content: center;
       padding: 0.35rem 0.75rem; color: #3b6b6d;
-      background-color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.9);
+      background-color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.9);
       border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     
     .ghost-btn {
@@ -83,13 +90,18 @@
       border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px);
     }
 
+    /* 밀리의 서재풍 뷰어 모달 하단 시트 애니메이션 */
+    .bottom-sheet {
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .bottom-sheet.open {
+      transform: translateY(0);
+    }
+
     .draggable { cursor: grab; }
     .draggable:active { cursor: grabbing; }
-
-    .diary-modal-bg {
-      background-color: rgba(60, 60, 60, 0.65);
-      backdrop-filter: blur(8px);
-    }
+    .diary-modal-bg { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
   </style>
 </head>
 <body class="text-[#1a4142]">
@@ -110,8 +122,9 @@
 
   <header class="sticky top-0 z-40 py-6 px-8 flex justify-between items-start bg-[#d0e4e0]/60 backdrop-blur-md border-b border-white/20 shadow-sm">
     <div class="flex flex-col items-start relative group logo-container">
-      <div class="absolute -top-4 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+      <div class="absolute -top-4 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex space-x-1">
         <button class="water-btn !text-[10px] !px-2 !py-1" onclick="openTextEditor(this.closest('.logo-container'))">수정</button>
+        <button class="water-btn !text-[10px] !px-2 !py-1 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.logo-container'))">스타일</button>
       </div>
       <div class="mb-1">
         <svg width="30" height="30" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,12 +148,18 @@
           <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item">
             <div class="flex justify-between items-center w-full">
               <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target">[상위 메뉴 입력]</a>
-              <button class="water-btn !text-[9px] !px-2 !py-1 ml-2" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+              <div class="flex space-x-1 ml-2">
+                <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                <button class="water-btn !text-[9px] !px-2 !py-1 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.flex').querySelector('a'))">스타일</button>
+              </div>
             </div>
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
               <div class="relative flex justify-between items-center child-menu-item">
                 <a href="javascript:void(0)" class="text-xs transition-colors flex-grow text-target">- [하위 메뉴 입력]</a>
-                <button class="water-btn !text-[9px] !px-2 !py-1 ml-2" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                <div class="flex space-x-1 ml-2">
+                    <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                    <button class="water-btn !text-[9px] !px-2 !py-1 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.flex').querySelector('a'))">스타일</button>
+                </div>
               </div>
             </div>
           </div>
@@ -152,25 +171,26 @@
   <main class="px-4 md:px-8 max-w-6xl mx-auto pt-16">
     <section class="py-12">
       <div class="glass-panel rounded-3xl p-8 relative flex flex-col items-center text-center draggable mx-auto max-w-xl shadow-lg border-white/40 bg-white/20" id="draggable-desc">
-        <div class="absolute top-4 right-4 flex space-x-2 z-30">
+        <div class="absolute top-4 right-4 flex space-x-1 z-30">
+          <button class="water-btn !bg-galleryGold !text-white !border-galleryGold" onclick="openStyleEditor(this.closest('#draggable-desc'))">스타일</button>
           <button class="water-btn" onclick="openTextEditor(this.closest('#draggable-desc'))">수정</button>
           <button class="water-btn" onclick="deleteElement(this.closest('#draggable-desc'))">삭제</button>
         </div>
         
         <p class="mb-2 intro-handwriting text-target">[라벨 입력]</p>
         <h2 class="mb-4 intro-handwriting text-target" style="font-size: 2.2rem;">[소개글 타이틀 입력]</h2>
-        
         <div class="w-12 h-1 bg-[#cfa752] mb-6 rounded-full opacity-80"></div>
-        <p class="text-sm leading-relaxed max-w-md text-target intro-desc" style="font-family: 'Noto Serif', serif; color: #1a4142;">
-          [여기에 상세 소개글을 입력하세요. 이 박스는 꾹 눌러서 이동할 수 있습니다.]
+        <p class="text-sm leading-relaxed max-w-md text-target intro-desc">
+          [여기에 상세 소개글을 입력하세요. 우측 상단의 '스타일' 버튼을 누르면 밀리의 서재처럼 글씨를 마음대로 디자인할 수 있습니다.]
         </p>
       </div>
     </section>
 
     <section class="pb-20">
       <div class="text-center mb-8 title-container relative w-max mx-auto group/title">
-        <div class="absolute -top-4 -right-16 opacity-0 group-hover/title:opacity-100 transition-opacity">
+        <div class="absolute -top-4 -right-28 opacity-0 group-hover/title:opacity-100 transition-opacity flex space-x-1">
             <button class="water-btn !py-1 !px-2" onclick="openTextEditor(this.closest('.title-container'))">수정</button>
+            <button class="water-btn !py-1 !px-2 !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.title-container'))">스타일</button>
         </div>
         <h3 class="text-xs uppercase tracking-[0.3em] font-bold drop-shadow-sm text-target gal-title" style="color: #1a4142;">EXHIBITION</h3>
       </div>
@@ -179,24 +199,23 @@
         
         <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
           <img id="art-img-1" src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover">
-          
           <div class="absolute top-4 left-4 z-0 flex space-x-2">
              <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('art-img-1')">사진 넣기</button>
              <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
           </div>
-
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
-                <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                <div class="absolute top-4 right-4 flex space-x-1 z-20">
+                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
                 <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 1]</h4>
                 <div class="overflow-y-auto pr-2">
                   <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [작품 설명입니다. 글 수정 후 꼭 우측 상단 '사이트에 고정'을 눌러주세요.]
+                    [스타일 버튼을 누르고 색상, 자간, 크기, 문단, 여백을 자유롭게 조절해보세요!]
                   </p>
                 </div>
              </div>
@@ -214,13 +233,14 @@
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
-                <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                <div class="absolute top-4 right-4 flex space-x-1 z-20">
+                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
                 <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 2]</h4>
                 <div class="overflow-y-auto pr-2">
                   <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [작품 설명입니다. 사진과 글은 브라우저에 안전하게 저장됩니다.]
+                    [조절된 뷰어 스타일은 글씨와 마찬가지로 기기에 안전하게 영구 저장됩니다.]
                   </p>
                 </div>
              </div>
@@ -238,13 +258,14 @@
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
              <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
-                <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                <div class="absolute top-4 right-4 flex space-x-1 z-20">
+                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
                 <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 3]</h4>
                 <div class="overflow-y-auto pr-2">
                   <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [작품 설명입니다. 오른쪽 상단 고정 버튼을 활용하세요.]
+                    [원하는 색상과 크기로 텍스트를 나만의 감성대로 커스텀 해보세요.]
                   </p>
                 </div>
              </div>
@@ -255,35 +276,82 @@
     </section>
   </main>
 
-  <footer class="py-12 text-center border-t border-white/20 relative z-10 bg-[#d0e4e0]/50 backdrop-blur-sm mt-10">
-    <h2 class="text-xl font-serif mb-2 drop-shadow-sm text-[#1a4142]">LACEY FINE ART</h2>
-    <p class="text-[10px] uppercase tracking-widest text-[#1a4142]/70 mb-6 font-bold">COPYRIGHT 2026. ALL RIGHTS RESERVED</p>
-    <div class="flex justify-center relative w-max mx-auto group/search">
-      <div class="absolute -top-8 right-0 flex space-x-2 opacity-0 group-hover/search:opacity-100 transition-opacity duration-300">
-          <button class="water-btn !py-1 !px-2 !text-[10px]" onclick="openTextEditor(this.closest('.group\\/search').querySelector('span'))">수정</button>
-      </div>
-      <a href="javascript:void(0)" onclick="window.open('https://www.google.com', '_blank')" class="relative inline-block">
-        <span class="font-diary text-3xl text-[#1a4142]/90 hover:text-[#cfa752] transition-colors duration-300 text-target search-text">
-          Search on Google...
-        </span>
-        <div class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1a4142]/40 group-hover:bg-[#cfa752] transition-colors duration-300"></div>
-      </a>
-    </div>
-  </footer>
-
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg">
-    <div class="bg-white/95 w-[90%] max-w-md p-6 rounded-2xl shadow-2xl border border-gray-200">
+    <div class="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-2xl border border-gray-200">
       <h3 class="text-lg font-bold mb-4 text-[#1a4142] font-serif">📝 글쓰기 (내용 수정)</h3>
       <textarea id="modal-textarea" class="w-full h-40 p-4 border border-[#d0e4e0] rounded-xl focus:ring-2 focus:ring-[#d0e4e0] focus:border-transparent resize-none font-serif text-gray-700 bg-gray-50/50" placeholder="여기에 내용을 입력하세요..."></textarea>
       <div class="flex justify-end space-x-3 mt-4">
-        <button class="px-5 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition-colors font-bold text-sm" onclick="closeTextEditor()">취소</button>
-        <button class="px-5 py-2 bg-[#8ac6b8] text-white rounded-full hover:bg-[#5f9ea0] transition-colors font-bold text-sm" onclick="saveTextChanges()">확인</button>
+        <button class="px-5 py-2 bg-gray-200 text-gray-700 rounded-full font-bold text-sm" onclick="closeTextEditor()">취소</button>
+        <button class="px-5 py-2 bg-[#8ac6b8] text-white rounded-full font-bold text-sm" onclick="saveTextChanges()">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="style-editor-modal" class="fixed inset-0 z-[10000] hidden items-end md:items-center justify-center diary-modal-bg">
+    <div id="style-bottom-sheet" class="bottom-sheet bg-white w-full md:w-[90%] md:max-w-md p-6 rounded-t-3xl md:rounded-2xl shadow-2xl border border-gray-200">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold text-[#1a4142] font-serif flex items-center gap-2">
+          <span>🎨</span> 뷰어 설정
+        </h3>
+        <button class="text-gray-400 hover:text-gray-700 font-bold p-2" onclick="closeStyleEditor()">✕</button>
+      </div>
+      
+      <div class="space-y-5 max-h-[65vh] overflow-y-auto px-1 pb-4">
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-bold text-gray-700 block">글자색 선택</label>
+          <input type="color" id="val-color" class="w-12 h-8 cursor-pointer rounded-md border-0 p-0">
+        </div>
+        
+        <div>
+          <label class="text-sm font-bold text-gray-700 mb-2 block">글자 스타일 (폰트)</label>
+          <select id="val-font" class="w-full border-gray-300 bg-gray-50 rounded-lg text-sm p-2 focus:ring-galleryGold focus:border-galleryGold">
+            <option value="'Noto Serif KR', serif">기본 명조 (우아함)</option>
+            <option value="'Gowun Dodum', sans-serif">고운 돋움 (깔끔함)</option>
+            <option value="'Whisper', cursive">필기체 (감성적)</option>
+          </select>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1">
+            <label class="text-sm font-bold text-gray-700">글씨 크기</label>
+            <span id="label-size" class="text-xs text-gray-500">16px</span>
+          </div>
+          <input type="range" id="val-size" min="10" max="60" value="16" class="w-full accent-galleryGold">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1">
+            <label class="text-sm font-bold text-gray-700">자간 (글자 간격)</label>
+            <span id="label-spacing" class="text-xs text-gray-500">0px</span>
+          </div>
+          <input type="range" id="val-spacing" min="-3" max="10" step="0.5" value="0" class="w-full accent-galleryGold">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1">
+            <label class="text-sm font-bold text-gray-700">문단 간격</label>
+            <span id="label-line" class="text-xs text-gray-500">1.5</span>
+          </div>
+          <input type="range" id="val-line" min="1" max="3" step="0.1" value="1.5" class="w-full accent-galleryGold">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1">
+            <label class="text-sm font-bold text-gray-700">상하 여백 간격</label>
+            <span id="label-padding" class="text-xs text-gray-500">0px</span>
+          </div>
+          <input type="range" id="val-padding" min="0" max="50" value="0" class="w-full accent-galleryGold">
+        </div>
+      </div>
+      
+      <div class="mt-4 flex justify-end">
+        <button class="px-5 py-3 bg-galleryGold text-white rounded-xl font-bold w-full text-center shadow-md" onclick="closeStyleEditor()">완료</button>
       </div>
     </div>
   </div>
 
   <script>
-    // 메뉴
+    // ---------------- 메뉴 & 패널 기본 동작 ----------------
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
       e.stopPropagation(); document.getElementById('dropdown-menu').classList.toggle('hidden');
     });
@@ -310,11 +378,8 @@
       function elementTouchDrag(e) { var touch = e.touches[0]; pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY; pos3 = touch.clientX; pos4 = touch.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
     }
-    window.onload = function() {
-      if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
-    }
 
-    // 🌟 사진 처리 (압축 로직 강화)
+    // ---------------- 사진 교체 ----------------
     let currentImgId = null;
     const fileInput = document.getElementById('hidden-file-input');
 
@@ -329,14 +394,13 @@
           img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width; let height = img.height;
-            // 용량 최적화 (Max 600px)
             const MAX_SIZE = 600; 
             if (width > height && width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } 
             else if (height > width && height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.5); // 화질 50%
+            const compressedData = canvas.toDataURL('image/jpeg', 0.5); 
             
             if (currentImgId === 'global-bg') {
               document.body.style.backgroundImage = `url('${compressedData}')`;
@@ -363,7 +427,7 @@
         document.getElementById('global-bg').style.display = 'none';
     }
 
-    // 텍스트 편집
+    // ---------------- 텍스트 수정 편집기 ----------------
     const textModal = document.getElementById('text-editor-modal');
     const modalTextarea = document.getElementById('modal-textarea');
     let currentTextTargets = [];
@@ -371,11 +435,9 @@
     function openTextEditor(containerElement) {
         currentTextTargets = [];
         let combinedText = "";
-        
         let targets = [];
-        if (containerElement.classList.contains('text-target')) {
-            targets = [containerElement];
-        } else {
+        if (containerElement.classList.contains('text-target')) { targets = [containerElement]; } 
+        else {
             targets = containerElement.querySelectorAll('.text-target');
             if (targets.length === 0 && containerElement.tagName === 'A') targets = [containerElement];
         }
@@ -402,23 +464,92 @@
       });
       closeTextEditor();
     }
-    textModal.addEventListener('click', function(e) { if(e.target === textModal) closeTextEditor(); });
 
     function deleteElement(element) {
       if (confirm('정말로 삭제하시겠습니까?')) element.remove();
     }
 
-    // 🌟🌟🌟 강력한 브라우저 저장 기능 (LocalStorage) 🌟🌟🌟
+    // ---------------- 🌟 뷰어 (스타일) 편집기 기능 ----------------
+    const styleModal = document.getElementById('style-editor-modal');
+    const styleSheet = document.getElementById('style-bottom-sheet');
+    let styleTargets = []; // 스타일을 적용할 대상 요소들
+
+    // DOM 요소 캐싱
+    const sColor = document.getElementById('val-color');
+    const sFont = document.getElementById('val-font');
+    const sSize = document.getElementById('val-size');
+    const sSpacing = document.getElementById('val-spacing');
+    const sLine = document.getElementById('val-line');
+    const sPadding = document.getElementById('val-padding');
+    
+    const lSize = document.getElementById('label-size');
+    const lSpacing = document.getElementById('label-spacing');
+    const lLine = document.getElementById('label-line');
+    const lPadding = document.getElementById('label-padding');
+
+    function openStyleEditor(containerElement) {
+        styleTargets = [];
+        if (containerElement.classList.contains('text-target')) { styleTargets = [containerElement]; } 
+        else {
+            styleTargets = containerElement.querySelectorAll('.text-target');
+            if (styleTargets.length === 0 && containerElement.tagName === 'A') styleTargets = [containerElement];
+        }
+
+        // 모달 열기 & 애니메이션
+        styleModal.classList.remove('hidden'); 
+        styleModal.classList.add('flex');
+        setTimeout(() => styleSheet.classList.add('open'), 10);
+    }
+
+    function closeStyleEditor() {
+      styleSheet.classList.remove('open');
+      setTimeout(() => {
+        styleModal.classList.add('hidden'); 
+        styleModal.classList.remove('flex');
+        styleTargets = [];
+      }, 300);
+    }
+
+    // 뷰어 값 변경 이벤트 (실시간 적용)
+    sColor.addEventListener('input', (e) => {
+      styleTargets.forEach(t => t.style.color = e.target.value);
+    });
+    sFont.addEventListener('change', (e) => {
+      styleTargets.forEach(t => t.style.fontFamily = e.target.value);
+    });
+    sSize.addEventListener('input', (e) => {
+      styleTargets.forEach(t => t.style.fontSize = e.target.value + 'px');
+      lSize.innerText = e.target.value + 'px';
+    });
+    sSpacing.addEventListener('input', (e) => {
+      styleTargets.forEach(t => t.style.letterSpacing = e.target.value + 'px');
+      lSpacing.innerText = e.target.value + 'px';
+    });
+    sLine.addEventListener('input', (e) => {
+      styleTargets.forEach(t => t.style.lineHeight = e.target.value);
+      lLine.innerText = e.target.value;
+    });
+    sPadding.addEventListener('input', (e) => {
+      styleTargets.forEach(t => {
+         // 상하 여백만 주어 레이아웃이 안 깨지게 보호
+         t.style.paddingTop = e.target.value + 'px';
+         t.style.paddingBottom = e.target.value + 'px';
+      });
+      lPadding.innerText = e.target.value + 'px';
+    });
+
+    // ---------------- 🌟 브라우저 영구 저장 ----------------
     function saveToBrowser() {
       try {
-        // 1. 텍스트 저장
+        // 1. 텍스트 & 적용된 인라인 스타일(CSS) 저장
         const textMap = {};
+        const styleMap = {};
         document.querySelectorAll('.text-target').forEach((el, index) => {
-            // 위치(index)나 고유 식별자가 없으므로 순서대로 저장
-            // 더 정확히 하려면 각 요소에 ID를 부여해야 하나, 지금 구조에선 순서가 최선
             textMap['text-' + index] = el.innerHTML; 
+            styleMap['style-' + index] = el.getAttribute('style') || '';
         });
         localStorage.setItem('gallery_texts', JSON.stringify(textMap));
+        localStorage.setItem('gallery_styles', JSON.stringify(styleMap));
 
         // 2. 이미지 저장
         const imgMap = {};
@@ -437,21 +568,22 @@
             localStorage.removeItem('gallery_bg');
         }
 
-        alert("✅ 이 기기(브라우저)에 성공적으로 고정되었습니다!\n이제 창을 닫거나 새로고침해도 내용이 유지됩니다.");
+        alert("✅ 사이트에 고정(저장) 완료!\n텍스트, 스타일, 폰트, 사진 모두 이 기기에 영구 박제되었습니다.");
       } catch (e) {
-        alert("⚠️ 저장 용량 부족! 사진 크기를 줄여주세요.");
-        console.error(e);
+        alert("⚠️ 저장 용량 부족! 사진 크기를 더 줄여주세요.");
       }
     }
 
-    // 🌟 저장된 내용 불러오기
+    // ---------------- 🌟 저장된 내용 불러오기 ----------------
     function loadFromBrowser() {
       try {
-        // 텍스트 복구
+        // 텍스트 & 스타일 복구
         const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
+        const savedStyles = JSON.parse(localStorage.getItem('gallery_styles'));
         if (savedTexts) {
             document.querySelectorAll('.text-target').forEach((el, index) => {
                 if (savedTexts['text-' + index]) el.innerHTML = savedTexts['text-' + index];
+                if (savedStyles && savedStyles['style-' + index]) el.setAttribute('style', savedStyles['style-' + index]);
             });
         }
 
@@ -475,11 +607,11 @@
              document.getElementById('global-bg').style.display = 'block';
         }
       } catch (e) {
-        console.log("저장된 내용 없음 or 로드 실패");
+        console.log("저장된 데이터 없음");
       }
     }
 
-    // 시작 시 불러오기 실행
+    // 앱 시작 시 자동 로드
     window.addEventListener('DOMContentLoaded', () => {
         loadFromBrowser();
         if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
