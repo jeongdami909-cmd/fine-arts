@@ -52,14 +52,22 @@
       font-weight: 400;
     }
 
-    /* 기본 텍스트 타겟 속성 (옅은 회색 + 은은한 골드) */
+    /* 기본 텍스트 타겟 속성 (긴 글 줄바꿈 보존 적용) */
     .text-target {
       color: rgba(245, 245, 245, 0.95); 
       font-weight: 300; 
       text-shadow: 0 0 2px rgba(212, 175, 55, 0.4), 1px 1px 1px rgba(0, 0, 0, 0.1);
       letter-spacing: 0.05em;
       transition: all 0.2s ease;
+      white-space: pre-wrap; /* 엔터 줄바꿈 그대로 보존 */
+      word-break: break-word; /* 글자가 영역을 넘지 않도록 줄바꿈 */
     }
+
+    /* 얇고 깔끔한 커스텀 스크롤바 (디자인 유지) */
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
 
     /* 유리 패널 스타일 */
     .glass-panel {
@@ -147,7 +155,7 @@
 
       <div id="dropdown-menu" class="hidden absolute right-0 mt-4 w-72 bg-white/95 backdrop-blur-md border border-gray-200 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden">
         <div class="p-4 bg-gray-50 text-xs font-bold uppercase tracking-widest border-b border-gray-200 text-gray-500">Directory</div>
-        <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+        <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto custom-scroll">
           <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item">
             <div class="flex justify-between items-center w-full">
               <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target">[상위 메뉴 입력]</a>
@@ -183,9 +191,11 @@
         <p class="mb-2 intro-handwriting text-target">[라벨 입력]</p>
         <h2 class="mb-4 intro-handwriting text-target" style="font-size: 2.2rem;">[소개글 타이틀 입력]</h2>
         <div class="w-12 h-1 bg-[#cfa752] mb-6 rounded-full opacity-80"></div>
-        <p class="text-sm leading-relaxed max-w-md text-target intro-desc">
-          [여기에 상세 소개글을 입력하세요. 텍스트를 수정하고 우측 상단의 '전체 고정 (확인)' 버튼을 누르시면 저장됩니다.]
-        </p>
+        <div class="overflow-y-auto max-h-[400px] w-full px-2 custom-scroll">
+            <p class="text-sm leading-relaxed text-target intro-desc text-center mx-auto max-w-md">
+              [여기에 아주 긴 상세 소개글을 입력하세요. 텍스트를 수정하고 우측 상단의 '전체 고정 (확인)' 버튼을 누르시면 저장됩니다.]
+            </p>
+        </div>
       </div>
     </section>
 
@@ -214,16 +224,14 @@
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content overflow-hidden">
                 <div class="absolute top-4 right-4 flex space-x-1 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 1]</h4>
-                <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [사진을 넣은 후, 바로 옆에 있는 '고정 확인' 버튼을 누르면 사진이 절대 날아가지 않습니다!]
-                  </p>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target shrink-0">[작품 제목 1]</h4>
+                <div class="flex-1 overflow-y-auto pr-2 custom-scroll">
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">[여기에 긴 글을 자유롭게 적어주세요. 길어지면 자동으로 스크롤이 생기며 모든 글을 읽을 수 있습니다. 사진을 넣은 후, 바로 옆에 있는 '고정 확인' 버튼을 누르면 사진이 절대 날아가지 않습니다!]</p>
                 </div>
              </div>
           </div>
@@ -242,16 +250,14 @@
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content overflow-hidden">
                 <div class="absolute top-4 right-4 flex space-x-1 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 2]</h4>
-                <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [사진마다 '고정 확인' 버튼을 배치했습니다. 직관적으로 바로바로 저장해보세요.]
-                  </p>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target shrink-0">[작품 제목 2]</h4>
+                <div class="flex-1 overflow-y-auto pr-2 custom-scroll">
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">[사진마다 '고정 확인' 버튼을 배치했습니다. 직관적으로 바로바로 저장해보세요. 긴 글도 막힘없이 들어갑니다.]</p>
                 </div>
              </div>
           </div>
@@ -270,16 +276,14 @@
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
                 <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
              </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content overflow-hidden">
                 <div class="absolute top-4 right-4 flex space-x-1 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 3]</h4>
-                <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [밀리의 서재 같은 스타일 뷰어 기능도 완벽하게 지원됩니다.]
-                  </p>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target shrink-0">[작품 제목 3]</h4>
+                <div class="flex-1 overflow-y-auto pr-2 custom-scroll">
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">[밀리의 서재 같은 스타일 뷰어 기능도 완벽하게 지원됩니다. 여기에 소설이나 긴 설명을 편하게 작성해 보세요.]</p>
                 </div>
              </div>
           </div>
@@ -292,7 +296,7 @@
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg">
     <div class="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-2xl border border-gray-200">
       <h3 class="text-lg font-bold mb-4 text-[#1a4142] font-serif">📝 글쓰기 (내용 수정)</h3>
-      <textarea id="modal-textarea" class="w-full h-40 p-4 border border-[#d0e4e0] rounded-xl focus:ring-2 focus:ring-[#d0e4e0] focus:border-transparent resize-none font-serif text-gray-700 bg-gray-50/50" placeholder="여기에 내용을 입력하세요..."></textarea>
+      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-[#d0e4e0] rounded-xl focus:ring-2 focus:ring-[#d0e4e0] focus:border-transparent resize-none font-serif text-gray-700 bg-gray-50/50 custom-scroll" placeholder="여기에 내용을 입력하세요..."></textarea>
       <div class="flex justify-end space-x-3 mt-4">
         <button class="px-5 py-2 bg-gray-200 text-gray-700 rounded-full font-bold text-sm" onclick="closeTextEditor()">취소</button>
         <button class="px-5 py-2 bg-[#8ac6b8] text-white rounded-full font-bold text-sm" onclick="saveTextChanges()">확인 (적용)</button>
@@ -309,7 +313,7 @@
         <button class="text-gray-400 hover:text-gray-700 font-bold p-2" onclick="closeStyleEditor()">✕</button>
       </div>
       
-      <div class="space-y-5 max-h-[65vh] overflow-y-auto px-1 pb-4">
+      <div class="space-y-5 max-h-[65vh] overflow-y-auto px-1 pb-4 custom-scroll">
         <div class="flex justify-between items-center">
           <label class="text-sm font-bold text-gray-700 block">글자색 선택</label>
           <input type="color" id="val-color" class="w-12 h-8 cursor-pointer rounded-md border-0 p-0">
@@ -385,8 +389,8 @@
     function makeDraggable(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; 
-      function dragMouseDown(e) { if(e.target.tagName.toLowerCase() === 'button') return; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
-      function dragTouchStart(e) { if(e.target.tagName.toLowerCase() === 'button') return; var touch = e.touches[0]; pos3 = touch.clientX; pos4 = touch.clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
+      function dragMouseDown(e) { if(e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') return; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
+      function dragTouchStart(e) { if(e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') return; var touch = e.touches[0]; pos3 = touch.clientX; pos4 = touch.clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
       function elementDrag(e) { e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function elementTouchDrag(e) { var touch = e.touches[0]; pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY; pos3 = touch.clientX; pos4 = touch.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
@@ -407,13 +411,13 @@
           img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width; let height = img.height;
-            const MAX_SIZE = 600; 
+            const MAX_SIZE = 800; // 해상도 살짝 상향
             if (width > height && width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } 
             else if (height > width && height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.5); 
+            const compressedData = canvas.toDataURL('image/jpeg', 0.6); 
             
             if (currentImgId === 'global-bg') {
               document.body.style.backgroundImage = `url('${compressedData}')`;
@@ -451,14 +455,17 @@
         let targets = [];
         if (containerElement.classList.contains('text-target')) { targets = [containerElement]; } 
         else {
-            targets = containerElement.querySelectorAll('.text-target');
+            targets = Array.from(containerElement.querySelectorAll('.text-target'));
             if (targets.length === 0 && containerElement.tagName === 'A') targets = [containerElement];
         }
 
         targets.forEach((target, index) => {
             currentTextTargets.push(target);
-            combinedText += target.innerText.trim();
-            if (index < targets.length - 1) combinedText += "\n";
+            if (index === targets.length - 1) {
+                combinedText += target.innerText; // 마지막 요소(본문)는 띄어쓰기/줄바꿈 완벽 보존
+            } else {
+                combinedText += target.innerText.replace(/\n/g, ' ').trim() + "\n";
+            }
         });
 
       modalTextarea.value = combinedText;
@@ -473,7 +480,12 @@
     function saveTextChanges() {
       const newTextLines = modalTextarea.value.split('\n');
       currentTextTargets.forEach((target, index) => {
-          if (index < newTextLines.length) target.innerText = newTextLines[index].trim(); 
+          if (index === currentTextTargets.length - 1) {
+              // 본문 영역은 남은 모든 줄바꿈과 텍스트를 그대로 통째로 받음
+              target.innerText = newTextLines.slice(index).join('\n');
+          } else {
+              target.innerText = (newTextLines[index] || "").trim();
+          }
       });
       closeTextEditor();
     }
