@@ -198,7 +198,7 @@
         <h3 class="text-xs uppercase tracking-[0.3em] font-bold drop-shadow-sm text-target gal-title" style="color: #1a4142;">EXHIBITION</h3>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
         <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
           <img id="art-img-1" src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover">
@@ -220,74 +220,38 @@
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
                 <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 1]</h4>
-                <div class="overflow-y-auto pr-2">
+                <div class="overflow-y-auto pr-2 max-h-[180px]">
                   <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
                     [사진을 넣은 후, 바로 옆에 있는 '고정 확인' 버튼을 누르면 사진이 절대 날아가지 않습니다!]
                   </p>
                 </div>
-             </div>
-          </div>
-        </div>
-
-        <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
-          <img id="art-img-2" src="5168.jpg" alt="Art 2" class="absolute inset-0 w-full h-full object-cover object-top">
-          <div class="absolute top-4 left-4 z-0 flex flex-col space-y-1 items-start">
-             <div class="flex space-x-2">
-               <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('art-img-2')">사진 넣기</button>
-               <button class="ghost-btn !px-3 !py-1.5 !text-[10px] !bg-white/80 !text-[#cfa752] !border-[#cfa752] !font-bold" onclick="saveToBrowser()">고정 확인</button>
-             </div>
-             <button class="ghost-btn !px-3 !py-1.5 !text-[10px] mt-1" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
-          </div>
-          <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
-             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
-                <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-             </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
-                <div class="absolute top-4 right-4 flex space-x-1 z-20">
-                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
-                  <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
-                </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 2]</h4>
-                <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [사진마다 '고정 확인' 버튼을 배치했습니다. 직관적으로 바로바로 저장해보세요.]
-                  </p>
-                </div>
-             </div>
-          </div>
-        </div>
-
-        <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
-          <img id="art-img-3" src="5170.jpg" alt="Art 3" class="absolute inset-0 w-full h-full object-cover object-top">
-          <div class="absolute top-4 left-4 z-0 flex flex-col space-y-1 items-start">
-             <div class="flex space-x-2">
-               <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('art-img-3')">사진 넣기</button>
-               <button class="ghost-btn !px-3 !py-1.5 !text-[10px] !bg-white/80 !text-[#cfa752] !border-[#cfa752] !font-bold" onclick="saveToBrowser()">고정 확인</button>
-             </div>
-             <button class="ghost-btn !px-3 !py-1.5 !text-[10px] mt-1" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
-          </div>
-          <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
-             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
-                <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-             </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
-                <div class="absolute top-4 right-4 flex space-x-1 z-20">
-                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
-                  <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
-                </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목 3]</h4>
-                <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">
-                    [밀리의 서재 같은 스타일 뷰어 기능도 완벽하게 지원됩니다.]
-                  </p>
-                </div>
+                <button class="mt-auto water-btn !bg-white/90 !text-[10px] !py-2 w-full shadow-sm" onclick="openDetailedView(this.closest('.text-content'))">📖 글 자세히 보기</button>
              </div>
           </div>
         </div>
 
       </div>
+
+      <div class="mt-12 flex justify-center">
+        <button class="ghost-btn !border-galleryGold !text-galleryGold !px-8 !py-4 !text-sm !font-bold hover:bg-galleryGold hover:text-white transition-all shadow-lg" onclick="addNewGalleryItem()">
+          + 새로운 전시물 추가하기
+        </button>
+      </div>
     </section>
   </main>
+
+  <div id="detail-view-modal" class="fixed inset-0 z-[10001] hidden flex-col diary-modal-bg">
+    <div class="bg-[#f4f4f2] w-full h-full md:w-[600px] md:h-[90vh] md:m-auto md:rounded-3xl overflow-hidden flex flex-col shadow-2xl relative">
+        <header class="p-6 flex justify-between items-center border-b border-gray-200 bg-white/50">
+            <h2 id="detail-title" class="font-serif font-bold text-lg text-gray-800">제목</h2>
+            <button class="text-gray-400 hover:text-gray-800 p-2 text-2xl" onclick="closeDetailedView()">✕</button>
+        </header>
+        <div class="flex-1 overflow-y-auto p-8 md:p-12">
+            <div id="detail-content" class="font-serif text-lg leading-loose text-gray-700 whitespace-pre-wrap">내용이 들어갑니다.</div>
+        </div>
+        <footer class="p-4 text-center text-[10px] text-gray-400 border-t border-gray-100 bg-white/30">Lacey Fine Art Viewer</footer>
+    </div>
+  </div>
 
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg">
     <div class="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-2xl border border-gray-200">
@@ -407,13 +371,13 @@
           img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width; let height = img.height;
-            const MAX_SIZE = 600; 
+            const MAX_SIZE = 800; 
             if (width > height && width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } 
             else if (height > width && height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.5); 
+            const compressedData = canvas.toDataURL('image/jpeg', 0.6); 
             
             if (currentImgId === 'global-bg') {
               document.body.style.backgroundImage = `url('${compressedData}')`;
@@ -433,12 +397,6 @@
       }
       fileInput.value = ''; 
     });
-
-    function removeBackground() {
-        document.body.style.backgroundImage = 'none';
-        document.getElementById('global-bg').src = '';
-        document.getElementById('global-bg').style.display = 'none';
-    }
 
     // ---------------- 텍스트 수정 편집기 ----------------
     const textModal = document.getElementById('text-editor-modal');
@@ -482,7 +440,7 @@
       if (confirm('정말로 삭제하시겠습니까?')) element.remove();
     }
 
-    // ---------------- 🌟 뷰어 (스타일) 편집기 기능 ----------------
+    // ---------------- 뷰어 (스타일) 편집기 ----------------
     const styleModal = document.getElementById('style-editor-modal');
     const styleSheet = document.getElementById('style-bottom-sheet');
     let styleTargets = []; 
@@ -543,9 +501,69 @@
       lPadding.innerText = e.target.value + 'px';
     });
 
-    // ---------------- 🌟 브라우저 영구 저장 ----------------
+    // ---------------- 🌟 갤러리 무한 추가 기능 ----------------
+    function addNewGalleryItem() {
+        const grid = document.getElementById('gallery-grid');
+        const newId = 'art-img-' + Date.now();
+        const newItem = document.createElement('div');
+        newItem.className = "relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item";
+        newItem.innerHTML = `
+          <img id="${newId}" src="https://via.placeholder.com/600x800?text=New+Art" alt="New Art" class="absolute inset-0 w-full h-full object-cover">
+          <div class="absolute top-4 left-4 z-0 flex flex-col space-y-1 items-start">
+             <div class="flex space-x-2">
+               <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('${newId}')">사진 넣기</button>
+               <button class="ghost-btn !px-3 !py-1.5 !text-[10px] !bg-white/80 !text-[#cfa752] !border-[#cfa752] !font-bold" onclick="saveToBrowser()">고정 확인</button>
+             </div>
+             <button class="ghost-btn !px-3 !py-1.5 !text-[10px] mt-1" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
+          </div>
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
+             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/40 backdrop-blur-md border-r border-white/60 hover:bg-white/60 transition-colors shrink-0" onclick="toggleSlide(this)">
+                <svg class="w-6 h-6 text-[#1a4142] arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+             </div>
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-light text-content">
+                <div class="absolute top-4 right-4 flex space-x-1 z-20">
+                  <button class="water-btn !px-3 !py-1.5 !text-[10px] !bg-galleryGold !text-white" onclick="openStyleEditor(this.closest('.text-content'))">스타일</button>
+                  <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
+                </div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-[#1a4142] text-target">[작품 제목]</h4>
+                <div class="overflow-y-auto pr-2 max-h-[180px]">
+                  <p class="text-sm leading-relaxed font-medium text-[#555] text-target">[상세 내용을 입력하세요]</p>
+                </div>
+                <button class="mt-auto water-btn !bg-white/90 !text-[10px] !py-2 w-full shadow-sm" onclick="openDetailedView(this.closest('.text-content'))">📖 글 자세히 보기</button>
+             </div>
+          </div>
+        `;
+        grid.appendChild(newItem);
+    }
+
+    // ---------------- 🌟 자세히 보기 기능 ----------------
+    function openDetailedView(container) {
+        const title = container.querySelector('h4').innerText;
+        const content = container.querySelector('p').innerText;
+        const style = container.querySelector('p').getAttribute('style') || "";
+
+        document.getElementById('detail-title').innerText = title;
+        const detailBody = document.getElementById('detail-content');
+        detailBody.innerText = content;
+        detailBody.setAttribute('style', style);
+        
+        const modal = document.getElementById('detail-view-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeDetailedView() {
+        const modal = document.getElementById('detail-view-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // ---------------- 브라우저 저장/불러오기 ----------------
     function saveToBrowser() {
       try {
+        const itemsHtml = document.getElementById('gallery-grid').innerHTML;
+        localStorage.setItem('gallery_items_structure', itemsHtml);
+
         const textMap = {};
         const styleMap = {};
         document.querySelectorAll('.text-target').forEach((el, index) => {
@@ -564,49 +582,40 @@
         localStorage.setItem('gallery_images', JSON.stringify(imgMap));
 
         const bgImg = document.getElementById('global-bg').src;
-        if (bgImg.startsWith('data:image')) {
-            localStorage.setItem('gallery_bg', bgImg);
-        } else {
-            localStorage.removeItem('gallery_bg');
-        }
+        if (bgImg.startsWith('data:image')) localStorage.setItem('gallery_bg', bgImg);
 
-        alert("✅ 사이트에 성공적으로 고정되었습니다!\n사진, 글, 스타일 모두 이 기기에 박제되었습니다.");
+        alert("✅ 모든 내용이 성공적으로 저장되었습니다!");
       } catch (e) {
-        alert("⚠️ 사진 용량이 너무 커서 모두 저장하지 못했습니다. 용량이 작은 사진을 이용해주세요.");
+        alert("⚠️ 용량 제한으로 일부 사진이 저장되지 않을 수 있습니다.");
       }
     }
 
-    // ---------------- 🌟 저장된 내용 불러오기 ----------------
     function loadFromBrowser() {
-      try {
-        const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
-        const savedStyles = JSON.parse(localStorage.getItem('gallery_styles'));
-        if (savedTexts) {
-            document.querySelectorAll('.text-target').forEach((el, index) => {
-                if (savedTexts['text-' + index]) el.innerHTML = savedTexts['text-' + index];
-                if (savedStyles && savedStyles['style-' + index]) el.setAttribute('style', savedStyles['style-' + index]);
-            });
-        }
+      const savedStructure = localStorage.getItem('gallery_items_structure');
+      if (savedStructure) document.getElementById('gallery-grid').innerHTML = savedStructure;
 
-        const savedImages = JSON.parse(localStorage.getItem('gallery_images'));
-        if (savedImages) {
-            Object.keys(savedImages).forEach(id => {
-                const img = document.getElementById(id);
-                if (img) img.src = savedImages[id];
-            });
-        }
+      const savedTexts = JSON.parse(localStorage.getItem('gallery_texts'));
+      const savedStyles = JSON.parse(localStorage.getItem('gallery_styles'));
+      if (savedTexts) {
+          document.querySelectorAll('.text-target').forEach((el, index) => {
+              if (savedTexts['text-' + index]) el.innerHTML = savedTexts['text-' + index];
+              if (savedStyles && savedStyles['style-' + index]) el.setAttribute('style', savedStyles['style-' + index]);
+          });
+      }
 
-        const savedBg = localStorage.getItem('gallery_bg');
-        if (savedBg) {
-             document.body.style.backgroundImage = `url('${savedBg}')`;
-             document.body.style.backgroundSize = 'cover';
-             document.body.style.backgroundPosition = 'center';
-             document.body.style.backgroundAttachment = 'fixed';
-             document.getElementById('global-bg').src = savedBg;
-             document.getElementById('global-bg').style.display = 'block';
-        }
-      } catch (e) {
-        console.log("저장된 데이터 없음");
+      const savedImages = JSON.parse(localStorage.getItem('gallery_images'));
+      if (savedImages) {
+          Object.keys(savedImages).forEach(id => {
+              const img = document.getElementById(id);
+              if (img) img.src = savedImages[id];
+          });
+      }
+
+      const savedBg = localStorage.getItem('gallery_bg');
+      if (savedBg) {
+          document.body.style.backgroundImage = `url('${savedBg}')`;
+          document.getElementById('global-bg').src = savedBg;
+          document.getElementById('global-bg').style.display = 'block';
       }
     }
 
