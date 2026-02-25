@@ -33,78 +33,62 @@
       overflow-x: hidden;
     }
     
-    /* 기존 투명 유리 패널 (드래그 박스 등) */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
-    }
-
     /* 옅은 하늘빛 투명 유리 패널 (갤러리 안내글 전용) */
     .glass-panel-blue {
-      background: rgba(190, 230, 245, 0.55); /* 은은한 하늘빛 */
+      background: rgba(190, 230, 245, 0.55);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(210, 240, 250, 0.7);
-      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.05);
     }
 
-    .draggable {
-      cursor: grab;
-    }
-    .draggable:active {
-      cursor: grabbing;
-    }
-
-    /* 은은하게 엷은 물색 가장자리 버튼 효과 (모바일 터치 오류 방지를 위해 항상 살짝 보이게 설정) */
+    /* 은은하게 엷은 물색 가장자리 버튼 효과 */
     .water-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       padding: 0.35rem 0.75rem;
       color: rgba(30, 50, 60, 0.8);
-      background-color: rgba(200, 240, 255, 0.6); /* 옅은 하늘/물색 바탕 */
-      border: 1px solid rgba(140, 210, 230, 0.8); /* 엷은 물색 테두리 */
+      background-color: rgba(200, 240, 255, 0.6);
+      border: 1px solid rgba(140, 210, 230, 0.8);
       border-radius: 8px;
       font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
       white-space: nowrap;
-      transition: all 0.3s ease;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03); 
-      opacity: 0.85; /* 모바일에서 더블 탭 방지 위해 항상 보이게 */
+      opacity: 0.85;
     }
-    .water-btn:hover, .water-btn:active {
+    .water-btn:hover {
       opacity: 1;
-      color: rgba(10, 30, 40, 1);
-      background-color: rgba(170, 230, 250, 0.8);
-      border-color: rgba(100, 190, 220, 1);
-      box-shadow: 0 4px 8px rgba(100, 190, 220, 0.25);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
-    /* 슬라이딩 패널 애니메이션용 클래스 */
+    /* 슬라이딩 패널 애니메이션 */
     .slide-panel {
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .arrow-icon {
       transition: transform 0.6s ease;
     }
+    
+    /* 반투명 회색 다이어리 스타일 입력창 배경 */
+    .diary-modal-bg {
+      background-color: rgba(50, 50, 50, 0.6); /* 진한 회색 불투명 */
+      backdrop-filter: blur(8px);
+    }
   </style>
 </head>
 <body class="bg-galleryBeige text-galleryDark">
 
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center" data-purpose="site-header">
-    <div class="relative group/logo flex items-center space-x-2 p-2 rounded">
+  <input type="file" id="hidden-file-input" class="hidden" accept="image/*">
+
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+    <div class="relative group/logo flex items-center space-x-2 p-2 rounded hover:bg-gray-100/50 transition-colors">
       <div class="absolute -top-3 right-0 flex space-x-2">
-        <button class="water-btn">수정</button>
+        <button class="water-btn" onclick="openTextEditor(this.closest('.group\\/logo').querySelector('.logo-text-container'))">수정</button>
       </div>
-      <div class="flex flex-col items-center cursor-pointer">
-        <span class="text-galleryGold text-2xl leading-none italic font-bold">[로고 메인]</span>
-        <span class="text-xs uppercase tracking-widest font-semibold mt-1">[로고 서브]</span>
+      <div class="flex flex-col items-center cursor-pointer logo-text-container">
+        <span class="text-galleryGold text-2xl leading-none italic font-bold text-target">[로고 메인]</span>
+        <span class="text-xs uppercase tracking-widest font-semibold mt-1 text-target">[로고 서브]</span>
       </div>
     </div>
     
@@ -122,32 +106,32 @@
           Navigation Directory
         </div>
         <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-          <div class="relative flex flex-col border-b border-gray-100 pb-3">
+          <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item">
             <div class="flex justify-between items-center w-full">
-              <a href="#gallery-section" class="text-sm font-serif font-bold text-gray-800 hover:text-galleryGold transition-colors flex-grow">
+              <a href="#gallery-section" class="text-sm font-serif font-bold text-gray-800 hover:text-galleryGold transition-colors flex-grow text-target">
                 [상위 메뉴 입력]
               </a>
               <div class="flex space-x-2 ml-2">
-                <button class="water-btn !text-[9px] !px-2 !py-1">수정</button>
-                <button class="water-btn !text-[9px] !px-2 !py-1">삭제</button>
+                <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                <button class="water-btn !text-[9px] !px-2 !py-1" onclick="deleteElement(this.closest('.menu-item'))">삭제</button>
               </div>
             </div>
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
-              <div class="relative flex justify-between items-center">
-                <a href="#gallery-section" class="text-xs text-gray-600 hover:text-galleryGold transition-colors flex-grow">
+              <div class="relative flex justify-between items-center child-menu-item">
+                <a href="#gallery-section" class="text-xs text-gray-600 hover:text-galleryGold transition-colors flex-grow text-target">
                   - [하위 메뉴 입력]
                 </a>
                 <div class="flex space-x-2">
-                  <button class="water-btn !text-[9px] !px-2 !py-1">수정</button>
-                  <button class="water-btn !text-[9px] !px-2 !py-1">삭제</button>
+                  <button class="water-btn !text-[9px] !px-2 !py-1" onclick="openTextEditor(this.closest('.flex').querySelector('a'))">수정</button>
+                  <button class="water-btn !text-[9px] !px-2 !py-1" onclick="deleteElement(this.closest('.child-menu-item'))">삭제</button>
                 </div>
               </div>
-              <button class="text-[10px] text-gray-400 hover:text-galleryGold font-bold tracking-wider text-left w-full transition-colors mt-2">
+              <button class="text-[10px] text-gray-400 hover:text-galleryGold font-bold tracking-wider text-left w-full transition-colors mt-2" onclick="alert('하위 메뉴 추가 기능은 백엔드 구현이 필요합니다.')">
                 + 하위 추가
               </button>
             </div>
           </div>
-          <button class="w-full text-center py-2 text-xs font-bold text-galleryGold hover:text-white hover:bg-galleryGold border border-galleryGold transition-all rounded-sm mt-2">
+          <button class="w-full text-center py-2 text-xs font-bold text-galleryGold hover:text-white hover:bg-galleryGold border border-galleryGold transition-all rounded-sm mt-2" onclick="alert('새 카테고리 추가 기능은 백엔드 구현이 필요합니다.')">
             + 새 메뉴 카테고리 추가
           </button>
         </div>
@@ -155,50 +139,50 @@
     </div>
   </header>
   <main>
-    <section class="py-20 px-4 max-w-6xl mx-auto" data-purpose="about-section">
+    <section class="py-20 px-4 max-w-6xl mx-auto">
       <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-lg flex items-center justify-center">
-        <img alt="Background art" class="absolute inset-0 w-full h-full object-cover" src="5167.png"/>
+        <img id="main-bg-img" alt="Background art" class="absolute inset-0 w-full h-full object-cover img-target" src="5167.png"/>
         
         <div class="absolute top-4 left-4 z-10">
-          <button class="water-btn">배경 사진 수정</button>
+          <button class="water-btn" onclick="triggerFileUpload('main-bg-img')">배경 사진 수정</button>
         </div>
 
-        <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
+        <div id="draggable-desc" class="glass-panel-blue draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
           <div class="absolute top-4 right-4 flex space-x-2 z-30">
-            <button class="water-btn">수정</button>
-            <button class="water-btn">삭제</button>
+            <button class="water-btn" onclick="openTextEditor(this.closest('#draggable-desc').querySelector('.desc-content'))">수정</button>
+            <button class="water-btn" onclick="deleteElement(document.getElementById('draggable-desc'))">삭제</button>
           </div>
 
-          <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4 mt-6">[라벨 입력]</p>
-          <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">[소개글 타이틀<br/>입력]</h2>
-          <div class="w-6 h-px bg-galleryGold mb-6"></div>
-          <p class="text-[10px] uppercase tracking-widest text-gray-600 mb-4">[서브 타이틀 입력]</p>
-          <p class="text-sm text-gray-800 leading-loose">
-            [여기에 상세 소개글을 입력하세요. 이 박스는 마우스나 터치로 자유롭게 이동할 수 있습니다.]
-          </p>
-          <div class="mt-6 flex space-x-1 items-center justify-center opacity-40">
-            <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
-            <span class="text-[9px] uppercase tracking-widest text-gray-600">Drag to move</span>
+          <div class="desc-content mt-4">
+            <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4 text-target">[라벨 입력]</p>
+            <h2 class="text-3xl font-serif uppercase tracking-widest mb-6 text-target">[소개글 타이틀<br/>입력]</h2>
+            <div class="w-6 h-px bg-galleryGold mb-6 mx-auto"></div>
+            <p class="text-[10px] uppercase tracking-widest text-gray-600 mb-4 text-target">[서브 타이틀 입력]</p>
+            <p class="text-sm text-gray-800 leading-loose text-target">
+              [여기에 상세 소개글을 입력하세요. 이 박스는 마우스나 터치로 자유롭게 이동할 수 있습니다.]
+            </p>
           </div>
         </div>
       </div>
     </section>
-    <section id="gallery-section" class="relative py-16" data-purpose="gallery-grid">
-      <div class="relative z-10 text-center mb-14 w-max mx-auto p-4">
+    <section id="gallery-section" class="relative py-16">
+      <div class="relative z-10 text-center mb-14 w-max mx-auto p-4 gallery-title-container">
         <div class="absolute top-0 -right-16 flex space-x-3">
-          <button class="water-btn">제목 수정</button>
+          <button class="water-btn" onclick="openTextEditor(this.closest('.gallery-title-container').querySelector('.title-content'))">제목 수정</button>
         </div>
-        <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">[갤러리 제목 입력]</h3>
-        <p class="text-xs text-gray-500 mt-2 italic">[패널 가장자리의 손잡이(||)를 터치하여 그림을 확인하세요]</p>
+        <div class="title-content">
+            <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold text-target">[갤러리 제목 입력]</h3>
+            <p class="text-xs text-gray-500 mt-2 italic text-target">[패널 가장자리의 손잡이(||)를 터치하여 그림을 확인하세요]</p>
+        </div>
       </div>
 
       <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         
-        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white">
-          <img src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover" />
+        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white gallery-item">
+          <img id="art-img-1" src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover img-target" />
           
           <div class="absolute top-4 right-4 z-0">
-             <button class="water-btn">사진 수정</button>
+             <button class="water-btn" onclick="triggerFileUpload('art-img-1')">사진 수정</button>
           </div>
 
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
@@ -206,87 +190,70 @@
                 <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
-                <div class="space-y-1">
-                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
-                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
-                </div>
+                <div class="space-y-1"><div class="w-1 h-8 bg-gray-500/60 rounded-full"></div><div class="w-1 h-8 bg-gray-500/60 rounded-full"></div></div>
              </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue">
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue text-content">
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
-                  <button class="water-btn">글 수정</button>
-                  <button class="water-btn">삭제</button>
+                  <button class="water-btn" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
+                  <button class="water-btn" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
                 </div>
-                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6">[작품 제목 1]</h4>
+                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6 text-target">[작품 제목 1]</h4>
                 <div class="w-8 h-px bg-galleryGold mb-4"></div>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm text-gray-800 leading-relaxed font-medium">
-                    [이곳에 첫 번째 작품의 설명을 적어주세요. 하늘빛의 옅은 유리가 그림 위에 부드럽게 덮여 있습니다. 왼쪽 손잡이를 터치하면 우측으로 부드럽게 밀려납니다.]
+                  <p class="text-sm text-gray-800 leading-relaxed font-medium text-target">
+                    [이곳에 첫 번째 작품의 설명을 적어주세요. 하늘빛의 옅은 유리가 그림 위에 부드럽게 덮여 있습니다.]
                   </p>
                 </div>
              </div>
           </div>
         </div>
 
-        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white">
-          <img src="5168.jpg" alt="Art 2" class="absolute inset-0 w-full h-full object-cover object-top" />
-          
+        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white gallery-item">
+          <img id="art-img-2" src="5168.jpg" alt="Art 2" class="absolute inset-0 w-full h-full object-cover object-top img-target" />
           <div class="absolute top-4 right-4 z-0">
-             <button class="water-btn">사진 수정</button>
+             <button class="water-btn" onclick="triggerFileUpload('art-img-2')">사진 수정</button>
           </div>
-
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/30 backdrop-blur-sm border-r border-white/50 hover:bg-white/50 transition-colors shrink-0" onclick="toggleSlide(this)">
-                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-                <div class="space-y-1">
-                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
-                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
-                </div>
+                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                <div class="space-y-1"><div class="w-1 h-8 bg-gray-500/60 rounded-full"></div><div class="w-1 h-8 bg-gray-500/60 rounded-full"></div></div>
              </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue">
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue text-content">
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
-                  <button class="water-btn">글 수정</button>
-                  <button class="water-btn">삭제</button>
+                  <button class="water-btn" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
+                  <button class="water-btn" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
                 </div>
-                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6">[작품 제목 2]</h4>
+                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6 text-target">[작품 제목 2]</h4>
                 <div class="w-8 h-px bg-galleryGold mb-4"></div>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm text-gray-800 leading-relaxed font-medium">
-                    [두 번째 작품 설명입니다. 터치 기기(모바일)에서도 원활하게 동작하도록 더블 탭 현상을 제거하고 한 번에 눌리도록 구성했습니다.]
+                  <p class="text-sm text-gray-800 leading-relaxed font-medium text-target">
+                    [두 번째 작품 설명입니다. 이제 사진 수정 버튼을 누르면 진짜 파일 선택창이 열립니다.]
                   </p>
                 </div>
              </div>
           </div>
         </div>
 
-        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white">
-          <img src="5170.jpg" alt="Art 3" class="absolute inset-0 w-full h-full object-cover object-top" />
-          
+        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white gallery-item">
+          <img id="art-img-3" src="5170.jpg" alt="Art 3" class="absolute inset-0 w-full h-full object-cover object-top img-target" />
           <div class="absolute top-4 right-4 z-0">
-             <button class="water-btn">사진 수정</button>
+             <button class="water-btn" onclick="triggerFileUpload('art-img-3')">사진 수정</button>
           </div>
-
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
              <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/30 backdrop-blur-sm border-r border-white/50 hover:bg-white/50 transition-colors shrink-0" onclick="toggleSlide(this)">
-                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-                <div class="space-y-1">
-                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
-                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
-                </div>
+                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                <div class="space-y-1"><div class="w-1 h-8 bg-gray-500/60 rounded-full"></div><div class="w-1 h-8 bg-gray-500/60 rounded-full"></div></div>
              </div>
-             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue">
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue text-content">
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
-                  <button class="water-btn">글 수정</button>
-                  <button class="water-btn">삭제</button>
+                  <button class="water-btn" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
+                  <button class="water-btn" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
                 </div>
-                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6">[작품 제목 3]</h4>
+                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6 text-target">[작품 제목 3]</h4>
                 <div class="w-8 h-px bg-galleryGold mb-4"></div>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm text-gray-800 leading-relaxed font-medium">
-                    [세 번째 작품 설명입니다. 안내글 배경은 옅은 스카이블루 색상의 반투명 창으로 영롱하게 디자인했습니다.]
+                  <p class="text-sm text-gray-800 leading-relaxed font-medium text-target">
+                    [세 번째 작품 설명입니다. 글 수정 버튼을 누르면 반투명 회색 입력창이 나타납니다.]
                   </p>
                 </div>
              </div>
@@ -297,107 +264,172 @@
     </section>
     </main>
 
-  <footer class="bg-galleryBeige py-20 px-4 text-center relative" data-purpose="footer">
-    <div class="flex justify-center mt-4 relative w-max mx-auto">
+  <footer class="bg-galleryBeige py-20 px-4 text-center relative">
+    <div class="flex justify-center mt-4 relative w-max mx-auto footer-link-container">
       <div class="absolute -top-10 right-0 flex space-x-2 z-10">
-        <button class="water-btn">링크 수정</button>
+        <button class="water-btn" onclick="openTextEditor(this.closest('.footer-link-container').querySelector('a span'))">링크 수정</button>
       </div>
       <a href="https://www.google.com" target="_blank" class="group relative inline-block mt-4">
-        <span class="font-diary text-4xl text-gray-500 group-hover:text-galleryDark transition-colors duration-300">
+        <span class="font-diary text-4xl text-gray-500 group-hover:text-galleryDark transition-colors duration-300 text-target">
           Search on Google...
         </span>
         <div class="absolute -bottom-1 left-0 w-full h-[1px] bg-gray-400 group-hover:bg-galleryDark transition-colors duration-300"></div>
       </a>
     </div>
   </footer>
+  <div id="text-editor-modal" class="fixed inset-0 z-[100] hidden items-center justify-center diary-modal-bg">
+    <div class="bg-white w-[90%] max-w-md p-6 rounded-lg shadow-2xl">
+      <h3 class="text-lg font-bold mb-4 text-gray-800">내용 수정</h3>
+      <textarea id="modal-textarea" class="w-full h-40 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-galleryGold focus:border-transparent resize-none font-serif" placeholder="여기에 내용을 입력하세요..."></textarea>
+      <div class="flex justify-end space-x-3 mt-4">
+        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" onclick="closeTextEditor()">취소</button>
+        <button class="px-4 py-2 bg-galleryGold text-white rounded-md hover:bg-[#dcb028] transition-colors" onclick="saveTextChanges()">저장</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // 1. Menu Toggle
+    // 1. 메뉴 토글
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
       e.stopPropagation();
-      const menu = document.getElementById('dropdown-menu');
-      menu.classList.toggle('hidden');
+      document.getElementById('dropdown-menu').classList.toggle('hidden');
     });
-
     document.addEventListener('click', function(e) {
       const menu = document.getElementById('dropdown-menu');
-      const toggleBtn = document.getElementById('menu-toggle');
-      if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+      if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !document.getElementById('menu-toggle').contains(e.target)) {
         menu.classList.add('hidden');
       }
     });
 
-    // 2. Draggable Element Script
+    // 2. 슬라이딩 패널
+    function toggleSlide(handle) {
+      const panel = handle.closest('.slide-panel');
+      panel.classList.toggle('translate-x-[calc(100%-3.5rem)]');
+      handle.querySelector('.arrow-icon').classList.toggle('rotate-180');
+    }
+
+    // 3. 드래그 기능
     function makeDraggable(elmnt) {
-      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       elmnt.onmousedown = dragMouseDown;
       elmnt.ontouchstart = dragTouchStart; 
 
       function dragMouseDown(e) {
         if(e.target.tagName.toLowerCase() === 'button') return;
-        e = e || window.event;
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
+        e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY;
+        document.onmouseup = closeDragElement; document.onmousemove = elementDrag;
       }
-
       function dragTouchStart(e) {
         if(e.target.tagName.toLowerCase() === 'button') return;
-        e = e || window.event;
-        var touch = e.touches[0];
-        pos3 = touch.clientX;
-        pos4 = touch.clientY;
-        document.ontouchend = closeDragElement;
-        document.ontouchmove = elementTouchDrag;
+        pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY;
+        document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag;
       }
-
       function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
       }
-
       function elementTouchDrag(e) {
-        e = e || window.event;
-        var touch = e.touches[0];
-        pos1 = pos3 - touch.clientX;
-        pos2 = pos4 - touch.clientY;
-        pos3 = touch.clientX;
-        pos4 = touch.clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
       }
-
       function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-        document.ontouchend = null;
-        document.ontouchmove = null;
+        document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null;
       }
     }
+    if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
 
-    window.onload = function() {
-      var draggableDesc = document.getElementById("draggable-desc");
-      if(draggableDesc) {
-        makeDraggable(draggableDesc);
-      }
+    // --- 기능 구현 스크립트 ---
+
+    // 4. 사진 파일 업로드 기능
+    let currentImgId = null;
+    const fileInput = document.getElementById('hidden-file-input');
+
+    function triggerFileUpload(imgId) {
+      currentImgId = imgId;
+      fileInput.click(); // 숨겨진 file input 클릭
     }
 
-    // 3. Sliding Panel Script (오른쪽으로 밀어내기)
-    function toggleSlide(handle) {
-      const panel = handle.closest('.slide-panel');
-      const arrow = handle.querySelector('.arrow-icon');
+    fileInput.addEventListener('change', function(e) {
+      if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const imgElement = document.getElementById(currentImgId);
+          if (imgElement) {
+            imgElement.src = event.target.result; // 선택한 이미지로 즉시 교체
+          }
+        }
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      // 다음 선택을 위해 초기화
+      fileInput.value = ''; 
+    });
+
+    // 5. 텍스트 수정 모달 기능
+    const textModal = document.getElementById('text-editor-modal');
+    const modalTextarea = document.getElementById('modal-textarea');
+    let currentTextTargets = [];
+
+    function openTextEditor(containerElement) {
+        // 수정할 텍스트 요소들을 찾음 (여러 줄일 경우를 대비해 container를 받음)
+        currentTextTargets = [];
+        let combinedText = "";
+
+        if (containerElement.classList.contains('text-target')) {
+             // 단일 요소가 직접 전달된 경우
+            currentTextTargets.push(containerElement);
+            combinedText = containerElement.innerText.trim();
+        } else {
+            // 컨테이너 내부의 모든 .text-target 요소를 찾음
+            const targets = containerElement.querySelectorAll('.text-target');
+            targets.forEach((target, index) => {
+                currentTextTargets.push(target);
+                combinedText += target.innerText.trim();
+                if (index < targets.length - 1) combinedText += "\n"; // 줄바꿈으로 구분
+            });
+        }
+
+      modalTextarea.value = combinedText;
+      textModal.classList.remove('hidden');
+      textModal.classList.add('flex');
+      document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    }
+
+    function closeTextEditor() {
+      textModal.classList.add('hidden');
+      textModal.classList.remove('flex');
+      document.body.style.overflow = '';
+      currentTextTargets = [];
+    }
+
+    function saveTextChanges() {
+      const newTextLines = modalTextarea.value.split('\n');
       
-      // Tailwind의 번역(translate) 유틸리티를 사용하여 3.5rem(손잡이 너비)만 남기고 밀어냅니다.
-      panel.classList.toggle('translate-x-[calc(100%-3.5rem)]');
-      arrow.classList.toggle('rotate-180');
+      // 입력된 줄 수와 타겟 요소 수에 맞춰 텍스트 업데이트
+      currentTextTargets.forEach((target, index) => {
+          if (index < newTextLines.length) {
+              // 빈 줄이라도 내용을 비우는 것으로 처리
+              target.innerText = newTextLines[index].trim(); 
+              // 만약 원래 br 태그가 있던 자리라면 br로 교체하는 로직이 필요할 수 있으나,
+              // 현재 구조에서는 각 줄이 별도 태그로 감싸져 있어 innerText 교체로 충분함.
+          }
+      });
+
+      closeTextEditor();
     }
+    
+    // 모달 바깥 클릭 시 닫기
+    textModal.addEventListener('click', function(e) {
+        if(e.target === textModal) closeTextEditor();
+    });
+
+
+    // 6. 요소 삭제 기능
+    function deleteElement(element) {
+      if (confirm('정말로 이 항목을 삭제하시겠습니까?')) {
+        element.remove();
+      }
+    }
+
   </script>
 </body>
 </html>
