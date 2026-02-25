@@ -15,7 +15,7 @@
             galleryGold: '#eebd2b',
             galleryDark: '#1a1a1a',
             galleryGray: '#fafafa',
-            galleryBeige: '#e9e9e9', /* 원본의 따뜻한 미색 배경 */
+            galleryBeige: '#e9e9e9',
           },
           fontFamily: {
             serif: ['"Noto Serif"', 'serif'],
@@ -33,7 +33,7 @@
       overflow-x: hidden;
     }
     
-    /* 불투명 유리 (Glassmorphism) 스타일 */
+    /* 기존 투명 유리 패널 (드래그 박스 등) */
     .glass-panel {
       background: rgba(255, 255, 255, 0.45);
       backdrop-filter: blur(12px);
@@ -41,6 +41,16 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
     }
+
+    /* 옅은 하늘빛 투명 유리 패널 (갤러리 안내글 전용) */
+    .glass-panel-blue {
+      background: rgba(190, 230, 245, 0.55); /* 은은한 하늘빛 */
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(210, 240, 250, 0.7);
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.05);
+    }
+
     .draggable {
       cursor: grab;
     }
@@ -48,58 +58,49 @@
       cursor: grabbing;
     }
 
-    /* 은은하게 엷은 물색 가장자리 버튼 효과 */
+    /* 은은하게 엷은 물색 가장자리 버튼 효과 (모바일 터치 오류 방지를 위해 항상 살짝 보이게 설정) */
     .water-btn {
-      display: inline-block;
-      padding: 0.25rem 0.6rem;
-      color: rgba(0, 0, 0, 0.5); /* 부드러운 검은색 글씨 */
-      background-color: rgba(175, 238, 238, 0.25); /* 은은한 엷은 물색 배경 */
-      border: 1px solid rgba(175, 238, 238, 0.6); /* 엷은 물색 테두리 */
-      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.75rem;
+      color: rgba(30, 50, 60, 0.8);
+      background-color: rgba(200, 240, 255, 0.6); /* 옅은 하늘/물색 바탕 */
+      border: 1px solid rgba(140, 210, 230, 0.8); /* 엷은 물색 테두리 */
+      border-radius: 8px;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.05em;
       white-space: nowrap;
       transition: all 0.3s ease;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); 
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03); 
+      opacity: 0.85; /* 모바일에서 더블 탭 방지 위해 항상 보이게 */
     }
-    .water-btn:hover {
-      color: rgba(0, 0, 0, 0.8);
-      background-color: rgba(175, 238, 238, 0.45); /* 호버 시 진해지는 물색 */
-      border-color: rgba(175, 238, 238, 0.9);
-      box-shadow: 0 2px 6px rgba(175, 238, 238, 0.3);
-      transform: translateY(-1px); /* 살짝 떠오르는 효과 */
-    }
-
-    /* 텍스트 입력 영역 호버 시 점선 가이드 */
-    .editable-area {
-      border: 1px dashed transparent;
-      transition: border-color 0.3s;
-    }
-    .editable-area:hover {
-      border-color: rgba(0,0,0,0.1);
+    .water-btn:hover, .water-btn:active {
+      opacity: 1;
+      color: rgba(10, 30, 40, 1);
+      background-color: rgba(170, 230, 250, 0.8);
+      border-color: rgba(100, 190, 220, 1);
+      box-shadow: 0 4px 8px rgba(100, 190, 220, 0.25);
+      transform: translateY(-2px);
     }
 
-    /* 슬라이딩 유리문 패널 효과 */
-    .slide-hide {
-      /* 손잡이(3rem)만 남기고 오른쪽으로 밀어냅니다 */
-      transform: translateX(calc(100% - 3rem));
-    }
-    .panel-arrow {
+    /* 슬라이딩 패널 애니메이션용 클래스 */
+    .slide-panel {
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .slide-hide .panel-arrow {
-      transform: rotate(180deg);
+    .arrow-icon {
+      transition: transform 0.6s ease;
     }
   </style>
 </head>
 <body class="bg-galleryBeige text-galleryDark">
 
   <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center" data-purpose="site-header">
-    <div class="relative group/logo flex items-center space-x-2 editable-area p-2 rounded">
-      <div class="absolute -top-3 right-0 flex space-x-2 opacity-0 group-hover/logo:opacity-100 transition-opacity duration-300" onclick="event.stopPropagation();">
-        <span class="water-btn" onclick="alert('로고 수정 기능이 실행됩니다.')">수정</span>
+    <div class="relative group/logo flex items-center space-x-2 p-2 rounded">
+      <div class="absolute -top-3 right-0 flex space-x-2">
+        <button class="water-btn">수정</button>
       </div>
       <div class="flex flex-col items-center cursor-pointer">
         <span class="text-galleryGold text-2xl leading-none italic font-bold">[로고 메인]</span>
@@ -121,32 +122,32 @@
           Navigation Directory
         </div>
         <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-          <div class="group/menu relative flex flex-col border-b border-gray-100 pb-3">
+          <div class="relative flex flex-col border-b border-gray-100 pb-3">
             <div class="flex justify-between items-center w-full">
               <a href="#gallery-section" class="text-sm font-serif font-bold text-gray-800 hover:text-galleryGold transition-colors flex-grow">
                 [상위 메뉴 입력]
               </a>
-              <div class="opacity-0 group-hover/menu:opacity-100 flex space-x-2 transition-opacity duration-300 ml-2" onclick="event.stopPropagation();">
-                <span class="water-btn" onclick="alert('상위 메뉴 수정 기능이 실행됩니다.')">수정</span>
-                <span class="water-btn" onclick="alert('상위 메뉴 삭제 기능이 실행됩니다.')">삭제</span>
+              <div class="flex space-x-2 ml-2">
+                <button class="water-btn !text-[9px] !px-2 !py-1">수정</button>
+                <button class="water-btn !text-[9px] !px-2 !py-1">삭제</button>
               </div>
             </div>
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
-              <div class="group/child relative flex justify-between items-center">
+              <div class="relative flex justify-between items-center">
                 <a href="#gallery-section" class="text-xs text-gray-600 hover:text-galleryGold transition-colors flex-grow">
                   - [하위 메뉴 입력]
                 </a>
-                <div class="opacity-0 group-hover/child:opacity-100 flex space-x-2 transition-opacity duration-300" onclick="event.stopPropagation();">
-                  <span class="water-btn" onclick="alert('하위 메뉴 수정 기능이 실행됩니다.')">수정</span>
-                  <span class="water-btn" onclick="alert('하위 메뉴 삭제 기능이 실행됩니다.')">삭제</span>
+                <div class="flex space-x-2">
+                  <button class="water-btn !text-[9px] !px-2 !py-1">수정</button>
+                  <button class="water-btn !text-[9px] !px-2 !py-1">삭제</button>
                 </div>
               </div>
-              <button class="text-[10px] text-gray-400 hover:text-galleryGold font-bold tracking-wider text-left w-full transition-colors" onclick="alert('하위 메뉴 추가 기능이 실행됩니다.')">
+              <button class="text-[10px] text-gray-400 hover:text-galleryGold font-bold tracking-wider text-left w-full transition-colors mt-2">
                 + 하위 추가
               </button>
             </div>
           </div>
-          <button class="w-full text-center py-2 text-xs font-bold text-galleryGold hover:text-white hover:bg-galleryGold border border-galleryGold transition-all rounded-sm mt-2" onclick="alert('새 메뉴 카테고리 추가 기능이 실행됩니다.')">
+          <button class="w-full text-center py-2 text-xs font-bold text-galleryGold hover:text-white hover:bg-galleryGold border border-galleryGold transition-all rounded-sm mt-2">
             + 새 메뉴 카테고리 추가
           </button>
         </div>
@@ -155,20 +156,20 @@
   </header>
   <main>
     <section class="py-20 px-4 max-w-6xl mx-auto" data-purpose="about-section">
-      <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-lg flex items-center justify-center group/bg">
+      <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-lg flex items-center justify-center">
         <img alt="Background art" class="absolute inset-0 w-full h-full object-cover" src="5167.png"/>
         
-        <div class="absolute top-4 left-4 flex space-x-3 opacity-0 group-hover/bg:opacity-100 transition-opacity duration-500 z-10" onclick="event.stopPropagation();">
-          <span class="water-btn" onclick="alert('배경 이미지 수정 기능이 실행됩니다.')">배경 수정</span>
+        <div class="absolute top-4 left-4 z-10">
+          <button class="water-btn">배경 사진 수정</button>
         </div>
 
-        <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center group/glass">
-          <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/glass:opacity-100 transition-opacity duration-500 z-30" onclick="event.stopPropagation();">
-            <span class="water-btn" onclick="alert('소개글 수정 기능이 실행됩니다.')">수정</span>
-            <span class="water-btn" onclick="alert('소개글 삭제 기능이 실행됩니다.')">삭제</span>
+        <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center">
+          <div class="absolute top-4 right-4 flex space-x-2 z-30">
+            <button class="water-btn">수정</button>
+            <button class="water-btn">삭제</button>
           </div>
 
-          <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4">[라벨 입력]</p>
+          <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4 mt-6">[라벨 입력]</p>
           <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">[소개글 타이틀<br/>입력]</h2>
           <div class="w-6 h-px bg-galleryGold mb-6"></div>
           <p class="text-[10px] uppercase tracking-widest text-gray-600 mb-4">[서브 타이틀 입력]</p>
@@ -183,102 +184,111 @@
       </div>
     </section>
     <section id="gallery-section" class="relative py-16" data-purpose="gallery-grid">
-      <div class="relative z-10 text-center mb-14 group/boardtitle editable-area w-max mx-auto p-4">
-        <div class="absolute top-0 -right-12 flex space-x-3 opacity-0 group-hover/boardtitle:opacity-100 transition-opacity duration-500" onclick="event.stopPropagation();">
-          <span class="water-btn" onclick="alert('갤러리 제목 수정 기능이 실행됩니다.')">수정</span>
+      <div class="relative z-10 text-center mb-14 w-max mx-auto p-4">
+        <div class="absolute top-0 -right-16 flex space-x-3">
+          <button class="water-btn">제목 수정</button>
         </div>
         <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">[갤러리 제목 입력]</h3>
-        <p class="text-xs text-gray-500 mt-2 italic">[패널 가장자리를 눌러 슬라이드 해보세요]</p>
+        <p class="text-xs text-gray-500 mt-2 italic">[패널 가장자리의 손잡이(||)를 터치하여 그림을 확인하세요]</p>
       </div>
 
       <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         
-        <div class="relative w-full h-96 overflow-hidden rounded-xl shadow-md bg-white group/card">
-          <img src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" />
-          <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-0">
-             <span class="water-btn" onclick="alert('사진 수정 기능이 실행됩니다.')">사진 수정</span>
+        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white">
+          <img src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover" />
+          
+          <div class="absolute top-4 right-4 z-0">
+             <button class="water-btn">사진 수정</button>
           </div>
 
-          <div class="glass-overlay absolute inset-0 w-full h-full glass-panel flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] z-10">
-             <div class="w-12 h-full flex flex-col justify-center items-center cursor-pointer border-r border-white/50 bg-white/20 hover:bg-white/40 transition-colors shrink-0 group/handle" onclick="toggleSlide(this)">
-                <svg class="w-5 h-5 text-gray-500 group-hover/handle:text-gray-800 panel-arrow mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
+             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/30 backdrop-blur-sm border-r border-white/50 hover:bg-white/50 transition-colors shrink-0" onclick="toggleSlide(this)">
+                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
                 <div class="space-y-1">
-                  <div class="w-1 h-6 bg-gray-400/50 rounded-full group-hover/handle:bg-gray-600/70 transition-colors"></div>
-                  <div class="w-1 h-6 bg-gray-400/50 rounded-full group-hover/handle:bg-gray-600/70 transition-colors"></div>
+                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
+                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
                 </div>
              </div>
-             <div class="flex-1 px-6 py-8 flex flex-col justify-center relative editable-area group/text">
-                <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
-                  <span class="water-btn" onclick="alert('내용 수정 기능이 실행됩니다.')">수정</span>
-                  <span class="water-btn" onclick="alert('내용 삭제 기능이 실행됩니다.')">삭제</span>
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue">
+                <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                  <button class="water-btn">글 수정</button>
+                  <button class="water-btn">삭제</button>
                 </div>
-                <h4 class="text-xl font-serif text-gray-900 mb-3">[작품 제목 1]</h4>
-                <div class="w-6 h-px bg-galleryGold mb-4"></div>
-                <p class="text-sm text-gray-700 leading-relaxed pr-2">
-                  [이곳에 첫 번째 작품에 대한 상세한 설명을 적어주세요. 왼쪽의 손잡이를 누르면 패널이 오른쪽 끝으로 밀려나며 그림을 온전히 볼 수 있습니다.]
-                </p>
+                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6">[작품 제목 1]</h4>
+                <div class="w-8 h-px bg-galleryGold mb-4"></div>
+                <div class="overflow-y-auto pr-2">
+                  <p class="text-sm text-gray-800 leading-relaxed font-medium">
+                    [이곳에 첫 번째 작품의 설명을 적어주세요. 하늘빛의 옅은 유리가 그림 위에 부드럽게 덮여 있습니다. 왼쪽 손잡이를 터치하면 우측으로 부드럽게 밀려납니다.]
+                  </p>
+                </div>
              </div>
           </div>
         </div>
 
-        <div class="relative w-full h-96 overflow-hidden rounded-xl shadow-md bg-white group/card">
-          <img src="5168.jpg" alt="Art 2" class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover/card:scale-105" />
-          <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-0">
-             <span class="water-btn" onclick="alert('사진 수정 기능이 실행됩니다.')">사진 수정</span>
+        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white">
+          <img src="5168.jpg" alt="Art 2" class="absolute inset-0 w-full h-full object-cover object-top" />
+          
+          <div class="absolute top-4 right-4 z-0">
+             <button class="water-btn">사진 수정</button>
           </div>
 
-          <div class="glass-overlay absolute inset-0 w-full h-full glass-panel flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] z-10">
-             <div class="w-12 h-full flex flex-col justify-center items-center cursor-pointer border-r border-white/50 bg-white/20 hover:bg-white/40 transition-colors shrink-0 group/handle" onclick="toggleSlide(this)">
-                <svg class="w-5 h-5 text-gray-500 group-hover/handle:text-gray-800 panel-arrow mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
+             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/30 backdrop-blur-sm border-r border-white/50 hover:bg-white/50 transition-colors shrink-0" onclick="toggleSlide(this)">
+                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
                 <div class="space-y-1">
-                  <div class="w-1 h-6 bg-gray-400/50 rounded-full group-hover/handle:bg-gray-600/70 transition-colors"></div>
-                  <div class="w-1 h-6 bg-gray-400/50 rounded-full group-hover/handle:bg-gray-600/70 transition-colors"></div>
+                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
+                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
                 </div>
              </div>
-             <div class="flex-1 px-6 py-8 flex flex-col justify-center relative editable-area group/text">
-                <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
-                  <span class="water-btn" onclick="alert('내용 수정 기능이 실행됩니다.')">수정</span>
-                  <span class="water-btn" onclick="alert('내용 삭제 기능이 실행됩니다.')">삭제</span>
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue">
+                <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                  <button class="water-btn">글 수정</button>
+                  <button class="water-btn">삭제</button>
                 </div>
-                <h4 class="text-xl font-serif text-gray-900 mb-3">[작품 제목 2]</h4>
-                <div class="w-6 h-px bg-galleryGold mb-4"></div>
-                <p class="text-sm text-gray-700 leading-relaxed pr-2">
-                  [이곳에 두 번째 작품에 대한 상세한 설명을 적어주세요. 슬라이드 유리문처럼 동작하며, 은은한 물빛 테두리 버튼이 배치되어 있습니다.]
-                </p>
+                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6">[작품 제목 2]</h4>
+                <div class="w-8 h-px bg-galleryGold mb-4"></div>
+                <div class="overflow-y-auto pr-2">
+                  <p class="text-sm text-gray-800 leading-relaxed font-medium">
+                    [두 번째 작품 설명입니다. 터치 기기(모바일)에서도 원활하게 동작하도록 더블 탭 현상을 제거하고 한 번에 눌리도록 구성했습니다.]
+                  </p>
+                </div>
              </div>
           </div>
         </div>
 
-        <div class="relative w-full h-96 overflow-hidden rounded-xl shadow-md bg-white group/card">
-          <img src="5170.jpg" alt="Art 3" class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover/card:scale-105" />
-          <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-0">
-             <span class="water-btn" onclick="alert('사진 수정 기능이 실행됩니다.')">사진 수정</span>
+        <div class="relative w-full h-[450px] overflow-hidden rounded-xl shadow-lg bg-white">
+          <img src="5170.jpg" alt="Art 3" class="absolute inset-0 w-full h-full object-cover object-top" />
+          
+          <div class="absolute top-4 right-4 z-0">
+             <button class="water-btn">사진 수정</button>
           </div>
 
-          <div class="glass-overlay absolute inset-0 w-full h-full glass-panel flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] z-10">
-             <div class="w-12 h-full flex flex-col justify-center items-center cursor-pointer border-r border-white/50 bg-white/20 hover:bg-white/40 transition-colors shrink-0 group/handle" onclick="toggleSlide(this)">
-                <svg class="w-5 h-5 text-gray-500 group-hover/handle:text-gray-800 panel-arrow mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10">
+             <div class="w-14 h-full flex flex-col justify-center items-center cursor-pointer bg-white/30 backdrop-blur-sm border-r border-white/50 hover:bg-white/50 transition-colors shrink-0" onclick="toggleSlide(this)">
+                <svg class="w-6 h-6 text-gray-700 arrow-icon mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
                 <div class="space-y-1">
-                  <div class="w-1 h-6 bg-gray-400/50 rounded-full group-hover/handle:bg-gray-600/70 transition-colors"></div>
-                  <div class="w-1 h-6 bg-gray-400/50 rounded-full group-hover/handle:bg-gray-600/70 transition-colors"></div>
+                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
+                  <div class="w-1 h-8 bg-gray-500/60 rounded-full"></div>
                 </div>
              </div>
-             <div class="flex-1 px-6 py-8 flex flex-col justify-center relative editable-area group/text">
-                <div class="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
-                  <span class="water-btn" onclick="alert('내용 수정 기능이 실행됩니다.')">수정</span>
-                  <span class="water-btn" onclick="alert('내용 삭제 기능이 실행됩니다.')">삭제</span>
+             <div class="flex-1 h-full px-6 py-8 flex flex-col relative glass-panel-blue">
+                <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                  <button class="water-btn">글 수정</button>
+                  <button class="water-btn">삭제</button>
                 </div>
-                <h4 class="text-xl font-serif text-gray-900 mb-3">[작품 제목 3]</h4>
-                <div class="w-6 h-px bg-galleryGold mb-4"></div>
-                <p class="text-sm text-gray-700 leading-relaxed pr-2">
-                  [세 번째 작품의 설명입니다. 패널이 닫혀 있을 때 텍스트 수정 버튼이, 패널이 오른쪽으로 열려 있을 때 사진 수정 버튼이 나타납니다.]
-                </p>
+                <h4 class="text-xl font-serif text-gray-900 mb-3 mt-6">[작품 제목 3]</h4>
+                <div class="w-8 h-px bg-galleryGold mb-4"></div>
+                <div class="overflow-y-auto pr-2">
+                  <p class="text-sm text-gray-800 leading-relaxed font-medium">
+                    [세 번째 작품 설명입니다. 안내글 배경은 옅은 스카이블루 색상의 반투명 창으로 영롱하게 디자인했습니다.]
+                  </p>
+                </div>
              </div>
           </div>
         </div>
@@ -288,11 +298,11 @@
     </main>
 
   <footer class="bg-galleryBeige py-20 px-4 text-center relative" data-purpose="footer">
-    <div class="flex justify-center group/search mt-4">
-      <div class="absolute -top-6 right-1/2 translate-x-1/2 flex space-x-4 opacity-0 group-hover/search:opacity-100 transition-opacity duration-500" onclick="event.stopPropagation();">
-        <span class="water-btn" onclick="alert('링크 수정 기능이 실행됩니다.')">링크 수정</span>
+    <div class="flex justify-center mt-4 relative w-max mx-auto">
+      <div class="absolute -top-10 right-0 flex space-x-2 z-10">
+        <button class="water-btn">링크 수정</button>
       </div>
-      <a href="https://www.google.com" target="_blank" class="group relative inline-block">
+      <a href="https://www.google.com" target="_blank" class="group relative inline-block mt-4">
         <span class="font-diary text-4xl text-gray-500 group-hover:text-galleryDark transition-colors duration-300">
           Search on Google...
         </span>
@@ -301,7 +311,7 @@
     </div>
   </footer>
   <script>
-    // 1. Menu Toggle Script
+    // 1. Menu Toggle
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
       e.stopPropagation();
       const menu = document.getElementById('dropdown-menu');
@@ -323,6 +333,7 @@
       elmnt.ontouchstart = dragTouchStart; 
 
       function dragMouseDown(e) {
+        if(e.target.tagName.toLowerCase() === 'button') return;
         e = e || window.event;
         e.preventDefault();
         pos3 = e.clientX;
@@ -332,6 +343,7 @@
       }
 
       function dragTouchStart(e) {
+        if(e.target.tagName.toLowerCase() === 'button') return;
         e = e || window.event;
         var touch = e.touches[0];
         pos3 = touch.clientX;
@@ -377,11 +389,14 @@
       }
     }
 
-    // 3. Sliding Panel Script
-    function toggleSlide(handleElement) {
-      // 클릭한 손잡이가 속한 전체 유리 패널(.glass-overlay)을 찾아 클래스를 토글합니다.
-      const panel = handleElement.closest('.glass-overlay');
-      panel.classList.toggle('slide-hide');
+    // 3. Sliding Panel Script (오른쪽으로 밀어내기)
+    function toggleSlide(handle) {
+      const panel = handle.closest('.slide-panel');
+      const arrow = handle.querySelector('.arrow-icon');
+      
+      // Tailwind의 번역(translate) 유틸리티를 사용하여 3.5rem(손잡이 너비)만 남기고 밀어냅니다.
+      panel.classList.toggle('translate-x-[calc(100%-3.5rem)]');
+      arrow.classList.toggle('rotate-180');
     }
   </script>
 </body>
