@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>De Lacey Fine Art | Experience Art</title>
+  <title>My Gallery | Experience Art</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Whisper&display=swap" rel="stylesheet"/>
   
@@ -70,15 +70,28 @@
     .water-btn-dark:hover {
       text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 2px 3px rgba(0, 0, 0, 0.2);
     }
+
+    /* 텍스트 입력 영역 호버 시 점선 가이드 (선택 사항) */
+    .editable-area {
+      border: 1px dashed transparent;
+      transition: border-color 0.3s;
+    }
+    .editable-area:hover {
+      border-color: rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body class="bg-galleryGray text-galleryDark">
 
   <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center" data-purpose="site-header">
-    <div class="flex items-center space-x-2">
+    
+    <div class="relative group/logo flex items-center space-x-2 editable-area p-2 rounded">
+      <div class="absolute -top-3 right-0 flex space-x-2 opacity-0 group-hover/logo:opacity-100 transition-opacity duration-300">
+        <span class="water-btn water-btn-dark text-[10px]">수정</span>
+      </div>
       <div class="flex flex-col items-center cursor-pointer">
-        <span class="text-galleryGold text-2xl leading-none italic font-bold">De</span>
-        <span class="text-xs uppercase tracking-widest font-semibold mt-1">Lacey Fine Art</span>
+        <span class="text-galleryGold text-2xl leading-none italic font-bold">[로고 메인]</span>
+        <span class="text-xs uppercase tracking-widest font-semibold mt-1">[로고 서브]</span>
       </div>
     </div>
     
@@ -100,7 +113,7 @@
           <div class="group/menu relative flex flex-col border-b border-gray-100 pb-3">
             <div class="flex justify-between items-center w-full">
               <a href="#bulletin-board" class="text-sm font-serif font-bold text-gray-800 hover:text-galleryGold transition-colors flex-grow">
-                Main Exhibition (상위)
+                [상위 메뉴 입력]
               </a>
               <div class="opacity-0 group-hover/menu:opacity-100 flex space-x-3 transition-opacity duration-300 ml-2">
                 <span class="water-btn water-btn-dark text-[10px]">수정</span>
@@ -111,14 +124,13 @@
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
               <div class="group/child relative flex justify-between items-center">
                 <a href="#bulletin-board" class="text-xs text-gray-600 hover:text-galleryGold transition-colors flex-grow">
-                  - Sub Gallery (하위)
+                  - [하위 메뉴 입력]
                 </a>
                 <div class="opacity-0 group-hover/child:opacity-100 flex space-x-2 transition-opacity duration-300">
                   <span class="water-btn water-btn-dark text-[9px]">수정</span>
                   <span class="water-btn water-btn-dark text-[9px]">삭제</span>
                 </div>
               </div>
-              
               <button class="text-[10px] text-gray-400 hover:text-galleryGold font-bold tracking-wider text-left w-full transition-colors">
                 + 하위 추가
               </button>
@@ -135,38 +147,47 @@
   <main>
     <section class="relative bg-white py-24 px-6 text-center overflow-hidden border-b border-gray-100" data-purpose="intro-hero">
       <div class="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none">
-        <span class="text-[250px] font-serif italic text-galleryGold">De</span>
+        <span class="text-[250px] font-serif italic text-galleryGold">[배경]</span>
       </div>
-      <div class="relative z-10 max-w-xl mx-auto">
-        <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-6">Experience the essence of art</p>
+      
+      <div class="relative z-10 max-w-2xl mx-auto group/hero editable-area p-8">
+        <div class="absolute top-0 right-0 flex space-x-4 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-500 z-30">
+          <span class="water-btn water-btn-dark">수정</span>
+          <span class="water-btn water-btn-dark">삭제</span>
+        </div>
+
+        <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-6">[소제목을 입력하세요]</p>
         <div class="w-8 h-px bg-galleryGold mx-auto mb-8"></div>
-        <h2 class="text-4xl md:text-5xl font-serif mb-2 tracking-tight">De</h2>
-        <h1 class="text-3xl md:text-5xl font-serif uppercase tracking-widest mb-6">Lacey Fine Art</h1>
+        <h2 class="text-4xl md:text-5xl font-serif mb-2 tracking-tight">[메인 타이틀 1]</h2>
+        <h1 class="text-3xl md:text-5xl font-serif uppercase tracking-widest mb-6">[메인 타이틀 2]</h1>
         <p class="text-sm text-gray-500 italic leading-relaxed mb-10">
-          Where classical beauty meets modern interpretation. Discover pieces that resonate with your soul.
+          [여기에 갤러리나 사이트를 소개하는 간단한 문구를 입력하세요. 마음을 울리는 예술의 정수...]
         </p>
         <button class="border border-galleryGold text-galleryGold px-8 py-3 text-xs uppercase tracking-[0.2em] font-bold hover:bg-galleryGold hover:text-white transition-all duration-300">
-          Explore Gallery
+          [버튼 텍스트 입력]
         </button>
       </div>
     </section>
     <section class="py-20 px-4 max-w-6xl mx-auto" data-purpose="about-section">
-      <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-2xl flex items-center justify-center">
-        <img alt="Abstract vibrant art composition" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1600"/>
+      <div class="relative w-full h-[600px] overflow-hidden rounded-md shadow-2xl flex items-center justify-center group/bg">
+        <img alt="Background art" class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1600"/>
         
+        <div class="absolute top-4 left-4 flex space-x-3 opacity-0 group-hover/bg:opacity-100 transition-opacity duration-500 z-10">
+          <span class="water-btn">배경 수정</span>
+        </div>
+
         <div id="draggable-desc" class="glass-panel draggable absolute z-20 w-[90%] md:w-[450px] p-8 rounded-xl flex flex-col items-center text-center group/glass">
-          
           <div class="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover/glass:opacity-100 transition-opacity duration-500 z-30">
             <span class="water-btn water-btn-dark">수정</span>
             <span class="water-btn water-btn-dark">삭제</span>
           </div>
 
-          <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4">Who We Are</p>
-          <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">Lacey<br/>Fine Art</h2>
+          <p class="text-galleryGold text-[10px] uppercase tracking-[0.4em] font-bold mb-4">[라벨 입력]</p>
+          <h2 class="text-3xl font-serif uppercase tracking-widest mb-6">[소개글 타이틀<br/>입력]</h2>
           <div class="w-6 h-px bg-galleryGold mb-6"></div>
-          <p class="text-[10px] uppercase tracking-widest text-gray-600 mb-4">Art Studio Since 2000</p>
+          <p class="text-[10px] uppercase tracking-widest text-gray-600 mb-4">[서브 타이틀 입력]</p>
           <p class="text-sm text-gray-800 leading-loose">
-            Set up in the year 2000 by Brothers Gordon and Martin Farmer, De Lacey Fine Art quickly came to the forefront of Modern British Art. Drag this note to explore the canvas beneath.
+            [여기에 상세 소개글을 입력하세요. 이 박스는 마우스나 터치로 자유롭게 이동할 수 있습니다.]
           </p>
           <div class="mt-6 flex space-x-1 items-center justify-center opacity-40">
             <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
@@ -180,49 +201,52 @@
         <img alt="Gallery Background" class="w-full h-full object-cover blur-sm" src="https://images.unsplash.com/photo-1518998053401-878c730c5e69?auto=format&fit=crop&q=80&w=1600"/>
       </div>
       
-      <div class="relative z-10 text-center mb-14">
-        <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">Exhibition Board</h3>
-        <p class="text-xs text-gray-300 mt-2 italic">Curated moments & reflections</p>
+      <div class="relative z-10 text-center mb-14 group/boardtitle editable-area w-max mx-auto p-4">
+        <div class="absolute top-0 -right-12 flex space-x-3 opacity-0 group-hover/boardtitle:opacity-100 transition-opacity duration-500">
+          <span class="water-btn">수정</span>
+        </div>
+        <h3 class="text-galleryGold text-[12px] uppercase tracking-[0.4em] font-bold">[게시판 제목 입력]</h3>
+        <p class="text-xs text-gray-300 mt-2 italic">[게시판 서브 설명 입력]</p>
       </div>
       
       <div class="relative z-10 max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
         
         <div class="glass-panel rounded-xl overflow-hidden shadow-lg flex flex-col">
-          <div class="relative h-64 overflow-hidden group/img">
+          <div class="relative h-64 overflow-hidden group/img cursor-pointer">
             <img alt="Gallery View 1" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" src="https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&q=80&w=800"/>
             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex justify-end items-start p-4 space-x-4">
-              <span class="water-btn">수정</span>
+              <span class="water-btn">사진 수정</span>
               <span class="water-btn">삭제</span>
             </div>
           </div>
-          <div class="relative p-8 flex-grow group/text">
+          <div class="relative p-8 flex-grow group/text cursor-pointer">
             <div class="absolute top-4 right-4 flex space-x-4 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
-              <span class="water-btn water-btn-dark">수정</span>
+              <span class="water-btn water-btn-dark">내용 수정</span>
               <span class="water-btn water-btn-dark">삭제</span>
             </div>
-            <h4 class="text-xl font-serif mb-3 text-gray-900">The Silent Echo</h4>
+            <h4 class="text-xl font-serif mb-3 text-gray-900">[게시물 제목 1]</h4>
             <p class="text-sm text-gray-700 leading-relaxed pr-12">
-              A minimalist approach to the urban landscape. The contrast between light and shadow creates a profound sense of isolation. (여기에 내용을 수정하여 입력하세요.)
+              [이곳에 게시물의 세부 내용을 입력하세요. 이미지와 내용을 각각 수정하거나 삭제할 수 있습니다.]
             </p>
           </div>
         </div>
 
         <div class="glass-panel rounded-xl overflow-hidden shadow-lg flex flex-col">
-          <div class="relative h-64 overflow-hidden group/img">
+          <div class="relative h-64 overflow-hidden group/img cursor-pointer">
             <img alt="Gallery View 2" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800"/>
             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 flex justify-end items-start p-4 space-x-4">
-              <span class="water-btn">수정</span>
+              <span class="water-btn">사진 수정</span>
               <span class="water-btn">삭제</span>
             </div>
           </div>
-          <div class="relative p-8 flex-grow group/text">
+          <div class="relative p-8 flex-grow group/text cursor-pointer">
             <div class="absolute top-4 right-4 flex space-x-4 opacity-0 group-hover/text:opacity-100 transition-opacity duration-500">
-              <span class="water-btn water-btn-dark">수정</span>
+              <span class="water-btn water-btn-dark">내용 수정</span>
               <span class="water-btn water-btn-dark">삭제</span>
             </div>
-            <h4 class="text-xl font-serif mb-3 text-gray-900">Abstract Fluidity</h4>
+            <h4 class="text-xl font-serif mb-3 text-gray-900">[게시물 제목 2]</h4>
             <p class="text-sm text-gray-700 leading-relaxed pr-12">
-              Exploring the boundaries of form and color. This piece represents the chaos and harmony coexisting in nature. (여기에 내용을 수정하여 입력하세요.)
+              [이곳에 두 번째 게시물의 세부 내용을 입력하세요. 글과 사진 모두 자유롭게 변경하세요.]
             </p>
           </div>
         </div>
@@ -239,18 +263,21 @@
     </div>
 
     <div class="flex flex-col items-center mb-10">
-      <span class="text-galleryGold text-4xl italic font-bold leading-none">De</span>
-      <span class="text-xl uppercase tracking-[0.4em] font-serif mt-2">Lacey Fine Art</span>
-      <p class="text-[10px] uppercase tracking-widest text-gray-500 mt-6">Copyright 2026. All Rights Reserved</p>
+      <span class="text-galleryGold text-4xl italic font-bold leading-none">[푸터 로고 메인]</span>
+      <span class="text-xl uppercase tracking-[0.4em] font-serif mt-2">[푸터 로고 서브]</span>
+      <p class="text-[10px] uppercase tracking-widest text-gray-500 mt-6">[카피라이트 입력 영역: Copyright 2026. All Rights Reserved]</p>
     </div>
 
     <div class="flex justify-center mb-12">
-      <a aria-label="Twitter" class="text-gray-500 hover:text-galleryGold transition-colors" href="#">
+      <a aria-label="Twitter" class="text-gray-500 hover:text-galleryGold transition-colors" href="https://twitter.com" target="_blank" rel="noopener noreferrer">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.599 3.419-2.044 1.602-4.629 2.411-7.218 2.102 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
       </a>
     </div>
 
-    <div class="flex justify-center">
+    <div class="flex justify-center group/search">
+      <div class="absolute -top-6 right-1/2 translate-x-1/2 flex space-x-4 opacity-0 group-hover/search:opacity-100 transition-opacity duration-500">
+        <span class="water-btn">링크 수정</span>
+      </div>
       <a href="https://www.google.com" target="_blank" class="group relative inline-block">
         <span class="font-diary text-4xl text-gray-400 group-hover:text-white transition-colors duration-300">
           Search on Google...
@@ -262,12 +289,11 @@
   <script>
     // 1. Menu Toggle Script
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
-      e.stopPropagation(); // 클릭 이벤트 버블링 방지
+      e.stopPropagation();
       const menu = document.getElementById('dropdown-menu');
       menu.classList.toggle('hidden');
     });
 
-    // 외부 클릭 시 메뉴 닫기
     document.addEventListener('click', function(e) {
       const menu = document.getElementById('dropdown-menu');
       const toggleBtn = document.getElementById('menu-toggle');
@@ -281,7 +307,7 @@
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       
       elmnt.onmousedown = dragMouseDown;
-      elmnt.ontouchstart = dragTouchStart; // 모바일 터치 지원
+      elmnt.ontouchstart = dragTouchStart; 
 
       function dragMouseDown(e) {
         e = e || window.event;
@@ -331,7 +357,7 @@
       }
     }
 
-    // 드래그 기능 초기화
+    // Initialize drag
     window.onload = function() {
       var draggableDesc = document.getElementById("draggable-desc");
       if(draggableDesc) {
