@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Lacey Fine Art | Gallery</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Whisper&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&family=Whisper&display=swap" rel="stylesheet"/>
   
   <script>
     tailwind.config = {
@@ -34,17 +34,20 @@
       overflow-x: hidden;
     }
     
-    /* 🌟 요청하신 글씨 스타일 적용 (제목, 본문 등) */
+    /* 🌟 요청하신 글씨 스타일: 옅은 살구색(주황빛) + 아주 가는 폰트 + 은은한 은빛 테두리 */
     .text-target {
-      color: rgba(255, 218, 185, 0.9); /* 옅은 주황색 (Peach Puff) + 약간 투명 */
-      font-weight: 300; /* 가는 글씨 */
-      text-shadow: 0 0 3px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(192, 192, 192, 0.5); /* 은은한 은빛 테두리 효과 (글로우) */
-      letter-spacing: 0.05em;
+      color: rgba(255, 218, 185, 0.95); /* 옅은 살구/주황색 (Peach Puff) */
+      font-weight: 200; /* Extra Light (아주 가는 글씨) */
+      /* 텍스트 주변에 은은한 은빛(흰색+연한회색)이 번지는 효과 */
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.6), 1px 1px 1px rgba(192, 192, 192, 0.3);
+      letter-spacing: 0.08em; 
+      line-height: 1.8; 
     }
 
-    /* 로고나 강조 텍스트는 조금 더 잘 보이게 조정 */
+    /* 제목은 존재감을 위해 살짝만 덜 가늘게, 은빛을 조금 더 강조 */
     h1.text-target, h2.text-target, h3.text-target {
-       text-shadow: 0 0 5px rgba(255, 255, 255, 0.6), 1px 1px 3px rgba(160, 160, 160, 0.4);
+       font-weight: 300; 
+       text-shadow: 0 0 4px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(192, 192, 192, 0.4);
     }
 
     /* 기본 반투명 유리 패널 */
@@ -68,7 +71,7 @@
     .arrow-icon { transition: transform 0.6s ease; }
     .slide-hide { transform: translateX(calc(100% - 3.5rem)); }
 
-    /* 기본 버튼 */
+    /* 기본 수정/삭제 버튼 */
     .water-btn {
       display: inline-flex; align-items: center; justify-content: center;
       padding: 0.35rem 0.75rem; color: #3b6b6d;
@@ -82,17 +85,18 @@
       transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* 투명 메뉴 버튼 */
+    /* 🌟 투명 & 얇은 회색 메뉴 버튼 (배경 변경, 저장용) */
     .ghost-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      padding: 0.4rem 1rem; color: rgba(100, 110, 110, 0.8);
-      background-color: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 20px; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.05em;
-      white-space: nowrap; cursor: pointer; backdrop-filter: blur(4px);
+      padding: 0.4rem 1rem; color: rgba(120, 130, 130, 0.8);
+      background-color: transparent; border: 1px solid rgba(150, 160, 160, 0.4);
+      border-radius: 20px; font-size: 0.75rem; font-weight: 300; letter-spacing: 0.05em;
+      white-space: nowrap; cursor: pointer; backdrop-filter: blur(2px);
       transition: all 0.3s ease;
     }
     .ghost-btn:hover {
-      background-color: rgba(255, 255, 255, 0.5);
+      color: rgba(80, 90, 90, 1); background-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(150, 160, 160, 0.6);
     }
 
     .draggable { cursor: grab; }
@@ -104,7 +108,7 @@
     }
   </style>
 </head>
-<body class="text-[#1a4142]">
+<body class="text-[#1a4142]" id="gallery-body">
 
   <input type="file" id="hidden-file-input" style="display: none;" accept="image/*">
 
@@ -115,7 +119,7 @@
   <div class="fixed top-[90px] right-4 md:right-8 z-[9999] flex flex-col space-y-2">
     <button class="ghost-btn shadow-sm" onclick="triggerFileUpload('global-bg')">배경 사진 넣기</button>
     <button class="ghost-btn shadow-sm" onclick="removeBackground()">배경 삭제</button>
-    <button class="ghost-btn shadow-sm font-bold text-[#5f9ea0] border-[#5f9ea0]/50" onclick="saveGallery()">상태 저장하기</button>
+    <button class="ghost-btn shadow-sm font-bold text-[#5f9ea0] border-[#5f9ea0]/50" onclick="saveAndDownloadGallery()">상태 저장하기</button>
   </div>
 
   <header class="sticky top-0 z-40 py-6 px-8 flex justify-between items-start bg-[#d0e4e0]/60 backdrop-blur-md border-b border-white/20 shadow-sm">
@@ -130,7 +134,7 @@
           <path d="M25 15V35" stroke="#cfa752" stroke-width="2"/>
         </svg>
       </div>
-      <h1 class="text-xs tracking-widest font-bold drop-shadow-sm text-target" id="header-title">LACEY FINE ART</h1>
+      <h1 class="text-xs tracking-widest font-bold text-[#1a4142] drop-shadow-sm text-target" id="header-title">LACEY FINE ART</h1>
     </div>
     
     <div class="relative">
@@ -146,7 +150,7 @@
         <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
           <div class="relative flex flex-col border-b border-gray-100 pb-3 menu-item group/pmenu">
             <div class="flex justify-between items-center w-full">
-              <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target menu-text-1">
+              <a href="javascript:void(0)" class="text-sm font-serif font-bold transition-colors flex-grow text-target menu-text-1" style="color: #555; text-shadow: none;">
                 [상위 메뉴 입력]
               </a>
               <div class="flex space-x-1 opacity-0 group-hover/pmenu:opacity-100 transition-opacity">
@@ -155,7 +159,7 @@
             </div>
             <div class="pl-4 mt-3 space-y-3 border-l-2 border-gray-100 ml-1">
               <div class="relative flex justify-between items-center child-menu-item group/cmenu">
-                <a href="javascript:void(0)" class="text-xs transition-colors flex-grow text-target menu-text-2">
+                <a href="javascript:void(0)" class="text-xs transition-colors flex-grow text-target menu-text-2" style="color: #777; text-shadow: none;">
                   - [하위 메뉴 입력]
                 </a>
                 <div class="flex space-x-1 opacity-0 group-hover/cmenu:opacity-100 transition-opacity">
@@ -180,9 +184,9 @@
         <p class="text-[10px] uppercase tracking-[0.3em] font-bold mb-4 text-target intro-label">WHO WE ARE</p>
         <h2 class="text-4xl font-serif drop-shadow-sm mb-2 text-target intro-title">[라벨 입력]</h2>
         <h2 class="text-3xl font-serif mb-6 text-target intro-subtitle">[소개글 타이틀 입력]</h2>
-        <div class="w-12 h-1 bg-[#cfa752] mb-6 rounded-full"></div>
+        <div class="w-12 h-1 bg-[#cfa752] mb-6 rounded-full opacity-80"></div>
         <p class="text-sm leading-relaxed max-w-md text-target intro-desc">
-          [여기에 갤러리 소개글을 입력하세요. 은은한 주황빛 글씨와 은빛 테두리가 적용되었습니다.]
+          [여기에 갤러리 소개글을 입력하세요. 얇고 은은한 주황빛(살구색) 폰트가 적용되었습니다.]
         </p>
       </div>
     </section>
@@ -200,6 +204,7 @@
         
         <div class="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl bg-white gallery-item">
           <img id="art-img-1" src="5167.png" alt="Art 1" class="absolute inset-0 w-full h-full object-cover">
+          
           <div class="absolute top-4 left-4 z-0 flex space-x-2">
              <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="triggerFileUpload('art-img-1')">사진 넣기</button>
              <button class="ghost-btn !px-3 !py-1.5 !text-[10px]" onclick="deleteElement(this.closest('.gallery-item'))">삭제</button>
@@ -214,11 +219,11 @@
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-1">[작품 제목 1]</h4>
-                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full"></div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-1" style="color:#555; text-shadow:none;">[작품 제목 1]</h4>
+                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full opacity-60"></div>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-target item-desc-1">
-                    [글을 수정하고 반드시 '상태 저장하기'를 눌러주세요. 그래야 사라지지 않습니다.]
+                  <p class="text-sm leading-relaxed font-medium text-target item-desc-1" style="color:#666; text-shadow:none;">
+                    [모든 수정을 마친 후 '상태 저장하기'를 누르면, 수정된 내용이 포함된 파일이 자동으로 다운로드 됩니다!]
                   </p>
                 </div>
              </div>
@@ -240,11 +245,11 @@
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-2">[작품 제목 2]</h4>
-                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full"></div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-2" style="color:#555; text-shadow:none;">[작품 제목 2]</h4>
+                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full opacity-60"></div>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-target item-desc-2">
-                    [가는 글씨체와 옅은 살구빛 색상으로 변경되었습니다.]
+                  <p class="text-sm leading-relaxed font-medium text-target item-desc-2" style="color:#666; text-shadow:none;">
+                    [다운로드된 파일을 언제든 열면 내가 저장한 사진과 글씨가 그대로 나타납니다. 영원히 간직하세요!]
                   </p>
                 </div>
              </div>
@@ -266,11 +271,11 @@
                 <div class="absolute top-4 right-4 flex space-x-2 z-20">
                   <button class="water-btn !px-3 !py-1.5 !text-[10px]" onclick="openTextEditor(this.closest('.text-content'))">글 수정</button>
                 </div>
-                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-3">[작품 제목 3]</h4>
-                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full"></div>
+                <h4 class="text-2xl font-serif mb-3 mt-6 text-target item-title-3" style="color:#555; text-shadow:none;">[작품 제목 3]</h4>
+                <div class="w-8 h-1 bg-[#cfa752] mb-4 rounded-full opacity-60"></div>
                 <div class="overflow-y-auto pr-2">
-                  <p class="text-sm leading-relaxed font-medium text-target item-desc-3">
-                    [저장 버튼은 우측 상단에 있습니다.]
+                  <p class="text-sm leading-relaxed font-medium text-target item-desc-3" style="color:#666; text-shadow:none;">
+                    [브라우저 용량 제한 문제를 완전히 해결하기 위해 파일 다운로드 방식을 결합했습니다.]
                   </p>
                 </div>
              </div>
@@ -323,6 +328,7 @@
   </div>
 
   <script>
+    // 메뉴 슬라이드 기능
     document.getElementById('menu-toggle').addEventListener('click', function(e) {
       e.stopPropagation();
       document.getElementById('dropdown-menu').classList.toggle('hidden');
@@ -334,6 +340,7 @@
       }
     });
 
+    // 패널 열고 닫기
     function toggleSlide(handle) {
       const panel = handle.closest('.slide-panel');
       panel.classList.toggle('slide-hide'); 
@@ -341,6 +348,7 @@
       arrow.classList.toggle('rotate-180'); 
     }
 
+    // 드래그 기능 (상단 안내창)
     function makeDraggable(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; 
@@ -350,10 +358,8 @@
       function elementTouchDrag(e) { var touch = e.touches[0]; pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY; pos3 = touch.clientX; pos4 = touch.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
       function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
     }
-    window.onload = function() {
-      if(document.getElementById("draggable-desc")) makeDraggable(document.getElementById("draggable-desc"));
-    }
 
+    // 이미지 교체 및 자동 압축 (저장 용량 최적화)
     let currentImgId = null;
     const fileInput = document.getElementById('hidden-file-input');
 
@@ -366,30 +372,40 @@
       if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
         const reader = new FileReader();
+        
         reader.onload = function(event) {
           const img = new Image();
           img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width; let height = img.height;
-            const MAX_SIZE = 800; // 용량 최소화를 위해 800px로 제한
-            if (width > height && width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } 
-            else if (height > width && height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+            // 🌟 용량 최적화: 최대 너비/높이를 600px로 더욱 강하게 압축
+            const MAX_SIZE = 600; 
+
+            if (width > height && width > MAX_SIZE) {
+                height *= MAX_SIZE / width; width = MAX_SIZE;
+            } else if (height > width && height > MAX_SIZE) {
+                width *= MAX_SIZE / height; height = MAX_SIZE;
+            }
             canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.6); // 퀄리티 0.6으로 압축
             
+            // 🌟 화질 압축: 0.5 (50%) 수준으로 낮춰 용량 대폭 절감
+            const compressedData = canvas.toDataURL('image/jpeg', 0.5);
+
             if (currentImgId === 'global-bg') {
               document.body.style.backgroundImage = `url('${compressedData}')`;
               document.body.style.backgroundSize = 'cover';
               document.body.style.backgroundPosition = 'center';
               document.body.style.backgroundAttachment = 'fixed';
               document.getElementById('global-bg').src = compressedData; 
+              document.getElementById('global-bg').style.display = 'block';
             } else {
               const imgElement = document.getElementById(currentImgId);
               if (imgElement) imgElement.src = compressedData;
             }
           }
+          img.onerror = function() { alert("이미지를 불러오는데 실패했습니다."); }
           img.src = event.target.result;
         }
         reader.readAsDataURL(file);
@@ -400,8 +416,10 @@
     function removeBackground() {
         document.body.style.backgroundImage = 'none';
         document.getElementById('global-bg').src = '';
+        document.getElementById('global-bg').style.display = 'none';
     }
 
+    // 텍스트 모달창 처리
     const textModal = document.getElementById('text-editor-modal');
     const modalTextarea = document.getElementById('modal-textarea');
     let currentTextTargets = [];
@@ -409,17 +427,27 @@
     function openTextEditor(containerElement) {
         currentTextTargets = [];
         let combinedText = "";
+        
+        let targets = [];
         if (containerElement.classList.contains('text-target')) {
-            currentTextTargets.push(containerElement);
-            combinedText = containerElement.innerText.trim();
+            targets = [containerElement];
         } else {
-            const targets = containerElement.querySelectorAll('.text-target');
-            targets.forEach((target, index) => {
-                currentTextTargets.push(target);
-                combinedText += target.innerText.trim();
-                if (index < targets.length - 1) combinedText += "\n";
-            });
+            targets = containerElement.querySelectorAll('.text-target');
+            if (targets.length === 0) {
+               const title = containerElement.querySelector('h4');
+               const desc = containerElement.querySelector('p');
+               if(title) targets = [title];
+               if(desc) targets = [...targets, desc];
+               if(containerElement.tagName === 'A') targets = [containerElement];
+            }
         }
+
+        targets.forEach((target, index) => {
+            currentTextTargets.push(target);
+            combinedText += target.innerText.trim();
+            if (index < targets.length - 1) combinedText += "\n";
+        });
+
       modalTextarea.value = combinedText;
       textModal.classList.remove('hidden'); textModal.classList.add('flex');
     }
@@ -442,24 +470,24 @@
       if (confirm('정말로 삭제하시겠습니까?')) element.remove();
     }
 
-    // 🌟 안전한 저장 로직 (텍스트 우선 저장)
-    function saveGallery() {
+    // ==========================================
+    // 🌟 궁극의 저장 기능: 파일로 영원히 간직하기
+    // ==========================================
+    function saveAndDownloadGallery() {
       try {
-        // 1. 텍스트부터 저장 (실패 확률 낮음)
+        // 1. 브라우저 내부 임시 저장 (기존 기능)
         const textElements = document.querySelectorAll('.text-target');
         const textsArray = Array.from(textElements).map(el => el.innerHTML);
         localStorage.setItem('myGalleryTexts', JSON.stringify(textsArray));
 
-        // 2. 이미지 저장 (용량 초과 가능성 있음)
         const imagesData = {};
         document.querySelectorAll('img').forEach(img => {
-            if(img.id && img.src.startsWith('data:image')) { // base64 이미지만 저장
+            if(img.id && img.src.startsWith('data:image')) { 
                 imagesData[img.id] = img.src;
             }
         });
         localStorage.setItem('myGalleryImages', JSON.stringify(imagesData));
         
-        // 배경 이미지 저장
         const bgImage = document.getElementById('global-bg').src;
         if(bgImage.startsWith('data:image')) {
             localStorage.setItem('myGalleryBg', bgImage);
@@ -467,13 +495,34 @@
             localStorage.removeItem('myGalleryBg');
         }
 
-        alert("저장되었습니다! 이제 앱을 껐다 켜도 내용이 유지됩니다.");
+        // 2. 현재 상태 그대로 HTML 파일로 다운로드 (핵심)
+        // 현재 화면의 HTML을 통째로 가져와서 하나의 완성된 웹페이지 파일로 만듭니다.
+        const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        
+        // 텍스트 파일(Blob) 객체 생성
+        const blob = new Blob([htmlContent], {type: "text/html;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        
+        // 가상의 다운로드 링크를 만들어서 클릭 이벤트 발생
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "My_Beautiful_Gallery.html"; // 저장될 파일 이름
+        document.body.appendChild(a);
+        a.click();
+        
+        // 뒷정리
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert("성공!\n\n1. 현재 브라우저에 임시 저장되었습니다.\n2. 'My_Beautiful_Gallery.html' 파일이 기기에 다운로드 되었습니다. 이 파일을 열면 영원히 사라지지 않습니다!");
+
       } catch (err) {
         console.error(err);
-        alert("사진 용량이 너무 커서 일부 저장이 안 될 수 있습니다.\n텍스트는 저장되었으니 안심하세요!");
+        alert("저장 중 오류가 발생했습니다. 용량이 너무 큰 이미지가 포함되어 있을 수 있습니다.");
       }
     }
 
+    // 페이지 로드 시 기존 저장된 데이터 복구
     function loadGallery() {
       try {
         const savedTexts = JSON.parse(localStorage.getItem('myGalleryTexts'));
@@ -496,6 +545,7 @@
             document.body.style.backgroundPosition = 'center';
             document.body.style.backgroundAttachment = 'fixed';
             document.getElementById('global-bg').src = savedBg;
+            document.getElementById('global-bg').style.display = 'block';
         }
       } catch (e) { console.log("로드 중 오류 발생 (무시 가능)"); }
     }
