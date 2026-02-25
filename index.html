@@ -1,27 +1,147 @@
-<div class="main-background">
-  <header>
-    <span>게시하기</span>
-    <button class="small-btn post-btn">게시</button>
-  </header>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Gallery</title>
+  <style>
+    /* 전체 배경 및 폰트 설정 */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
 
-  <main>
-    <section class="glass-board">
-      <div class="item">
-        <p>게시물 내용이 여기에 들어갑니다.</p>
-        <div class="edit-delete-group">
-          <button class="mini-btn">수정</button>
-          <button class="mini-btn">삭제</button>
+    .main-background {
+      width: 100%;
+      min-height: 100vh;
+      /* ▼ 여기에 배경 사진 링크를 넣으시면 됩니다 ▼ */
+      background-image: url('배경사진_링크주소를_여기에_넣으세요'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 상단 게시하기 영역 */
+    header {
+      padding: 20px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+    }
+    header span {
+      font-weight: bold;
+      color: #333; /* 배경이 어두우면 #fff로 바꾸세요 */
+    }
+
+    /* 게시판 설명창: 불투명 유리 효과 */
+    .glass-board {
+      background: rgba(211, 211, 211, 0.5); /* 옅은 회색 반투명 */
+      backdrop-filter: blur(10px); /* 유리문처럼 흐릿한 효과 */
+      margin: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex-grow: 1;
+    }
+
+    .item p {
+      margin-top: 0;
+      color: #333;
+    }
+
+    /* 버튼 스타일: 작고 은은하게 */
+    .small-btn, .mini-btn {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid #888;
+      color: #333;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    
+    .post-btn {
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+
+    .mini-btn {
+      font-size: 11px;
+      padding: 2px 6px;
+      margin-right: 5px;
+    }
+
+    /* 하단 영역 (SNS 및 검색창) */
+    footer {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .sns-link a {
+      text-decoration: none;
+      color: #555;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 4px 10px;
+      border-radius: 15px;
+    }
+
+    .google-search {
+      text-align: center;
+    }
+
+    .cursive-font {
+      font-family: 'Cursive', cursive, sans-serif; /* 필기체 스타일 */
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #888;
+      font-size: 14px;
+      color: #333;
+      width: 150px;
+      text-align: center;
+      padding-bottom: 2px;
+    }
+    .cursive-font:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-background">
+    
+    <header>
+      <span>게시하기</span>
+      <button class="small-btn post-btn">게시</button>
+    </header>
+
+    <main>
+      <section class="glass-board">
+        <div class="item">
+          <p>게시물 내용이 여기에 들어갑니다. 불투명한 유리 느낌의 배경입니다.</p>
+          <div class="edit-delete-group">
+            <button class="mini-btn">수정</button>
+            <button class="mini-btn">삭제</button>
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <footer>
-    <div class="sns-link">
-      <a href="https://twitter.com" target="_blank">Twitter</a>
-    </div>
-    <div class="google-search">
-      <input type="text" placeholder="Google Search..." class="cursive-font">
-    </div>
-  </footer>
-</div>
+    <footer>
+      <div class="sns-link">
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+      </div>
+      <div class="google-search">
+        <input type="text" placeholder="Google Search..." class="cursive-font">
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>
