@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 상단 버튼: 디자인 유지 */
+    /* 🌟 상단 버튼 디자인 유지 */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -57,11 +57,10 @@
       word-break: break-word;
     }
 
-    /* 🌟🌟🌟 게시판 첫 제목: 필기체 + 주홍빛 + 은빛 (강제 적용) 🌟🌟🌟 */
+    /* 🌟 메인 제목 스타일 유지 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
-        color: #FF7F50 !important; /* 은은한 주홍 코랄 */
-        /* 은빛 광택 효과 (여러 겹의 그림자로 은은한 금속 느낌) */
+        color: #FF7F50 !important;
         text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 2px 2px 4px rgba(192,192,192,0.5) !important;
         font-size: 3.2rem !important;
         font-weight: 400 !important;
@@ -78,10 +77,7 @@
       border: 1px solid rgba(255,255,255,0.1); 
       display: flex; align-items: center; justify-content: center;
     }
-    .art-image {
-      width: 100%; height: 100%;
-      object-fit: contain !important;
-    }
+    .art-image { width: 100%; height: 100%; object-fit: contain !important; }
     
     .desc-panel {
       background: rgba(230, 230, 230, 0.85) !important;
@@ -95,6 +91,8 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    /* 🌟 스크롤바 디자인 */
+    .custom-scroll { overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
     .custom-scroll::-webkit-scrollbar { width: 2px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
 
@@ -134,7 +132,7 @@
 
       <div id="dropdown-menu" class="hidden absolute right-0 mt-6 w-72 bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-2xl overflow-hidden z-50">
         <div class="p-6 bg-white/5 text-[9px] font-bold tracking-[0.2em] opacity-40 border-b border-white/10">DIRECTORY</div>
-        <div class="p-6 space-y-6 custom-scroll max-h-[60vh] overflow-y-auto" id="menu-list">
+        <div id="menu-list" class="p-6 space-y-6 custom-scroll max-h-[60vh] overflow-y-auto">
           <div class="space-y-3">
             <div class="flex justify-between items-center group">
               <a href="javascript:void(0)" class="text-xs font-bold text-target opacity-80">[상위 카테고리]</a>
@@ -175,14 +173,18 @@
              <button class="text-[9px] font-bold tracking-widest opacity-20 hover:opacity-100 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
-             <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
-             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative">
+             <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)">
+                <div class="w-[1px] h-8 bg-black/20"></div>
+             </div>
+             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden">
                 <div class="absolute top-6 right-8 flex space-x-2">
                     <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-1'))">STYLE</button>
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-1'))">EDIT</button>
                 </div>
-                <h4 class="text-lg font-serif mb-6 mt-6 text-target">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4"><p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p></div>
+                <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4">
+                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요.</p>
+                </div>
              </div>
           </div>
         </div>
@@ -202,7 +204,6 @@
   </div>
 
   <script>
-    /* 🌟 IndexedDB 창고 로직 (유지) */
     const DB_NAME = 'GalleryStoreDB_Final_V2';
     const STORE_NAME = 'GalleryAssets';
     function openDB() {
@@ -213,28 +214,11 @@
         req.onerror = rej;
       });
     }
-    async function dbSet(k, v) {
-      const db = await openDB();
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).put(v, k);
-    }
-    async function dbGet(k) {
-      const db = await openDB();
-      return new Promise(res => {
-        const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k);
-        req.onsuccess = () => res(req.result);
-      });
-    }
+    async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
+    async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
-    /* ---------------- 디자인 및 기능 로직 ---------------- */
-    document.getElementById('menu-toggle').onclick = (e) => {
-        e.stopPropagation();
-        document.getElementById('dropdown-menu').classList.toggle('hidden');
-    };
-
-    function toggleSlide(handle) {
-      handle.closest('.slide-panel').classList.toggle('slide-hide'); 
-    }
+    document.getElementById('menu-toggle').onclick = (e) => { e.stopPropagation(); document.getElementById('dropdown-menu').classList.toggle('hidden'); };
+    function toggleSlide(handle) { handle.closest('.slide-panel').classList.toggle('slide-hide'); }
 
     const fileInput = document.getElementById('hidden-file-input');
     let currentImgId = null;
@@ -248,23 +232,16 @@
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX = 1000;
-          let w = img.width, h = img.height;
-          if (w > h && w > MAX) { h *= MAX/w; w = MAX; }
-          else if (h > w && h > MAX) { w *= MAX/h; h = MAX; }
+          const MAX = 1000; let w = img.width, h = img.height;
+          if (w > h && w > MAX) { h *= MAX/w; w = MAX; } else if (h > w && h > MAX) { w *= MAX/h; h = MAX; }
           canvas.width = w; canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           const data = canvas.toDataURL('image/jpeg', 0.4);
           if (currentImgId === 'global-bg') {
-            document.body.style.backgroundImage = `url(${data})`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundAttachment = 'fixed';
-            document.getElementById('global-bg').src = data;
-            document.getElementById('global-bg').style.display = 'block';
+            document.body.style.backgroundImage = `url(${data})`; document.body.style.backgroundSize = 'cover'; document.body.style.backgroundAttachment = 'fixed';
+            document.getElementById('global-bg').src = data; document.getElementById('global-bg').style.display = 'block';
           } else {
-            const targetImg = document.getElementById(currentImgId);
-            targetImg.src = data;
-            targetImg.style.opacity = "1";
+            const targetImg = document.getElementById(currentImgId); targetImg.src = data; targetImg.style.opacity = "1";
           }
         };
         img.src = ev.target.result;
@@ -272,6 +249,7 @@
       reader.readAsDataURL(file);
     };
 
+    /* 🌟 탭 추가 시 스크롤 기능 강제 주입 로직 🌟 */
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
@@ -283,13 +261,13 @@
              <button class="text-[9px] font-bold tracking-widest opacity-20 hover:opacity-100 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
-             <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
-             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative">
+             <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
+             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden">
                 <div class="absolute top-6 right-8 flex space-x-2">
                     <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-1'))">STYLE</button>
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-1'))">EDIT</button>
                 </div>
-                <h4 class="text-lg font-serif mb-6 mt-6 text-target">[작품 제목]</h4>
+                <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
                 <div class="flex-1 overflow-y-auto custom-scroll pr-4"><p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p></div>
              </div>
           </div>
@@ -323,30 +301,21 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        
-        await dbSet('lay_data_v2', mainClone.innerHTML);
-        await dbSet('menu_lay_v2', menuLayout);
-        await dbSet('txt_data_v2', txts);
-        await dbSet('sty_data_v2', stys);
-        await dbSet('img_data_v2', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_data_v2', document.getElementById('global-bg').src);
-        
-        alert("✅ 저장 완료.");
+        await dbSet('lay_v3', mainClone.innerHTML); await dbSet('menu_v3', menuLayout); await dbSet('txt_v3', txts); await dbSet('sty_v3', stys); await dbSet('img_v3', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v3', document.getElementById('global-bg').src);
+        alert("✅ 모든 게시판의 스크롤 기능이 활성화된 채 저장되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_data_v2');
-      if(!lay) return;
+      const lay = await dbGet('lay_v3'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_lay_v2');
-      if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_data_v2'), stys = await dbGet('sty_data_v2'), imgs = await dbGet('img_data_v2'), bg = await dbGet('bg_data_v2');
+      const menuLay = await dbGet('menu_v3'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v3'), stys = await dbGet('sty_v3'), imgs = await dbGet('img_v3'), bg = await dbGet('bg_v3');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
     }
-
     window.onload = loadFromBrowser;
   </script>
 </body>
