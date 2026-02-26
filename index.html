@@ -36,17 +36,19 @@
     #gallery-section { scroll-margin-top: 120px; }
     ::-webkit-scrollbar { width: 0px; }
 
-    /* 🌟 글 접기/펴기 (에러 방지용 확실한 속성) */
+    /* 🌟 글 접기/펴기 로직 개선 (높이 제한 해제) */
     .collapsed-text {
       display: -webkit-box !important;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      transition: max-height 0.3s ease;
+      max-height: 4.5em; /* 대략 2~3줄 높이 */
+      transition: all 0.4s ease;
     }
     .expanded-text {
       display: block !important;
       overflow: visible !important;
+      max-height: 5000px !important; /* 충분한 높이 확보 */
     }
     
     .intro-handwriting { font-family: 'Whisper', cursive; color: #FF6347; font-size: 1.5rem; opacity: 0.7; }
@@ -57,13 +59,14 @@
     .text-target:hover { opacity: 1; }
 
     /* 사이트 첫 소개칸 투명 */
-    .intro-panel { background: transparent !important; border: none !important; }
+    .intro-panel { background: transparent !important; border: none !important; width: 100%; }
 
-    /* 작품 소개칸 불투명 덮개 */
+    /* 작품 소개칸 불투명 덮개 (높이 가변형으로 수정) */
     .glass-panel-light {
       background: rgba(255, 255, 255, 0.92) !important;
       backdrop-filter: blur(25px) !important;
       border-left: 0.5px solid rgba(255, 255, 255, 0.5) !important;
+      overflow-y: auto !important; /* 긴 글 대비 스크롤 허용 */
     }
 
     /* 버튼 디자인: 가는 선, 은은한 스타일 */
@@ -85,7 +88,7 @@
     #admin-panel {
       transition: all 0.4s ease; max-height: 0; opacity: 0; overflow: hidden;
     }
-    #admin-panel.open { max-height: 400px; opacity: 1; margin-top: 10px; }
+    #admin-panel.open { max-height: 500px; opacity: 1; margin-top: 10px; }
 
     .slide-panel { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 30; }
     .slide-hide { transform: translateX(calc(100% - 2.8rem)); }
@@ -93,6 +96,9 @@
     .draggable { cursor: grab; }
     .draggable:active { cursor: grabbing; }
     .diary-modal-bg { background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); }
+    
+    .custom-scroll::-webkit-scrollbar { width: 2px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
   </style>
 </head>
 <body class="text-[#1a4142]">
@@ -126,7 +132,7 @@
     </div>
     
     <div class="relative pointer-events-auto">
-      <button id="menu-toggle" class="w-10 h-10 flex items-center justify-center opacity-30 hover:opacity-100 transition-all">
+      <button id="menu-toggle" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/30 transition-all">
         <div class="w-6 h-[0.5px] bg-[#1a4142]"></div>
       </button>
 
@@ -139,19 +145,19 @@
              </div>
              <div class="pl-4 space-y-3">
                 <div class="flex justify-between items-center group/nav">
-                   <a href="#gallery-section" class="text-[10px] text-target flex-grow opacity-60" onclick="closeMenu()">- NAME</a>
+                   <a href="#gallery-section" class="text-[11px] text-target flex-grow opacity-60" onclick="closeMenu()">- [NAME]</a>
                    <button class="mini-icon-btn !p-0 opacity-20 group-hover/nav:opacity-100" onclick="openTextEditor(this.previousElementSibling)">✎</button>
                 </div>
              </div>
           </div>
           <div class="flex flex-col space-y-4 border-t border-black/5 pt-6">
              <div class="flex justify-between items-center group/nav">
-                <a href="#gallery-section" class="text-[12px] font-bold text-target flex-grow" onclick="closeMenu()">⏳ ERA</a>
+                <a href="#gallery-section" class="text-[11px] font-bold text-target flex-grow" onclick="closeMenu()">⏳ ERA</a>
                 <button class="mini-icon-btn !p-0 opacity-20 group-hover/nav:opacity-100" onclick="openTextEditor(this.previousElementSibling)">✎</button>
              </div>
              <div class="pl-4 space-y-3">
                 <div class="flex justify-between items-center group/nav">
-                   <a href="#gallery-section" class="text-[11px] text-target flex-grow opacity-60" onclick="closeMenu()">- NAME</a>
+                   <a href="#gallery-section" class="text-[11px] text-target flex-grow opacity-60" onclick="closeMenu()">- [NAME]</a>
                    <button class="mini-icon-btn !p-0 opacity-20 group-hover/nav:opacity-100" onclick="openTextEditor(this.previousElementSibling)">✎</button>
                 </div>
              </div>
@@ -177,7 +183,7 @@
         <h2 class="text-2xl font-light tracking-widest text-target mb-6">[Title]</h2>
         <div class="w-8 h-[0.5px] bg-black mb-8 opacity-10"></div>
         <div class="w-full flex flex-col items-center">
-            <p class="text-[13px] leading-relaxed text-target collapsed-text" id="intro-p-text">[Description]</p>
+            <p class="text-[13px] leading-relaxed text-target collapsed-text w-full">[Description]</p>
             <button class="text-[9px] opacity-30 mt-6 tracking-widest hover:opacity-100 uppercase expand-btn" onclick="toggleExpand(this)">More</button>
         </div>
       </div>
@@ -195,15 +201,15 @@
              <div class="w-12 h-full flex items-center justify-center cursor-pointer bg-white/5" onclick="toggleSlide(this)">
                 <div class="w-4 h-[0.5px] bg-black opacity-20"></div>
              </div>
-             <div class="flex-1 h-full px-10 py-16 flex flex-col relative glass-panel-light overflow-hidden shadow-2xl">
+             <div class="flex-1 h-full px-10 py-16 flex flex-col relative glass-panel-light shadow-2xl custom-scroll">
                 <div class="absolute top-6 right-6 flex space-x-2">
                   <button class="mini-icon-btn" onclick="playTTS(this.closest('.flex-1'))">🔊</button>
                   <button class="mini-icon-btn" onclick="openStyleEditor(this.closest('.flex-1'))">🎨</button>
-                  <button class="mini-icon-btn" onclick="openTextEditor(this.closest('.flex-1'))">✎</button>
+                  <button class="mini-icon-btn !opacity-100" onclick="openTextEditor(this.closest('.flex-1'))">✎</button>
                 </div>
                 <h4 class="text-xl font-light mb-8 mt-4 text-[#1a4142] text-target">[Art Title]</h4>
-                <div class="flex-1 overflow-y-auto pr-2 custom-scroll flex flex-col items-start">
-                  <p class="text-[13px] font-light text-target collapsed-text">[Description]</p>
+                <div class="flex-1 flex flex-col items-start">
+                  <p class="text-[13px] font-light text-target collapsed-text w-full">[Description]</p>
                   <button class="text-[9px] opacity-30 mt-6 tracking-tighter uppercase expand-btn" onclick="toggleExpand(this)">More</button>
                 </div>
              </div>
@@ -216,7 +222,7 @@
   <div id="text-editor-modal" class="fixed inset-0 z-[100005] hidden items-center justify-center diary-modal-bg">
     <div class="bg-white w-[90%] max-w-xs p-10 rounded-[2rem] shadow-2xl">
       <h3 class="text-[9px] font-bold mb-6 tracking-[0.3em] text-gray-300">Edit</h3>
-      <textarea id="modal-textarea" class="w-full h-56 p-5 border-0 rounded-2xl font-light text-[14px] text-gray-700 bg-gray-50 outline-none"></textarea>
+      <textarea id="modal-textarea" class="w-full h-56 p-5 border-0 rounded-2xl font-light text-[14px] text-gray-700 bg-gray-50 outline-none custom-scroll"></textarea>
       <div class="flex justify-end space-x-4 mt-10">
         <button class="fixed-menu-btn" onclick="closeTextEditor()">Close</button>
         <button class="fixed-menu-btn !text-galleryGold !font-bold" onclick="saveTextChanges()">Save</button>
@@ -240,7 +246,6 @@
   </div>
 
   <script>
-    // 🌟 관리 패널 토글
     function toggleAdmin() {
         const panel = document.getElementById('admin-panel');
         const icon = document.getElementById('admin-icon');
@@ -250,16 +255,14 @@
 
     const menuToggle = document.getElementById('menu-toggle');
     const dropdownMenu = document.getElementById('dropdown-menu');
-
     menuToggle.onclick = (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); };
     function closeMenu() { dropdownMenu.classList.add('hidden'); }
     document.onclick = (e) => { if (!dropdownMenu.contains(e.target)) closeMenu(); };
 
     function toggleSlide(handle) { handle.closest('.slide-panel').classList.toggle('slide-hide'); }
 
-    // 🌟 더보기/접기 로직 (에러 수정됨)
+    // 🌟 더보기/접기 로직 (게시판 높이 제한 해제 버전)
     function toggleExpand(btn) {
-      // 버튼 바로 위 혹은 부모 안의 p 태그 찾기
       const p = btn.closest('div').querySelector('p.text-target');
       if (!p) return;
       
@@ -278,7 +281,7 @@
     function makeDraggable(el) {
         let p1=0, p2=0, p3=0, p4=0;
         el.onmousedown = (e) => {
-            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'A') return;
+            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'A' || e.target.closest('button')) return;
             p3 = e.clientX; p4 = e.clientY;
             document.onmouseup = () => { document.onmousemove = null; };
             document.onmousemove = (e) => {
@@ -298,10 +301,10 @@
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-12 h-full flex items-center justify-center cursor-pointer bg-white/5" onclick="toggleSlide(this)"><div class="w-4 h-[0.5px] bg-black opacity-20"></div></div>
-             <div class="flex-1 h-full px-10 py-16 flex flex-col relative glass-panel-light overflow-hidden shadow-2xl">
-                <div class="absolute top-6 right-6 flex space-x-2"><button class="mini-icon-btn" onclick="playTTS(this.closest('.flex-1'))">🔊</button><button class="mini-icon-btn" onclick="openStyleEditor(this.closest('.flex-1'))">🎨</button><button class="mini-icon-btn" onclick="openTextEditor(this.closest('.flex-1'))">✎</button></div>
-                <h4 class="text-xl font-light mb-8 mt-4 text-target">[New Title]</h4>
-                <div class="flex-1 overflow-y-auto pr-2 custom-scroll flex flex-col items-start"><p class="text-[13px] text-target opacity-80 collapsed-text">[Description]</p><button class="text-[9px] opacity-30 mt-6 tracking-tighter uppercase expand-btn" onclick="toggleExpand(this)">More</button></div>
+             <div class="flex-1 h-full px-10 py-16 flex flex-col relative glass-panel-light shadow-2xl custom-scroll">
+                <div class="absolute top-6 right-6 flex space-x-2"><button class="mini-icon-btn" onclick="playTTS(this.closest('.flex-1'))">🔊</button><button class="mini-icon-btn" onclick="openStyleEditor(this.closest('.flex-1'))">🎨</button><button class="mini-icon-btn !opacity-100" onclick="openTextEditor(this.closest('.flex-1'))">✎</button></div>
+                <h4 class="text-xl font-light mb-8 mt-4 text-target">[New Art]</h4>
+                <div class="flex-1 flex flex-col items-start"><p class="text-[13px] text-target opacity-80 collapsed-text w-full">[Description]</p><button class="text-[9px] opacity-30 mt-6 tracking-tighter uppercase expand-btn" onclick="toggleExpand(this)">More</button></div>
              </div>
           </div></div>`;
       document.getElementById('gallery-grid').insertAdjacentHTML('beforeend', html);
@@ -347,14 +350,22 @@
       document.getElementById('text-editor-modal').classList.replace('hidden', 'flex');
     }
     function closeTextEditor() { document.getElementById('text-editor-modal').classList.replace('flex', 'hidden'); }
+    
+    // 🌟 긴 글 보존 저장 로직 (마지막 타겟에 남은 모든 줄 몰아주기)
     function saveTextChanges() {
       const lines = document.getElementById('modal-textarea').value.split('\n');
-      editTargs.forEach((t, i) => { if(lines[i] !== undefined) t.innerText = lines[i]; });
+      editTargs.forEach((t, i) => { 
+        if (i === editTargs.length - 1) {
+          // 마지막 타겟(설명란)에는 남은 모든 텍스트를 줄바꿈 포함하여 할당
+          t.innerText = lines.slice(i).join('\n');
+        } else {
+          t.innerText = lines[i] || ""; 
+        }
+      });
       closeTextEditor();
     }
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
 
-    let styleTargs = [];
     function openStyleEditor(el) {
       styleTargs = el.querySelectorAll('.text-target');
       document.getElementById('style-editor-modal').classList.replace('hidden', 'flex');
@@ -368,27 +379,27 @@
       try {
         const gridClone = document.getElementById('gallery-grid').cloneNode(true);
         gridClone.querySelectorAll('img').forEach(img => img.src = ""); 
-        localStorage.setItem('gallery_grid_v11', gridClone.innerHTML);
+        localStorage.setItem('gallery_grid_v12', gridClone.innerHTML);
         const textMap={}; const styleMap={};
-        document.querySelectorAll('.text-target').forEach((el, i) => { textMap[i]=el.innerHTML; styleMap[i]=el.getAttribute('style')||''; });
-        localStorage.setItem('gallery_texts_v11', JSON.stringify(textMap));
-        localStorage.setItem('gallery_styles_v11', JSON.stringify(styleMap));
+        document.querySelectorAll('.text-target').forEach((el, i) => { textMap[i]=el.innerText; styleMap[i]=el.getAttribute('style')||''; });
+        localStorage.setItem('gallery_texts_v12', JSON.stringify(textMap));
+        localStorage.setItem('gallery_styles_v12', JSON.stringify(styleMap));
         const imgMap={}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgMap[img.id]=img.src; });
-        localStorage.setItem('gallery_images_v11', JSON.stringify(imgMap));
-        localStorage.setItem('gallery_bg_v11', document.getElementById('global-bg').src);
-        alert("SITE DATA LOCKED.");
+        localStorage.setItem('gallery_images_v12', JSON.stringify(imgMap));
+        localStorage.setItem('gallery_bg_v12', document.getElementById('global-bg').src);
+        alert("SITE LOCKED.");
       } catch(e) { alert("ERROR: MEMORY FULL."); }
     }
 
     function loadFromBrowser() {
-      const layout = localStorage.getItem('gallery_grid_v11');
+      const layout = localStorage.getItem('gallery_grid_v12');
       if (layout) document.getElementById('gallery-grid').innerHTML = layout;
-      const texts = JSON.parse(localStorage.getItem('gallery_texts_v11'));
-      const styles = JSON.parse(localStorage.getItem('gallery_styles_v11'));
-      if (texts) document.querySelectorAll('.text-target').forEach((el, i) => { if(texts[i]) el.innerHTML=texts[i]; if(styles[i]) el.setAttribute('style', styles[i]); });
-      const imgs = JSON.parse(localStorage.getItem('gallery_images_v11'));
+      const texts = JSON.parse(localStorage.getItem('gallery_texts_v12'));
+      const styles = JSON.parse(localStorage.getItem('gallery_styles_v12'));
+      if (texts) document.querySelectorAll('.text-target').forEach((el, i) => { if(texts[i]) el.innerText=texts[i]; if(styles[i]) el.setAttribute('style', styles[i]); });
+      const imgs = JSON.parse(localStorage.getItem('gallery_images_v12'));
       if (imgs) Object.keys(imgs).forEach(id => { const img=document.getElementById(id); if(img) img.src=imgs[id]; });
-      const bg = localStorage.getItem('gallery_bg_v11');
+      const bg = localStorage.getItem('gallery_bg_v12');
       if (bg && bg.startsWith('data:image')) {
         document.body.style.backgroundImage = `url('${bg}')`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed';
         document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block';
