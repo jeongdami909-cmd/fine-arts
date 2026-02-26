@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 상단 버튼 디자인 유지 */
+    /* 🌟 상단 버튼 디자인 유지 (평소 '-' 표시) */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -50,28 +50,32 @@
     .minimal-btn:hover::before, .minimal-btn:active::before { content: ""; width: 0; opacity: 0; }
     .minimal-btn:hover span, .minimal-btn:active span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 기본 텍스트 스타일 (작품 설명창용) 🌟 */
+    /* 🌟 [수정] 본문 텍스트: 매우 얇은 인디고 + 티 안 나는 은은한 골드 테두리 */
     .text-target {
-      color: #A89F91; /* 기본 뮤트 샴페인 골드 */
-      font-weight: 300;
-      letter-spacing: 0.03em;
+      color: #3A4B7C !important; /* 은은한 인디고 */
+      font-weight: 100 !important; /* 매우매우 얇게 */
+      /* 티 안 나게 은은한 골드 테두리 효과 (0.5px 미세 그림자) */
+      text-shadow: 
+          0.5px 0.5px 0px rgba(212, 175, 55, 0.25), 
+         -0.5px -0.5px 0px rgba(212, 175, 55, 0.25) !important;
+      letter-spacing: 0.05em;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    /* 🌟 [수정됨] 주홍빛에 은은한 은빛 제목 🌟 */
+    /* 🌟 [수정] 제목: 주홍빛에 은은한 은빛 광채 추가 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important; /* 주홍빛 */
-        /* 은은한 은빛 광채 효과 추가 */
-        text-shadow: 0 0 4px rgba(192, 192, 192, 0.8), 1px 1px 2px rgba(255, 255, 255, 0.5) !important;
+        /* 은은한 은빛 광채 (Silver Glow) */
+        text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 0px 0px 5px rgba(192,192,192,0.5) !important;
         font-size: 3.2rem !important;
         font-weight: 400 !important;
         line-height: 1.1 !important;
         display: block !important;
     }
 
-    .main-wrapper { margin-top: 65vh; }
+    .main-wrapper { margin-top: 65vh; } /* */
     .gallery-item { background: transparent !important; box-shadow: none !important; }
     
     .art-frame { 
@@ -79,45 +83,28 @@
       border: 1px solid rgba(255,255,255,0.1); 
       display: flex; align-items: center; justify-content: center;
     }
+    .art-image { width: 100%; height: 100%; object-fit: contain !important; }
     
-    /* 아래쪽 작품 설명창 배경 (유지) */
+    /* 🌟 [수정] 바탕: 5353.jpg와 같은 반 불투명 유리창 배경 */
+    .desc-panel, .glass-panel {
+      background: rgba(255, 255, 255, 0.25) !important; /* 은은한 반투명 */
+      backdrop-filter: blur(12px) !important; /* 유리창 효과 */
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+
     .desc-panel {
-      background: rgba(0, 0, 0, 0.4) !important;
-      backdrop-filter: blur(10px);
       border-left: 1px solid rgba(255,255,255,0.3);
       display: flex; flex-direction: column; 
       height: 100%; min-height: 0;
     }
 
-    /* 기본 glass-panel 스타일 */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    /* 🌟 [수정됨] 소개 게시판 전용 배경: "아까처럼 반 불투명 유리창" 🌟 */
-    #main-desc-box.glass-panel {
-      background: rgba(0, 0, 0, 0.4) !important; /* V23 스타일로 복귀 */
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    }
-    
-    /* 🌟 [수정됨] 소개 게시판 내부 텍스트 전용 스타일 🌟 */
-    #main-desc-box .text-target {
-        color: #3A4B7C !important; /* 얇은 인디고 색상 */
-        font-weight: 300 !important; /* 매우 얇게 */
-        /* 티 안 나게 은은한 골드 테두리 효과 (미세한 그림자) */
-        text-shadow: 
-            0.5px 0.5px 0px rgba(212, 175, 55, 0.3), 
-           -0.5px -0.5px 0px rgba(212, 175, 55, 0.3) !important;
-    }
-
-
     /* 커스텀 스크롤바 (유지) */
     .custom-scroll::-webkit-scrollbar { width: 2px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(168, 159, 145, 0.2); } 
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(58, 75, 124, 0.1); } 
 
-    /* 지피티 솔루션 핵심 CSS: 스크롤 완벽 고정 (유지) */
+    /* 스크롤 로직 (유지) */
     .scroll-engine {
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
@@ -150,7 +137,7 @@
         <div class="absolute -right-12 top-0 opacity-0 group-hover:opacity-100 transition-opacity">
             <button class="text-[9px] uppercase tracking-tighter opacity-40" onclick="openTextEditor(this.closest('.logo-container'))">edit</button>
         </div>
-        <h1 class="text-[11px] tracking-[0.4em] font-bold text-target opacity-60" id="header-title">FINE ARTS</h1>
+        <h1 class="text-[11px] tracking-[0.4em] font-bold text-target opacity-60" id="header-title" style="color: #3A4B7C !important; text-shadow:none !important;">FINE ARTS</h1>
     </div>
     
     <div class="relative">
@@ -188,7 +175,7 @@
         <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="max-h-[250px] scroll-engine custom-scroll w-full px-6">
-            <p class="text-[13px] leading-loose text-target opacity-80">여기에 긴 안내글을 작성하세요. 요청하신 대로 얇은 인디고 글씨에 은은한 골드 테두리가 적용되었습니다.</p>
+            <p class="text-[13px] leading-loose text-target opacity-80">여기에 긴 안내글을 작성하세요. 인디고 글씨에 미세한 골드 테두리가 적용되었습니다.</p>
         </div>
       </div>
     </section>
@@ -212,7 +199,7 @@
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
                 <div class="scroll-engine custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-target">내용을 입력하세요. 여기는 기존 V23 스타일이 유지됩니다.</p>
+                  <p class="text-[12px] leading-loose text-target">내용을 입력하세요. 모든 텍스트 스타일이 완벽하게 적용되었습니다.</p>
                 </div>
              </div>
           </div>
@@ -224,7 +211,7 @@
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg px-6">
     <div class="bg-white/90 backdrop-blur-3xl w-full max-w-md p-10 rounded-[3rem] shadow-2xl">
       <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">EDIT CONTENT</h3>
-      <textarea id="modal-textarea" class="w-full h-64 p-0 border-none bg-transparent focus:ring-0 resize-none font-serif text-sm custom-scroll leading-relaxed"></textarea>
+      <textarea id="modal-textarea" class="w-full h-64 p-0 border-none bg-transparent focus:ring-0 resize-none font-serif text-sm custom-scroll leading-relaxed" style="color:#1a1a1a !important; text-shadow:none !important;"></textarea>
       <div class="flex justify-end space-x-6 mt-10">
         <button class="text-xs opacity-30" onclick="closeTextEditor()">CANCEL</button>
         <button class="text-xs font-bold text-galleryGold" onclick="saveTextChanges()">APPLY</button>
@@ -232,27 +219,9 @@
     </div>
   </div>
 
-  <div id="style-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg px-6">
-    <div id="style-bottom-sheet" class="bg-white/90 backdrop-blur-3xl w-full max-w-sm p-10 rounded-[3rem] shadow-2xl">
-      <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">STYLE SETTINGS</h3>
-      <div class="space-y-8">
-        <div class="flex justify-between items-center"><label class="text-[10px] opacity-50 font-bold">COLOR</label><input type="color" id="val-color" class="w-8 h-8 border-none bg-transparent"></div>
-        <div class="flex flex-col gap-3"><label class="text-[10px] opacity-50 font-bold">FONT</label>
-          <select id="val-font" class="text-xs p-0 bg-transparent border-none focus:ring-0">
-            <option value="'Noto Serif KR', serif">Noto Serif</option>
-            <option value="'Gowun Dodum', sans-serif">Gowun Dodum</option>
-            <option value="'Whisper', cursive">Handwriting</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-3"><label class="text-[10px] opacity-50 font-bold">SIZE</label><input type="range" id="val-size" min="10" max="40" class="accent-black/10"></div>
-      </div>
-      <button class="w-full mt-12 text-xs font-bold tracking-widest py-4 border-t border-black/5" onclick="closeStyleEditor()">DONE</button>
-    </div>
-  </div>
-
   <script>
-    /* 🌟 IndexedDB 및 로직 V25 업데이트 (기능은 V23과 동일) */
-    const DB_NAME = 'GalleryStoreDB_Final_V25';
+    /* 🌟 용량 부족 에러를 해결한 IndexedDB 대용량 창고 */
+    const DB_NAME = 'GalleryStoreDB_Final_V26';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -331,18 +300,6 @@
       closeTextEditor();
     }
 
-    const sModal = document.getElementById('style-editor-modal');
-    let sTargets = [];
-    function openStyleEditor(el) {
-      sTargets = el.classList.contains('text-target') ? [el] : Array.from(el.querySelectorAll('.text-target'));
-      sModal.classList.replace('hidden', 'flex');
-    }
-    function closeStyleEditor() { sModal.classList.replace('flex', 'hidden'); }
-
-    document.getElementById('val-color').oninput = (e) => sTargets.forEach(t => t.style.color = e.target.value);
-    document.getElementById('val-font').onchange = (e) => sTargets.forEach(t => t.style.fontFamily = e.target.value);
-    document.getElementById('val-size').oninput = (e) => sTargets.forEach(t => t.style.fontSize = e.target.value + 'px');
-
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
 
     async function saveToBrowser() {
@@ -353,17 +310,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v25', mainClone.innerHTML); await dbSet('menu_v25', menuLayout); await dbSet('txt_v25', txts); await dbSet('sty_v25', stys); await dbSet('img_v25', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v25', document.getElementById('global-bg').src);
-        alert("✅ 주홍빛+은빛 제목과 얇은 인디고+골드테두리 글씨가 저장되었습니다.");
+        await dbSet('lay_v26', mainClone.innerHTML); await dbSet('menu_v26', menuLayout); await dbSet('txt_v26', txts); await dbSet('sty_v26', stys); await dbSet('img_v26', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v26', document.getElementById('global-bg').src);
+        alert("✅ 모든 스타일과 내용이 안전하게 박제되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v25'); if(!lay) return;
+      const lay = await dbGet('lay_v26'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v25'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v25'), stys = await dbGet('sty_v25'), imgs = await dbGet('img_v25'), bg = await dbGet('bg_v25');
+      const menuLay = await dbGet('menu_v26'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v26'), stys = await dbGet('sty_v26'), imgs = await dbGet('img_v26'), bg = await dbGet('bg_v26');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
