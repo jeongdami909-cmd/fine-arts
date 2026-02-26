@@ -26,9 +26,7 @@
     html, body { height: auto !important; min-height: 100%; background-color: #d0e4e0; margin: 0; padding: 0; }
     body { font-family: 'Noto Serif KR', serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    /* 🌟 메뉴 클릭 보장 (Z-index 최상위) */
     header { z-index: 99999 !important; position: fixed; top: 0; left: 0; right: 0; background: transparent; }
-    #dropdown-menu { z-index: 100000 !important; pointer-events: auto !important; }
 
     .main-wrapper { padding-top: 65vh; position: relative; z-index: 10; }
 
@@ -65,7 +63,15 @@
     }
     .desc-panel .text-target { color: #C9B078 !important; font-weight: 300 !important; text-shadow: none !important; }
 
-    /* 🌟 자세히 보기 텍스트 제한 클래스 */
+    /* 🌟 검색 하이라이트 (삼성 노트/카톡 스타일) */
+    .search-highlight {
+      background-color: rgba(255, 215, 0, 0.6); /* 골드빛 하이라이트 */
+      color: #000 !important;
+      border-radius: 2px;
+      text-shadow: none !important;
+    }
+
+    /* 자세히 보기 */
     .line-clamp-folded { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .view-more-btn { color: #C9B078; font-size: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; text-decoration: underline; opacity: 0.7; }
 
@@ -74,7 +80,21 @@
     .slide-panel { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; position: absolute; top:0; right:0; width:100%; }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
     .glass-panel { background: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; }
-    .category-label { font-size: 8px; color: #cfa752; opacity: 0.6; margin-top: 5px; }
+
+    /* 🌟 검색창 디자인 */
+    #search-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(58, 75, 124, 0.2);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      padding: 4px 8px;
+      color: #3A4B7C;
+      font-weight: bold;
+      width: 120px;
+      transition: all 0.4s;
+    }
+    #search-input:focus { outline: none; width: 180px; border-bottom: 1px solid #cfa752; }
   </style>
 </head>
 <body>
@@ -87,31 +107,10 @@
 
   <header class="py-8 px-10 flex justify-between items-center">
     <div class="logo-container"><h1 class="text-[11px] tracking-[0.4em] font-bold opacity-60" style="color: #3A4B7C !important;">FINE ARTS</h1></div>
-    <div class="relative">
-      <button id="menu-toggle" class="text-[10px] tracking-[0.2em] font-bold opacity-40 hover:opacity-100 flex items-center space-x-2">
-        <span>MENU</span><div class="w-4 h-[1px] bg-current"></div>
-      </button>
-      
-      <div id="dropdown-menu" class="hidden absolute right-0 mt-6 w-72 bg-white/95 backdrop-blur-2xl border border-black/5 shadow-2xl rounded-2xl overflow-hidden">
-        <div class="p-6 bg-black/5 text-[9px] font-bold tracking-[0.2em] opacity-40 border-b">INDEX / CATEGORY</div>
-        <div id="menu-list" class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
-          <div class="space-y-4">
-            <button onclick="filterGallery('all', 'all')" class="text-xs font-bold text-gray-800 text-left w-full hover:text-galleryGold">ALL WORKS</button>
-            
-            <div class="pl-4 space-y-6 border-l border-black/5">
-              <div class="space-y-2">
-                <button onclick="filterGallery('A', 'all')" class="text-[10px] font-bold opacity-40 uppercase tracking-tighter hover:opacity-100">[범위 A 전체보기]</button>
-                <button onclick="filterGallery('A', 'A-1')" class="block text-[11px] text-gray-500 hover:text-black">- 하위 메뉴 1-1</button>
-                <button onclick="filterGallery('A', 'A-2')" class="block text-[11px] text-gray-500 hover:text-black">- 하위 메뉴 1-2</button>
-              </div>
-              <div class="space-y-2">
-                <button onclick="filterGallery('B', 'all')" class="text-[10px] font-bold opacity-40 uppercase tracking-tighter hover:opacity-100">[범위 B 전체보기]</button>
-                <button onclick="filterGallery('B', 'B-1')" class="block text-[11px] text-gray-500 hover:text-black">- 하위 메뉴 2-1</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    
+    <div class="flex items-center space-x-2">
+      <span class="text-[9px] font-bold opacity-30 tracking-widest">SEARCH</span>
+      <input type="text" id="search-input" placeholder="..." oninput="performSearch()">
     </div>
   </header>
 
@@ -131,7 +130,7 @@
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="w-full px-6">
             <div class="text-container line-clamp-folded">
-              <p class="text-[13px] leading-loose text-target opacity-80">여기에 아주 긴 내용을 입력해보세요. 자동으로 접히며 '자세히 보기' 버튼이 생성됩니다.</p>
+              <p class="text-[13px] leading-loose text-target opacity-80 searchable">검색 키워드를 입력하면 이곳의 텍스트도 함께 찾아집니다.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -140,7 +139,7 @@
 
     <section class="pb-40">
       <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
-        <div class="relative w-full gallery-item group rounded-[2rem] overflow-hidden" data-parent="A" data-sub="A-1">
+        <div class="relative w-full gallery-item group rounded-[2rem] overflow-hidden">
           <div class="absolute inset-0 bg-white/5 flex items-center justify-center rounded-[2rem] overflow-hidden">
             <img id="art-1" src="" class="art-image opacity-0 transition-opacity">
           </div>
@@ -149,21 +148,15 @@
                 <button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
                 <button class="text-[9px] font-bold tracking-widest opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
              </div>
-             <div class="flex items-center space-x-2">
-                <span class="category-label text-target">[A > A-1]</span>
-                <button class="text-[7px] opacity-20 hover:opacity-100" onclick="setCategories(this.closest('.gallery-item'))">SET CAT</button>
-             </div>
           </div>
           
           <div class="slide-panel absolute inset-0 w-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 rounded-l-[2rem]" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 px-10 py-12 flex flex-col desc-panel relative rounded-r-[2rem]">
-                <div class="absolute top-6 right-8">
-                    <button class="text-[9px] text-[#C9B078] font-bold opacity-70 hover:opacity-100" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
-                </div>
-                <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
+                <div class="absolute top-6 right-8"><button class="text-[9px] text-[#C9B078] font-bold opacity-70" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
+                <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0 searchable">[작품 제목]</h4>
                 <div class="text-container line-clamp-folded">
-                  <p class="text-[13px] leading-loose text-target">내용을 입력하세요. 글이 길어지면 자동으로 접히고, '자세히 보기'를 누르면 게시판이 아래로 길어집니다.</p>
+                  <p class="text-[13px] leading-loose text-target searchable">여기에 나라, 시대, 화가 이름을 적어두고 위 검색창에서 찾아보세요. 일치하는 단어에 색깔이 칠해집니다.</p>
                 </div>
                 <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
              </div>
@@ -185,64 +178,58 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V47';
+    const DB_NAME = 'GalleryStoreDB_Final_V48';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
     async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
-    // 🌟 메뉴 토글 및 인덱스 필터링
-    const menuToggle = document.getElementById('menu-toggle');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    menuToggle.onclick = (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); };
-    document.onclick = () => dropdownMenu.classList.add('hidden');
-    dropdownMenu.onclick = (e) => e.stopPropagation();
-
-    function filterGallery(parent, sub) {
+    // 🌟 검색 및 하이라이트 핵심 로직
+    function performSearch() {
+        const query = document.getElementById('search-input').value.toLowerCase().trim();
         const items = document.querySelectorAll('.gallery-item');
+        
         items.forEach(item => {
-            const itemP = item.getAttribute('data-parent');
-            const itemS = item.getAttribute('data-sub');
-            let show = false;
-            if (parent === 'all') show = true;
-            else if (sub === 'all') show = (itemP === parent);
-            else show = (itemP === parent && itemS === sub);
-            item.style.display = show ? 'block' : 'none';
+            const searchTargets = item.querySelectorAll('.searchable');
+            let itemMatch = false;
+
+            searchTargets.forEach(target => {
+                // 원본 텍스트 보관 (최초 1회)
+                if (!target.hasAttribute('data-origin')) {
+                    target.setAttribute('data-origin', target.innerText);
+                }
+                const originalText = target.getAttribute('data-origin');
+
+                if (query === "") {
+                    target.innerText = originalText;
+                    itemMatch = true;
+                } else if (originalText.toLowerCase().includes(query)) {
+                    // 키워드 하이라이트 처리
+                    const regex = new RegExp(`(${query})`, 'gi');
+                    target.innerHTML = originalText.replace(regex, `<span class="search-highlight">$1</span>`);
+                    itemMatch = true;
+                } else {
+                    target.innerText = originalText;
+                }
+            });
+
+            // 검색 결과에 따른 게시판 노출/숨김
+            item.style.display = (query === "" || itemMatch) ? "block" : "none";
         });
-        dropdownMenu.classList.add('hidden');
     }
 
-    // 🌟 카테고리 지정
-    function setCategories(item) {
-        const p = prompt("상위 범위를 입력하세요 (예: A, B)", item.getAttribute('data-parent'));
-        const s = prompt("하위 메뉴를 입력하세요 (예: A-1, B-1)", item.getAttribute('data-sub'));
-        if (p && s) {
-            item.setAttribute('data-parent', p);
-            item.setAttribute('data-sub', s);
-            item.querySelector('.category-label').innerText = `[${p} > ${s}]`;
-        }
-    }
-
-    // 🌟 자세히 보기 토글
+    // 자세히 보기 토글
     function toggleViewMore(btn) {
         const container = btn.previousElementSibling;
         const item = btn.closest('.gallery-item') || btn.closest('.glass-panel');
         const panel = btn.closest('.slide-panel');
-        
         container.classList.toggle('line-clamp-folded');
         if (container.classList.contains('line-clamp-folded')) {
             btn.innerText = "자세히 보기";
-            if (panel) {
-                item.style.height = '450px';
-                panel.style.position = 'absolute';
-            }
+            if (panel) { item.style.height = '450px'; panel.style.position = 'absolute'; }
         } else {
             btn.innerText = "접기";
-            if (panel) {
-                item.style.height = 'auto';
-                panel.style.position = 'relative';
-                panel.style.height = 'auto';
-            }
+            if (panel) { item.style.height = 'auto'; panel.style.position = 'relative'; panel.style.height = 'auto'; }
         }
     }
 
@@ -250,13 +237,9 @@
         const item = handle.closest('.gallery-item');
         const panel = handle.closest('.slide-panel');
         panel.classList.toggle('slide-hide');
-        if (panel.classList.contains('slide-hide')) {
-            item.style.height = '450px';
-            panel.style.position = 'absolute';
-        }
+        if (panel.classList.contains('slide-hide')) { item.style.height = '450px'; panel.style.position = 'absolute'; }
     }
 
-    // 이미지 및 기타 로직 동일
     const fileInput = document.getElementById('hidden-file-input');
     let currentImgId = null;
     function triggerFileUpload(id) { currentImgId = id; fileInput.click(); }
@@ -283,19 +266,18 @@
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
       const html = `
-        <div class="relative w-full gallery-item group rounded-[2rem] overflow-hidden" data-parent="A" data-sub="all" style="height: 450px;">
+        <div class="relative w-full gallery-item group rounded-[2rem] overflow-hidden">
           <div class="absolute inset-0 bg-white/5 flex items-center justify-center rounded-[2rem] overflow-hidden"><img id="${id}" src="" class="art-image opacity-0 transition-opacity"></div>
           <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all flex flex-col space-y-2">
              <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40 hover:opacity-100" onclick="triggerFileUpload('${id}')">PHOTO</button>
              <button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
-             <div class="flex items-center space-x-2"><span class="category-label text-target">[분류 설정 전]</span><button class="text-[7px] opacity-20" onclick="setCategories(this.closest('.gallery-item'))">CAT</button></div>
           </div>
           <div class="slide-panel absolute inset-0 w-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 rounded-l-[2rem]" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 px-10 py-12 flex flex-col desc-panel relative rounded-r-[2rem]">
                 <div class="absolute top-6 right-8"><button class="text-[9px] text-[#C9B078] font-bold opacity-70" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
-                <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="text-container line-clamp-folded"><p class="text-[13px] leading-loose text-target">내용 입력</p></div>
+                <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0 searchable">[작품 제목]</h4>
+                <div class="text-container line-clamp-folded"><p class="text-[13px] leading-loose text-target searchable">내용 입력</p></div>
                 <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
              </div>
           </div>
@@ -309,21 +291,23 @@
     function openTextEditor(el) {
       tTargets = Array.from(el.querySelectorAll('.text-target'));
       if(tTargets.length === 0) tTargets = [el];
-      tArea.value = tTargets.map(t => t.innerText).join('\n');
-      tModal.classList.remove('hidden');
-      tModal.classList.add('flex');
-      tArea.focus();
+      tArea.value = tTargets.map(t => t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerText).join('\n');
+      tModal.classList.remove('hidden'); tModal.classList.add('flex'); tArea.focus();
     }
     function closeTextEditor() { tModal.classList.add('hidden'); tModal.classList.remove('flex'); }
     function saveTextChanges() {
       const lines = tArea.value.split('\n');
-      tTargets.forEach((t, i) => { if(i === tTargets.length -1) t.innerText = lines.slice(i).join('\n'); else t.innerText = lines[i] || ""; });
-      closeTextEditor();
+      tTargets.forEach((t, i) => { 
+        const newText = (i === tTargets.length -1) ? lines.slice(i).join('\n') : (lines[i] || "");
+        t.innerText = newText;
+        if(t.hasAttribute('data-origin')) t.setAttribute('data-origin', newText);
+      });
+      performSearch(); closeTextEditor();
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v47', mainClone.innerHTML); await dbSet('txt_v47', txts); await dbSet('img_v47', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v47', document.getElementById('global-bg').src); alert("✅ 인덱스 메뉴 및 자세히 보기 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v47'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v47'), imgs = await dbGet('img_v47'), bg = await dbGet('bg_v47'); document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v48', mainClone.innerHTML); await dbSet('txt_v48', txts); await dbSet('img_v48', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v48', document.getElementById('global-bg').src); alert("✅ 검색 및 하이라이트 기능이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v48'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v48'), imgs = await dbGet('img_v48'), bg = await dbGet('bg_v48'); document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
