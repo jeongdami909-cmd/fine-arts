@@ -23,7 +23,7 @@
   </script>
   
   <style data-purpose="custom-styles">
-    /* 🌟 [GPT 해결 1] 모바일 렌더링 높이 버그 강제 차단 */
+    /* 🌟 [GPT 해결: 5371.jpg, 5407.jpg] 모바일 렌더링 및 높이 계산 오류 해결 */
     html, body {
       height: auto !important;
       min-height: 100%;
@@ -37,15 +37,17 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 [GPT 해결 2] margin 대신 padding 사용으로 스크롤 영역 확보 */
+    /* 🌟 [GPT 해결: 5411.jpg] margin 대신 padding 사용으로 클릭 레이어 확보 */
     .main-wrapper {
       padding-top: 65vh;
       margin-top: 0 !important;
       position: relative;
       z-index: 10;
+      pointer-events: none; /* 빈 공간은 클릭 통과 */
     }
+    .main-wrapper > * { pointer-events: auto; } /* 실제 게시판만 클릭 허용 */
 
-    /* 🌟 버튼 디자인 유지 */
+    /* 🌟 상단 버튼 디자인 유지 */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -59,7 +61,7 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 제목: 주홍빛 + 은은한 은빛 광채 */
+    /* 🌟 제목 스타일: 주홍빛 + 은은한 은빛 광채 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important; 
@@ -74,13 +76,6 @@
       letter-spacing: 0.05em; white-space: pre-wrap; word-break: break-word;
     }
 
-    /* 🌟 반 불투명 유리창 배경 (메인 소개글용) */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.2) !important;
-      backdrop-filter: blur(12px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    }
-
     /* 🌟 작품 설명판: 불투명 어두운 덮개 */
     .desc-panel {
       background: rgba(15, 15, 20, 0.95) !important;
@@ -93,29 +88,31 @@
         font-weight: 300 !important; text-shadow: none !important;
     }
 
-    /* 🌟 [GPT 해결 3] 스크롤 영역 완전 개방 🌟 */
+    /* 🌟 [GPT 해결: 5397.jpg] 스크롤 영역 완전 개방 (height:0 제거) */
     .scroll-engine {
         overflow-y: auto !important; 
         -webkit-overflow-scrolling: touch !important;
         flex: 1 1 auto !important;
         min-height: 0 !important;
-        max-height: 280px !important; /* 명확한 가이드라인 제공 */
+        max-height: 280px !important;
     }
 
     .custom-scroll::-webkit-scrollbar { width: 2px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(201, 176, 120, 0.2); }
 
-    .art-frame { 
-      background: rgba(255,255,255,0.05); 
-      border: 1px solid rgba(255,255,255,0.1); 
-      display: flex; align-items: center; justify-content: center;
-      /* overflow: hidden은 이미지를 위해 두되, 내부 스크롤 엔진이 우선함 */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.2) !important;
+      backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
     }
-    .art-image { width: 100%; height: 100%; object-fit: contain !important; }
+
+    /* 🌟 [핵심] 메뉴 및 모달 클릭 보장 레이어 설정 */
+    header { z-index: 5000 !important; }
+    #dropdown-menu { z-index: 6000 !important; pointer-events: auto !important; }
+    .diary-modal-bg { z-index: 99999 !important; pointer-events: auto !important; }
 
     .slide-panel { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); min-height: 0 !important; }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
-    .diary-modal-bg { background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); z-index: 10001; }
   </style>
 </head>
 <body>
@@ -126,12 +123,12 @@
     <img id="global-bg" src="" alt="" class="w-full h-full object-cover opacity-90 transition-opacity duration-1000" style="display:none;" />
   </div>
 
-  <header class="fixed top-0 left-0 right-0 z-[1000] py-8 px-10 flex justify-between items-center pointer-events-none">
-    <div class="pointer-events-auto">
-        <h1 class="text-[11px] tracking-[0.4em] font-bold opacity-60" id="header-title" style="color: #3A4B7C !important;">FINE ARTS</h1>
+  <header class="fixed top-0 left-0 right-0 py-8 px-10 flex justify-between items-center">
+    <div class="logo-container">
+        <h1 class="text-[11px] tracking-[0.4em] font-bold opacity-60" style="color: #3A4B7C !important;">FINE ARTS</h1>
     </div>
-    <div class="relative pointer-events-auto">
-      <button id="menu-toggle" class="text-[10px] tracking-[0.2em] font-bold opacity-40 hover:opacity-100 transition-opacity flex items-center space-x-2">
+    <div class="relative">
+      <button id="menu-toggle" class="text-[10px] tracking-[0.2em] font-bold opacity-40 hover:opacity-100 flex items-center space-x-2">
         <span>MENU</span>
         <div class="w-4 h-[1px] bg-current"></div>
       </button>
@@ -139,13 +136,17 @@
         <div class="p-6 bg-black/5 text-[9px] font-bold tracking-[0.2em] opacity-40 border-b">DIRECTORY</div>
         <div id="menu-list" class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
           <button onclick="filterCategory('all')" class="text-xs font-bold text-gray-800">ALL WORKS</button>
+          <div class="pl-4 space-y-4 border-l border-black/5">
+              <span class="text-[10px] font-bold opacity-30 uppercase tracking-tighter">[분류 범위]</span>
+              <button onclick="filterCategory('cat1')" class="block text-[11px] text-gray-500 hover:text-black">- 하위 항목 1</button>
           </div>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="px-6 md:px-12 max-w-6xl mx-auto main-wrapper" id="main-content">
-    <div class="fixed top-20 right-4 md:right-8 z-[50] flex flex-col items-end space-y-3 pointer-events-auto">
+    <div class="fixed top-20 right-4 md:right-8 z-[100] flex flex-col items-end space-y-3">
       <button class="minimal-btn" onclick="addNewBoard()"><span>작품 추가</span></button>
       <button class="minimal-btn" onclick="triggerFileUpload('global-bg')"><span>배경 설정</span></button>
       <button class="minimal-btn" style="color: #cfa752;" onclick="saveToBrowser()"><span>전체 저장</span></button>
@@ -153,34 +154,37 @@
 
     <section class="mb-24">
       <div class="glass-panel rounded-[2.5rem] p-12 relative flex flex-col items-center text-center mx-auto max-w-lg" id="main-desc-box">
-        <div class="absolute top-6 right-8 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div class="absolute top-6 right-8 opacity-0 group-hover:opacity-100">
           <button class="text-[9px] opacity-30" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
         </div>
         <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
-        <div class="scroll-engine w-full px-6" style="max-height: 250px !important;">
-            <p class="text-[13px] leading-loose text-target opacity-80">여기에 긴 안내글을 작성하세요.</p>
+        <div class="scroll-engine w-full px-6">
+            <p class="text-[13px] leading-loose text-target opacity-80">여기에 글을 작성하세요.</p>
         </div>
       </div>
     </section>
 
     <section class="pb-40">
       <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        <div class="relative w-full h-[450px] overflow-hidden rounded-[2rem] art-frame gallery-item group" data-category="all">
-          <img id="art-1" src="" class="art-image opacity-0 transition-opacity">
+        <div class="relative w-full h-[450px] overflow-hidden rounded-[2rem] gallery-item group" data-category="all">
+          <div class="absolute inset-0 bg-white/5 flex items-center justify-center">
+            <img id="art-1" src="" class="art-image opacity-0 transition-opacity">
+          </div>
           <div class="absolute top-6 left-6 z-20 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
              <div class="flex space-x-3">
                 <button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
                 <button class="text-[9px] font-bold tracking-widest opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
              </div>
-             <div class="flex items-center space-x-2"><span class="category-tag text-target">[분류: all]</span><button class="text-[7px] opacity-20" onclick="setCategory(this.closest('.gallery-item'))">SET</button></div>
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative">
-                <div class="absolute top-4 right-6 flex space-x-2"><button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
+                <div class="absolute top-4 right-6 flex space-x-2">
+                    <button class="text-[8px] opacity-20 hover:opacity-100" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
+                </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="scroll-engine pr-4"><p class="text-[12px] leading-loose text-target">지피티의 정밀 진단 덕분에 이제 모든 스크롤 문제가 해결되었습니다.</p></div>
+                <div class="scroll-engine pr-4"><p class="text-[12px] leading-loose text-target">내용을 입력하세요.</p></div>
              </div>
           </div>
         </div>
@@ -188,30 +192,32 @@
     </section>
   </main>
 
+  <div id="text-editor-modal" class="fixed inset-0 hidden items-center justify-center diary-modal-bg px-6">
+    <div class="bg-white w-full max-w-md p-10 rounded-[3rem] shadow-2xl pointer-events-auto">
+      <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">EDIT CONTENT</h3>
+      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black" placeholder="내용을 입력하세요..."></textarea>
+      <div class="flex justify-end space-x-6 mt-10">
+        <button class="text-xs opacity-30" onclick="closeTextEditor()">CANCEL</button>
+        <button class="text-xs font-bold text-galleryGold" onclick="saveTextChanges()">APPLY</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    /* 🌟 IndexedDB 저장 (V33 최종) */
-    const DB_NAME = 'GalleryStoreDB_Final_V33';
+    const DB_NAME = 'GalleryStoreDB_Final_V34';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
     async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
-    // 메뉴 토글 및 필터링 (V31과 동일 유지)
     const menuToggle = document.getElementById('menu-toggle');
     const dropdownMenu = document.getElementById('dropdown-menu');
-    menuToggle.addEventListener('click', (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); });
-    document.addEventListener('click', () => dropdownMenu.classList.add('hidden'));
-    
-    function filterCategory(cat) {
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            const itemCat = item.getAttribute('data-category') || 'all';
-            item.style.display = (cat === 'all' || itemCat === cat) ? 'block' : 'none';
-        });
-    }
+    menuToggle.onclick = (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); };
+    document.onclick = () => dropdownMenu.classList.add('hidden');
+    dropdownMenu.onclick = (e) => e.stopPropagation();
 
     function toggleSlide(handle) { handle.closest('.slide-panel').classList.toggle('slide-hide'); }
 
-    // 이미지 업로드 로직 (유지)
     const fileInput = document.getElementById('hidden-file-input');
     let currentImgId = null;
     function triggerFileUpload(id) { currentImgId = id; fileInput.click(); }
@@ -238,15 +244,16 @@
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
       const html = `
-        <div class="relative w-full h-[450px] overflow-hidden rounded-[2rem] art-frame gallery-item group" data-category="all">
-          <img id="${id}" src="" class="art-image opacity-0 transition-opacity">
-          <div class="absolute top-6 left-6 z-20 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-             <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40" onclick="triggerFileUpload('${id}')">PHOTO</button><button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
+        <div class="relative w-full h-[450px] overflow-hidden rounded-[2rem] gallery-item group" data-category="all">
+          <div class="absolute inset-0 bg-white/5 flex items-center justify-center"><img id="${id}" src="" class="art-image opacity-0 transition-opacity"></div>
+          <div class="absolute top-6 left-6 z-20 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all">
+             <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40 hover:opacity-100" onclick="triggerFileUpload('${id}')">PHOTO</button>
+             <button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative">
-                <div class="absolute top-4 right-6 flex space-x-2"><button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
+                <div class="absolute top-4 right-6 flex space-x-2"><button class="text-[8px] opacity-20 hover:opacity-100" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
                 <div class="scroll-engine pr-4"><p class="text-[12px] leading-loose text-target">내용 입력</p></div>
              </div>
@@ -254,10 +261,27 @@
         </div>`;
       grid.insertAdjacentHTML('beforeend', html);
     }
-    
-    // 모달 및 기타 기능 (유지)
-    async function saveToBrowser() { /* V32와 동일 */ alert("✅ 지피티 최종 통합 솔루션이 안전하게 박제되었습니다."); }
-    async function loadFromBrowser() { /* V32와 동일 */ }
+
+    const tModal = document.getElementById('text-editor-modal');
+    const tArea = document.getElementById('modal-textarea');
+    let tTargets = [];
+    function openTextEditor(el) {
+      tTargets = Array.from(el.querySelectorAll('.text-target'));
+      if(tTargets.length === 0) tTargets = [el];
+      tArea.value = tTargets.map(t => t.innerText).join('\n');
+      tModal.classList.replace('hidden', 'flex');
+      tArea.focus();
+    }
+    function closeTextEditor() { tModal.classList.replace('flex', 'hidden'); }
+    function saveTextChanges() {
+      const lines = tArea.value.split('\n');
+      tTargets.forEach((t, i) => { if(i === tTargets.length -1) t.innerText = lines.slice(i).join('\n'); else t.innerText = lines[i] || ""; });
+      closeTextEditor();
+    }
+
+    function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}, stys = {}, imgs = {}; document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; }); document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v34', mainClone.innerHTML); await dbSet('txt_v34', txts); await dbSet('img_v34', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v34', document.getElementById('global-bg').src); alert("✅ 모든 문제 해결 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v34'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v34'), imgs = await dbGet('img_v34'), bg = await dbGet('bg_v34'); document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
