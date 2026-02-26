@@ -61,7 +61,7 @@
 
     .gallery-item { background: transparent !important; box-shadow: none !important; }
     
-    /* 🌟 그림 잘림 방지 (object-contain) */
+    /* 🌟 그림 잘림 방지 */
     .art-frame { 
       background: rgba(255,255,255,0.05) !important; 
       border: 1px solid rgba(255,255,255,0.1); 
@@ -69,7 +69,7 @@
     }
     .art-image {
       width: 100%; height: 100%;
-      object-fit: contain !important; /* 그림 전체가 다 보이게 설정 */
+      object-fit: contain !important;
     }
     
     .desc-panel {
@@ -122,12 +122,40 @@
         <div class="w-4 h-[1px] bg-current"></div>
       </button>
 
-      <div id="dropdown-menu" class="hidden absolute right-0 mt-6 w-64 bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-2xl overflow-hidden z-50">
-        <div class="p-6 space-y-5 custom-scroll max-h-[50vh] overflow-y-auto" id="menu-list">
-          <div class="flex justify-between items-center group">
-            <a href="javascript:void(0)" class="text-xs font-medium text-target opacity-70 group-hover:opacity-100 transition-all">[메뉴 입력]</a>
-            <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
+      <div id="dropdown-menu" class="hidden absolute right-0 mt-6 w-72 bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-2xl overflow-hidden z-50">
+        <div class="p-6 bg-white/5 text-[9px] font-bold tracking-[0.2em] opacity-40 border-b border-white/10">DIRECTORY</div>
+        <div class="p-6 space-y-6 custom-scroll max-h-[60vh] overflow-y-auto" id="menu-list">
+          
+          <div class="space-y-3">
+            <div class="flex justify-between items-center group">
+              <a href="javascript:void(0)" class="text-xs font-bold text-target opacity-80">[상위 카테고리 1]</a>
+              <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
+            </div>
+            <div class="pl-4 space-y-2 border-l border-white/10">
+              <div class="flex justify-between items-center group">
+                <a href="javascript:void(0)" class="text-[11px] text-target opacity-60 hover:opacity-100 transition-all">- [하위 메뉴 1]</a>
+                <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
+              </div>
+              <div class="flex justify-between items-center group">
+                <a href="javascript:void(0)" class="text-[11px] text-target opacity-60 hover:opacity-100 transition-all">- [하위 메뉴 2]</a>
+                <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
+              </div>
+            </div>
           </div>
+
+          <div class="space-y-3">
+            <div class="flex justify-between items-center group">
+              <a href="javascript:void(0)" class="text-xs font-bold text-target opacity-80">[상위 카테고리 2]</a>
+              <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
+            </div>
+            <div class="pl-4 space-y-2 border-l border-white/10">
+              <div class="flex justify-between items-center group">
+                <a href="javascript:void(0)" class="text-[11px] text-target opacity-60 hover:opacity-100 transition-all">- [하위 메뉴 입력]</a>
+                <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -205,8 +233,8 @@
   </div>
 
   <script>
-    /* 🌟 용량 해결을 위한 IndexedDB 창고 로직 (강력한 저장소) */
-    const DB_NAME = 'GalleryStoreDB';
+    /* 🌟 IndexedDB 저장 로직 (용량 해결) */
+    const DB_NAME = 'GalleryStoreDB_Final';
     const STORE_NAME = 'GalleryAssets';
     function openDB() {
       return new Promise((res, rej) => {
@@ -257,7 +285,7 @@
           else if (h > w && h > MAX) { w *= MAX/h; h = MAX; }
           canvas.width = w; canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          const data = canvas.toDataURL('image/jpeg', 0.5);
+          const data = canvas.toDataURL('image/jpeg', 0.4);
           if (currentImgId === 'global-bg') {
             document.body.style.backgroundImage = `url(${data})`;
             document.body.style.backgroundSize = 'cover';
@@ -330,23 +358,27 @@
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
 
-    /* 🌟 초대형 저장 창고 사용 */
+    /* 🌟 저장 로직 최적화 */
     async function saveToBrowser() {
       try {
         const mainClone = document.getElementById('main-content').cloneNode(true);
         mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; });
+        
+        // 메뉴 레이아웃도 함께 저장 (디렉토리 구조 보존용)
+        const menuLayout = document.getElementById('menu-list').innerHTML;
         
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
         
         await dbSet('lay_data', mainClone.innerHTML);
+        await dbSet('menu_lay', menuLayout);
         await dbSet('txt_data', txts);
         await dbSet('sty_data', stys);
         await dbSet('img_data', imgs);
         if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_data', document.getElementById('global-bg').src);
         
-        alert("✅ 저장 완료. (이제 용량 걱정이 없습니다!)");
+        alert("✅ 저장 완료. (디렉토리 메뉴도 함께 박제되었습니다.)");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
@@ -354,6 +386,10 @@
       const lay = await dbGet('lay_data');
       if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
+      
+      const menuLay = await dbGet('menu_lay');
+      if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+
       const txts = await dbGet('txt_data'), stys = await dbGet('sty_data'), imgs = await dbGet('img_data'), bg = await dbGet('bg_data');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
