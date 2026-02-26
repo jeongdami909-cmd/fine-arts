@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>In Silentio | Gallery</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700&family=Gowun+Dodum&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,300;1,700&family=Gowun+Dodum&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet"/>
   
   <script>
     tailwind.config = {
@@ -47,34 +47,33 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 [핵심수정] In Silentio: 골드 & 옅은 블랙의 고전적 미학 */
+    /* 🌟 [핵심수정] In Silentio: 가는 회색 선 + 투명 레드 음영 */
     #intro-main-title {
         font-family: 'Playfair Display', serif !important;
         font-style: italic !important;
-        /* 색상: 옅은 블랙 (Charcoal) */
-        color: #2C2C2C !important; 
-        /* 반투명 효과 (0.8) */
-        opacity: 0.85 !important;
-        /* 음영: 가늘고 정교한 연한 골드빛 음영 (#D4AF37) */
+        /* 색상: 가는 선의 느낌을 주는 세련된 회색 (#8E8E8E) */
+        color: #8E8E8E !important; 
+        /* 반투명 효과 (0.7) */
+        opacity: 0.7 !important;
+        /* 음영: 옅은 투명 레드 (#FF0000 0.2 투명도) 글로우 효과 */
         text-shadow: 
-          0.5px 0.5px 0px #D4AF37, 
-          -0.2px -0.2px 0px rgba(212, 175, 55, 0.5),
-          0px 0px 12px rgba(212, 175, 55, 0.2) !important;
-        /* 크기: 본문(13px)의 3.5배 = 약 46px */
+          0px 0px 12px rgba(255, 0, 0, 0.25), 
+          0px 0px 1px rgba(255, 0, 0, 0.1) !important;
+        /* 크기: 본문(13px)의 3.5배 = 46px */
         font-size: 46px !important; 
-        font-weight: 700 !important;
+        font-weight: 300 !important; /* 가느다란 선 느낌 강제 */
         line-height: 1.1; 
         display: block;
         margin-bottom: 2.5rem;
         word-break: keep-all;
-        letter-spacing: -0.02em;
+        letter-spacing: 0.02em;
     }
 
-    /* 상단 헤더 타이틀 동기화 스타일 */
+    /* 헤더 타이틀 동기화 */
     #header-title {
         font-family: 'Playfair Display', serif !important;
         font-style: italic !important;
-        font-size: 14px; letter-spacing: 0.1em; font-weight: bold; opacity: 0.6; color: #2C2C2C !important;
+        font-size: 14px; letter-spacing: 0.1em; font-weight: bold; opacity: 0.6; color: #8E8E8E !important;
     }
 
     /* 본문 디자인 보존 */
@@ -142,7 +141,7 @@
         <div class="w-12 h-[1px] bg-black/5 mb-12"></div>
         <div class="w-full px-4">
             <div class="text-container line-clamp-folded">
-              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">제목이 골드와 블랙의 정교한 조합으로 다시 태어났습니다. 촌스러운 주황색을 버리고 고전 시집 같은 우아함을 담았습니다.</p>
+              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">제목이 가느다란 회색 선과 옅은 레드 음영으로 바뀌어 훨씬 시네마틱해졌습니다. 나머지 모든 기능은 완벽하게 유지됩니다.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -185,7 +184,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V56';
+    const DB_NAME = 'GalleryStoreDB_Final_V57';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -196,7 +195,7 @@
         document.getElementById('header-title').innerText = introTitle;
     }
 
-    // 🌟 [기능] 검색 시 자동 펼침 및 정밀 이동 로직 보존
+    // 🌟 검색 및 자동 펼침 정밀 스크롤 보존
     function performSearch(shouldScroll = false) {
         const query = document.getElementById('search-input').value.toLowerCase().trim();
         const items = document.querySelectorAll('.gallery-item');
@@ -322,8 +321,8 @@
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v56', mainClone.innerHTML); await dbSet('txt_v56', txts); await dbSet('img_v56', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v56', document.getElementById('global-bg').src); alert("✅ 명품 골든 블랙 버전이 안전하게 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v56'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v56'), imgs = await dbGet('img_v56'), bg = await dbGet('bg_v56'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v57', mainClone.innerHTML); await dbSet('txt_v57', txts); await dbSet('img_v57', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v57', document.getElementById('global-bg').src); alert("✅ 미니멀 시네마틱 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v57'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v57'), imgs = await dbGet('img_v57'), bg = await dbGet('bg_v57'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
