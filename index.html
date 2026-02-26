@@ -47,29 +47,26 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 [핵심수정] In Silentio: 가는 회색 선 + 투명 레드 음영 */
+    /* 🌟 [핵심수정] In Silentio: 매우 가는 회색 선 + 절반 크기 + 레드 음영 */
     #intro-main-title {
         font-family: 'Playfair Display', serif !important;
         font-style: italic !important;
-        /* 색상: 가는 선의 느낌을 주는 세련된 회색 (#8E8E8E) */
         color: #8E8E8E !important; 
-        /* 반투명 효과 (0.7) */
         opacity: 0.7 !important;
-        /* 음영: 옅은 투명 레드 (#FF0000 0.2 투명도) 글로우 효과 */
+        /* 음영: 더욱 은은해진 투명 레드 글로우 */
         text-shadow: 
-          0px 0px 12px rgba(255, 0, 0, 0.25), 
+          0px 0px 8px rgba(255, 0, 0, 0.15), 
           0px 0px 1px rgba(255, 0, 0, 0.1) !important;
-        /* 크기: 본문(13px)의 3.5배 = 46px */
-        font-size: 46px !important; 
-        font-weight: 300 !important; /* 가느다란 선 느낌 강제 */
+        /* 크기: 이전 버전(46px)의 절반인 23px */
+        font-size: 23px !important; 
+        font-weight: 200 !important; /* 매우 가느다란 선 느낌 적용 */
         line-height: 1.1; 
         display: block;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
         word-break: keep-all;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.08em; /* 작아진 만큼 자간을 조금 더 넓혀 여백미 강조 */
     }
 
-    /* 헤더 타이틀 동기화 */
     #header-title {
         font-family: 'Playfair Display', serif !important;
         font-style: italic !important;
@@ -138,10 +135,10 @@
           <button class="text-[10px] opacity-40 hover:opacity-100 font-bold" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
         </div>
         <h2 id="intro-main-title" class="searchable" data-origin="In Silentio">In Silentio</h2>
-        <div class="w-12 h-[1px] bg-black/5 mb-12"></div>
+        <div class="w-8 h-[1px] bg-black/5 mb-10"></div>
         <div class="w-full px-4">
             <div class="text-container line-clamp-folded">
-              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">제목이 가느다란 회색 선과 옅은 레드 음영으로 바뀌어 훨씬 시네마틱해졌습니다. 나머지 모든 기능은 완벽하게 유지됩니다.</p>
+              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">제목이 사용자님의 요청대로 훨씬 가늘고 작게 조정되었습니다. 촌스러움을 완전히 걷어낸 미니멀한 아름다움을 느껴보세요.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -184,7 +181,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V57';
+    const DB_NAME = 'GalleryStoreDB_Final_V58';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -195,7 +192,7 @@
         document.getElementById('header-title').innerText = introTitle;
     }
 
-    // 🌟 검색 및 자동 펼침 정밀 스크롤 보존
+    // 🌟 [기능] 검색 시 자동 펼침 및 정밀 이동 로직 보존
     function performSearch(shouldScroll = false) {
         const query = document.getElementById('search-input').value.toLowerCase().trim();
         const items = document.querySelectorAll('.gallery-item');
@@ -321,8 +318,8 @@
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v57', mainClone.innerHTML); await dbSet('txt_v57', txts); await dbSet('img_v57', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v57', document.getElementById('global-bg').src); alert("✅ 미니멀 시네마틱 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v57'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v57'), imgs = await dbGet('img_v57'), bg = await dbGet('bg_v57'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v58', mainClone.innerHTML); await dbSet('txt_v58', txts); await dbSet('img_v58', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v58', document.getElementById('global-bg').src); alert("✅ 미니멀 가는 선 버전이 안전하게 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v58'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v58'), imgs = await dbGet('img_v58'), bg = await dbGet('bg_v58'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
