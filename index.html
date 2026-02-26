@@ -50,11 +50,10 @@
     .minimal-btn:hover::before, .minimal-btn:active::before { content: ""; width: 0; opacity: 0; }
     .minimal-btn:hover span, .minimal-btn:active span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 [수정] 본문 텍스트: 매우 얇은 인디고 + 티 안 나는 은은한 골드 테두리 */
+    /* 🌟 기본 텍스트 스타일 (메인 소개글용 유지) */
     .text-target {
-      color: #3A4B7C !important; /* 은은한 인디고 */
-      font-weight: 100 !important; /* 매우매우 얇게 */
-      /* 티 안 나게 은은한 골드 테두리 효과 (0.5px 미세 그림자) */
+      color: #3A4B7C !important;
+      font-weight: 100 !important;
       text-shadow: 
           0.5px 0.5px 0px rgba(212, 175, 55, 0.25), 
          -0.5px -0.5px 0px rgba(212, 175, 55, 0.25) !important;
@@ -63,11 +62,10 @@
       word-break: break-word;
     }
 
-    /* 🌟 [수정] 제목: 주홍빛에 은은한 은빛 광채 추가 */
+    /* 🌟 주홍빛 필기체 타이틀 (유지) */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
-        color: #FF7F50 !important; /* 주홍빛 */
-        /* 은은한 은빛 광채 (Silver Glow) */
+        color: #FF7F50 !important;
         text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 0px 0px 5px rgba(192,192,192,0.5) !important;
         font-size: 3.2rem !important;
         font-weight: 400 !important;
@@ -75,7 +73,7 @@
         display: block !important;
     }
 
-    .main-wrapper { margin-top: 65vh; } /* */
+    .main-wrapper { margin-top: 65vh; }
     .gallery-item { background: transparent !important; box-shadow: none !important; }
     
     .art-frame { 
@@ -85,26 +83,36 @@
     }
     .art-image { width: 100%; height: 100%; object-fit: contain !important; }
     
-    /* 🌟 [수정] 바탕: 5353.jpg와 같은 반 불투명 유리창 배경 */
-    .desc-panel, .glass-panel {
-      background: rgba(255, 255, 255, 0.25) !important; /* 은은한 반투명 */
-      backdrop-filter: blur(12px) !important; /* 유리창 효과 */
+    /* 🌟 메인 소개글용 투명 패널 스타일 (유지) */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.25) !important;
+      backdrop-filter: blur(12px) !important;
       -webkit-backdrop-filter: blur(12px) !important;
       border: 1px solid rgba(255, 255, 255, 0.3) !important;
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05) !important;
     }
 
+    /* 🌟 [수정됨] 그림 설명칸(슬라이드 패널): 훨씬 더 불투명한 덮개 스타일 */
     .desc-panel {
-      border-left: 1px solid rgba(255,255,255,0.3);
+      background: rgba(15, 15, 20, 0.85) !important; /* 매우 불투명하고 진한 어두운 색 */
+      backdrop-filter: blur(15px) !important; /* 블러 효과 강화 */
+      border-left: 1px solid rgba(255,255,255,0.1);
       display: flex; flex-direction: column; 
       height: 100%; min-height: 0;
     }
 
-    /* 커스텀 스크롤바 (유지) */
+    /* 🌟 [신규] 그림 설명칸 내부 텍스트 전용 스타일: 튀지 않는 은은한 골드 */
+    .desc-panel .text-target {
+        color: #C9B078 !important; /* 차분한 앤티크 골드 색상 */
+        text-shadow: none !important; /* 기존 그림자 제거 */
+        font-weight: 300 !important; /* 가독성을 위해 두께 약간 조절 */
+    }
+    
+    /* 커스텀 스크롤바 (색상 조정) */
     .custom-scroll::-webkit-scrollbar { width: 2px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(58, 75, 124, 0.1); } 
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(201, 176, 120, 0.3); } /* 골드톤에 맞춤 */
 
-    /* 스크롤 로직 (유지) */
+    /* 스크롤 로직 (완벽 유지) */
     .scroll-engine {
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
@@ -175,7 +183,7 @@
         <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="max-h-[250px] scroll-engine custom-scroll w-full px-6">
-            <p class="text-[13px] leading-loose text-target opacity-80">여기에 긴 안내글을 작성하세요. 인디고 글씨에 미세한 골드 테두리가 적용되었습니다.</p>
+            <p class="text-[13px] leading-loose text-target opacity-80">여기에 긴 안내글을 작성하세요. 메인 소개글은 기존 스타일을 유지합니다.</p>
         </div>
       </div>
     </section>
@@ -199,7 +207,7 @@
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
                 <div class="scroll-engine custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-target">내용을 입력하세요. 모든 텍스트 스타일이 완벽하게 적용되었습니다.</p>
+                  <p class="text-[12px] leading-loose text-target">내용을 입력하세요. 불투명한 배경에 은은한 골드 글씨가 선명하게 보입니다.</p>
                 </div>
              </div>
           </div>
@@ -211,7 +219,7 @@
   <div id="text-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg px-6">
     <div class="bg-white/90 backdrop-blur-3xl w-full max-w-md p-10 rounded-[3rem] shadow-2xl">
       <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">EDIT CONTENT</h3>
-      <textarea id="modal-textarea" class="w-full h-64 p-0 border-none bg-transparent focus:ring-0 resize-none font-serif text-sm custom-scroll leading-relaxed" style="color:#1a1a1a !important; text-shadow:none !important;"></textarea>
+      <textarea id="modal-textarea" class="w-full h-64 p-0 border-none bg-transparent focus:ring-0 resize-none font-serif text-sm custom-scroll leading-relaxed"></textarea>
       <div class="flex justify-end space-x-6 mt-10">
         <button class="text-xs opacity-30" onclick="closeTextEditor()">CANCEL</button>
         <button class="text-xs font-bold text-galleryGold" onclick="saveTextChanges()">APPLY</button>
@@ -220,8 +228,8 @@
   </div>
 
   <script>
-    /* 🌟 용량 부족 에러를 해결한 IndexedDB 대용량 창고 */
-    const DB_NAME = 'GalleryStoreDB_Final_V26';
+    /* 🌟 IndexedDB 및 로직 V27 업데이트 (기능 완벽 유지) */
+    const DB_NAME = 'GalleryStoreDB_Final_V27';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -310,17 +318,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v26', mainClone.innerHTML); await dbSet('menu_v26', menuLayout); await dbSet('txt_v26', txts); await dbSet('sty_v26', stys); await dbSet('img_v26', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v26', document.getElementById('global-bg').src);
-        alert("✅ 모든 스타일과 내용이 안전하게 박제되었습니다.");
+        await dbSet('lay_v27', mainClone.innerHTML); await dbSet('menu_v27', menuLayout); await dbSet('txt_v27', txts); await dbSet('sty_v27', stys); await dbSet('img_v27', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v27', document.getElementById('global-bg').src);
+        alert("✅ 불투명 덮개와 은은한 골드 글씨 스타일이 저장되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v26'); if(!lay) return;
+      const lay = await dbGet('lay_v27'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v26'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v26'), stys = await dbGet('sty_v26'), imgs = await dbGet('img_v26'), bg = await dbGet('bg_v26');
+      const menuLay = await dbGet('menu_v27'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v27'), stys = await dbGet('sty_v27'), imgs = await dbGet('img_v27'), bg = await dbGet('bg_v27');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
