@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 상단 버튼 디자인 유지 (평소 '-' 표시) */
+    /* 🌟 상단 버튼 디자인 유지 */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -50,15 +50,16 @@
     .minimal-btn:hover::before, .minimal-btn:active::before { content: ""; width: 0; opacity: 0; }
     .minimal-btn:hover span, .minimal-btn:active span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 기본 텍스트 색상 변경: 부드러운 흰색으로 설정하여 어두운 배경에서 튀지 않게 함 */
+    /* 🌟 핵심 변경: 본문 텍스트 색상 및 두께 수정 🌟 */
     .text-target {
-      color: rgba(255, 255, 255, 0.85); 
+      color: #D9CEBD; /* 은은한 회색빛 골드 색상 (절대 튀지 않음) */
+      font-weight: 300; /* 얇은 두께 설정 */
       letter-spacing: 0.05em;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    /* 🌟 주홍빛 필기체 타이틀 고정 스타일 (유지) */
+    /* 🌟 주홍빛 필기체 타이틀 고정 스타일 (그대로 유지) */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important;
@@ -79,31 +80,32 @@
     }
     .art-image { width: 100%; height: 100%; object-fit: contain !important; }
     
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    /* 🌟 설명창 배경 변경: 은은한 반투명 어두운 톤으로 설정 */
+    /* 설명창 배경 (은은한 반투명 유지) */
     .desc-panel {
-      background: rgba(0, 0, 0, 0.4) !important; /* 수정됨 */
+      background: rgba(0, 0, 0, 0.4) !important;
       backdrop-filter: blur(10px);
       border-left: 1px solid rgba(255,255,255,0.3);
       display: flex; flex-direction: column; 
       height: 100%; min-height: 0;
     }
 
-    /* 🌟 디자인용 커스텀 스크롤바 스타일 (유지) */
-    .custom-scroll::-webkit-scrollbar { width: 2px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); } /* 스크롤바 색상도 살짝 밝게 조정 */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-    /* 🌟 지피티 솔루션 핵심 CSS: 실제 스크롤 로직만 담당 (완벽 유지) 🌟 */
+    /* 디자인용 커스텀 스크롤바 스타일 (유지) */
+    .custom-scroll::-webkit-scrollbar { width: 2px; }
+    /* 스크롤바 색상도 본문 색상에 맞춰 살짝 조정 */
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(217, 206, 189, 0.3); } 
+
+    /* 지피티 솔루션 핵심 CSS: 실제 스크롤 로직만 담당 (유지) */
     .scroll-engine {
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         flex: 1 1 0% !important;
-        height: 0 !important; /* 모바일 flex 무한확장 버그 차단 */
+        height: 0 !important;
         min-height: 0 !important;
     }
 
@@ -169,7 +171,7 @@
         <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="max-h-[250px] scroll-engine custom-scroll w-full px-6">
-            <p class="text-[13px] leading-loose text-target opacity-60">여기에 긴 안내글을 작성하세요.</p>
+            <p class="text-[13px] leading-loose text-target opacity-80">여기에 긴 안내글을 작성하세요.</p>
         </div>
       </div>
     </section>
@@ -193,7 +195,7 @@
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
                 <div class="scroll-engine custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-target">내용을 입력하세요. 은은한 배경에 글씨가 튀지 않고 잘 보입니다. 스크롤도 완벽합니다.</p>
+                  <p class="text-[12px] leading-loose text-target">내용을 입력하세요. 은은한 골드빛 글씨가 적용되었습니다.</p>
                 </div>
              </div>
           </div>
@@ -232,7 +234,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V21';
+    const DB_NAME = 'GalleryStoreDB_Final_V22';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -334,17 +336,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v21', mainClone.innerHTML); await dbSet('menu_v21', menuLayout); await dbSet('txt_v21', txts); await dbSet('sty_v21', stys); await dbSet('img_v21', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v21', document.getElementById('global-bg').src);
-        alert("✅ 은은한 스타일과 완벽한 스크롤이 저장되었습니다.");
+        await dbSet('lay_v22', mainClone.innerHTML); await dbSet('menu_v22', menuLayout); await dbSet('txt_v22', txts); await dbSet('sty_v22', stys); await dbSet('img_v22', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v22', document.getElementById('global-bg').src);
+        alert("✅ 은은한 골드 텍스트 스타일이 저장되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v21'); if(!lay) return;
+      const lay = await dbGet('lay_v22'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v21'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v21'), stys = await dbGet('sty_v21'), imgs = await dbGet('img_v21'), bg = await dbGet('bg_v21');
+      const menuLay = await dbGet('menu_v22'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v22'), stys = await dbGet('sty_v22'), imgs = await dbGet('img_v22'), bg = await dbGet('bg_v22');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
