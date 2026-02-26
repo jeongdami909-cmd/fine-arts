@@ -57,7 +57,7 @@
       word-break: break-word;
     }
 
-    /* 🌟 주홍빛 필기체 타이틀 고정 */
+    /* 🌟 주홍빛 필기체 타이틀 고정 스타일 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important;
@@ -92,7 +92,7 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* 🌟 GPT 솔루션: 스크롤 영역 강제 고정 🌟 */
+    /* 🌟 GPT 솔루션: 스크롤 영역 강제 고정 및 모바일 Flex 버그 차단 🌟 */
     .custom-scroll { 
         overflow-y: auto !important; 
         -webkit-overflow-scrolling: touch; 
@@ -103,7 +103,6 @@
     .custom-scroll::-webkit-scrollbar { width: 2px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
 
-    /* 🌟 GPT 솔루션: 모바일 flex 버그 강제 차단용 CSS 🌟 */
     .slide-panel > div { min-height: 0 !important; }
 
     .slide-panel { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -181,7 +180,7 @@
              <button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
              <button class="text-[9px] font-bold tracking-widest opacity-20 hover:opacity-100 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
           </div>
-          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide" style="min-height:0;">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide min-h-0">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)">
                 <div class="w-[1px] h-8 bg-black/20"></div>
              </div>
@@ -191,7 +190,7 @@
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4 min-h-0" style="max-height: 100%;">
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4 min-h-0">
                   <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요. 이제 스크롤이 완벽하게 작동합니다.</p>
                 </div>
              </div>
@@ -213,7 +212,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V15';
+    const DB_NAME = 'GalleryStoreDB_Final_V16';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -249,7 +248,7 @@
       reader.readAsDataURL(file);
     };
 
-    /* 🌟 모든 게시판 지피티 솔루션(min-h-0) 강제 주입 설계 */
+    /* 🌟 모든 게시판 지피티 솔루션(min-h-0) 강제 주입 */
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
@@ -260,7 +259,7 @@
              <button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('${id}')">PHOTO</button>
              <button class="text-[9px] font-bold tracking-widest opacity-20 hover:opacity-100 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
           </div>
-          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide" style="min-height:0;">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide min-h-0">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden min-h-0">
                 <div class="absolute top-4 right-6 flex space-x-2">
@@ -268,7 +267,7 @@
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4 min-h-0" style="max-height: 100%;">
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4 min-h-0">
                     <p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p>
                 </div>
              </div>
@@ -303,17 +302,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v15', mainClone.innerHTML); await dbSet('menu_v15', menuLayout); await dbSet('txt_v15', txts); await dbSet('sty_v15', stys); await dbSet('img_v15', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v15', document.getElementById('global-bg').src);
-        alert("✅ 스크롤 기능이 완벽하게 저장되었습니다.");
+        await dbSet('lay_v16', mainClone.innerHTML); await dbSet('menu_v16', menuLayout); await dbSet('txt_v16', txts); await dbSet('sty_v16', stys); await dbSet('img_v16', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v16', document.getElementById('global-bg').src);
+        alert("✅ 스크롤 기능이 완벽하게 박제되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v15'); if(!lay) return;
+      const lay = await dbGet('lay_v16'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v15'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v15'), stys = await dbGet('sty_v15'), imgs = await dbGet('img_v15'), bg = await dbGet('bg_v15');
+      const menuLay = await dbGet('menu_v16'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v16'), stys = await dbGet('sty_v16'), imgs = await dbGet('img_v16'), bg = await dbGet('bg_v16');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
