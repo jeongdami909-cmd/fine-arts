@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 상단 버튼: 평소엔 '-' 표시, 호버 시 은은한 글자 */
+    /* 🌟 상단 버튼: 평소엔 '-' 표시, 호버 시 은은한 글자 (디자인 유지) */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -50,7 +50,6 @@
     .minimal-btn:hover::before, .minimal-btn:active::before { content: ""; width: 0; opacity: 0; }
     .minimal-btn:hover span, .minimal-btn:active span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 텍스트 설정 */
     .text-target {
       color: rgba(26, 65, 66, 0.8); 
       letter-spacing: 0.05em;
@@ -58,10 +57,9 @@
       word-break: break-word;
     }
 
-    /* 🌟 배경 중심 레이아웃 */
+    /* 🌟 배경 중심 레이아웃 (디자인 유지) */
     .main-wrapper { margin-top: 65vh; }
 
-    /* 🌟 작품 칸 설정 */
     .gallery-item { background: transparent !important; box-shadow: none !important; }
     .art-frame { background: transparent !important; border: 1px solid rgba(255,255,255,0.1); }
     
@@ -135,9 +133,7 @@
         <h2 class="mb-8 text-2xl font-serif text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="max-h-[250px] overflow-y-auto custom-scroll w-full px-6">
-            <p class="text-[13px] leading-loose text-target opacity-60">
-              여기에 긴 안내글을 작성하세요.
-            </p>
+            <p class="text-[13px] leading-loose text-target opacity-60">여기에 긴 안내글을 작성하세요.</p>
         </div>
       </div>
     </section>
@@ -200,6 +196,37 @@
   </div>
 
   <script>
+    /* 🌟 무한 창고 IndexedDB 로직 🌟 */
+    const DB_NAME = 'LaceyFineArtDB';
+    const STORE_NAME = 'siteData';
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+          e.target.result.createObjectStore(STORE_NAME);
+        };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function dbSet(key, value) {
+      const db = await openDB();
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).put(value, key);
+      return new Promise((res) => tx.oncomplete = res);
+    }
+
+    async function dbGet(key) {
+      const db = await openDB();
+      return new Promise((res) => {
+        const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(key);
+        req.onsuccess = () => res(req.result);
+      });
+    }
+
+    /* ---------------- 디자인 로직 ---------------- */
     document.getElementById('menu-toggle').onclick = (e) => {
         e.stopPropagation();
         document.getElementById('dropdown-menu').classList.toggle('hidden');
@@ -213,7 +240,6 @@
     let currentImgId = null;
     function triggerFileUpload(id) { currentImgId = id; fileInput.click(); }
 
-    // 🌟 핵심: 이미지 압축 및 최적화 로직 (용량 해결)
     fileInput.onchange = (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -222,17 +248,13 @@
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          // 해상도를 브라우저 저장소에 최적화된 사이즈로 조절 (배경 800px, 작품 500px)
-          const MAX = currentImgId === 'global-bg' ? 800 : 500;
+          const MAX = currentImgId === 'global-bg' ? 1000 : 600;
           let w = img.width, h = img.height;
           if (w > h && w > MAX) { h *= MAX/w; w = MAX; }
           else if (h > w && h > MAX) { w *= MAX/h; h = MAX; }
           canvas.width = w; canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          
-          // 0.3의 낮은 퀄리티로 압축 (용량 극적 감소, 육안 차이 미미)
-          const data = canvas.toDataURL('image/jpeg', 0.3);
-          
+          const data = canvas.toDataURL('image/jpeg', 0.5);
           if (currentImgId === 'global-bg') {
             document.body.style.backgroundImage = `url(${data})`;
             document.body.style.backgroundSize = 'cover';
@@ -305,34 +327,35 @@
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
 
-    // 🌟 저장 로직 최적화
-    function saveToBrowser() {
+    /* 🌟 저장/로드 (IndexedDB 방식) 🌟 */
+    async function saveToBrowser() {
       try {
         const mainClone = document.getElementById('main-content').cloneNode(true);
         mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; });
-        localStorage.setItem('lay_min_v2', mainClone.innerHTML);
         
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        
-        localStorage.setItem('txt_min_v2', JSON.stringify(txts));
-        localStorage.setItem('sty_min_v2', JSON.stringify(stys));
-        localStorage.setItem('img_min_v2', JSON.stringify(imgs));
-        if(document.getElementById('global-bg').src.startsWith('data:image')) localStorage.setItem('bg_min_v2', document.getElementById('global-bg').src);
-        
-        alert("✅ 모든 정보가 안전하게 저장되었습니다.");
+
+        await dbSet('lay_db', mainClone.innerHTML);
+        await dbSet('txt_db', txts);
+        await dbSet('sty_db', stys);
+        await dbSet('img_db', imgs);
+        const bg = document.getElementById('global-bg').src;
+        if(bg.startsWith('data:image')) await dbSet('bg_db', bg);
+
+        alert("✅ 창고가 넉넉해서 안전하게 저장되었습니다!");
       } catch(e) {
-        alert("⚠️ 여전히 용량이 부족합니다. 사진을 1~2개 삭제하거나 더 작은 사진을 사용해주세요.");
+        alert("⚠️ 시스템 오류 발생");
       }
     }
 
-    function loadFromBrowser() {
-      const lay = localStorage.getItem('lay_min_v2');
+    async function loadFromBrowser() {
+      const lay = await dbGet('lay_db');
       if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const txts = JSON.parse(localStorage.getItem('txt_min_v2')), stys = JSON.parse(localStorage.getItem('sty_min_v2')), imgs = JSON.parse(localStorage.getItem('img_min_v2')), bg = localStorage.getItem('bg_min_v2');
-      document.querySelectorAll('.text-target').forEach((t, i) => { if(txts[i]) t.innerHTML = txts[i]; if(stys[i]) t.setAttribute('style', stys[i]); });
+      const txts = await dbGet('txt_db'), stys = await dbGet('sty_db'), imgs = await dbGet('img_db'), bg = await dbGet('bg_db');
+      document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
     }
