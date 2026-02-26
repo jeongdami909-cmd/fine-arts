@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 상단 버튼 디자인 유지 */
+    /* 🌟 상단 버튼 디자인 유지 (전과 동일) */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -68,6 +68,7 @@
         display: block !important;
     }
 
+    /* 🌟 게시판 하단 배치 (65vh) 유지 */
     .main-wrapper { margin-top: 65vh; }
 
     .gallery-item { background: transparent !important; box-shadow: none !important; }
@@ -83,7 +84,8 @@
       background: rgba(230, 230, 230, 0.85) !important;
       backdrop-filter: blur(10px);
       border-left: 1px solid rgba(255,255,255,0.3);
-      display: flex; flex-direction: column; height: 100%;
+      display: flex; flex-direction: column; 
+      height: 100%;
     }
 
     .glass-panel {
@@ -92,13 +94,12 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* 🌟 스크롤 해결을 위한 핵심 CSS 🌟 */
+    /* 🌟 지피티의 'min-h-0' 솔루션 반영 🌟 */
     .custom-scroll { 
         overflow-y: auto !important; 
         -webkit-overflow-scrolling: touch; 
-        flex-grow: 1;
-        height: 0; /* flexbox에서 스크롤을 활성화하는 트릭 */
-        min-height: 0;
+        flex: 1 1 0%; /* flex-grow와 함께 높이 계산을 위해 0% 설정 */
+        min-height: 0; /* 부모가 늘어나는 것 방지 */
     }
     .custom-scroll::-webkit-scrollbar { width: 2px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
@@ -165,7 +166,7 @@
         </div>
         <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
-        <div class="max-h-[250px] overflow-y-auto custom-scroll w-full px-6">
+        <div class="max-h-[250px] overflow-y-auto custom-scroll w-full px-6 min-h-0">
             <p class="text-[13px] leading-loose text-target opacity-60">여기에 긴 안내글을 작성하세요.</p>
         </div>
       </div>
@@ -183,14 +184,14 @@
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)">
                 <div class="w-[1px] h-8 bg-black/20"></div>
              </div>
-             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden">
+             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden min-h-0">
                 <div class="absolute top-4 right-6 flex space-x-2">
                     <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-col'))">STYLE</button>
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요. 이제 스크롤이 시원하게 작동합니다.</p>
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4 min-h-0">
+                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요. 이제 지피티의 조언대로 첫 번째 게시판부터 스크롤이 시원하게 작동합니다.</p>
                 </div>
              </div>
           </div>
@@ -229,7 +230,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V6';
+    const DB_NAME = 'GalleryStoreDB_Final_V10';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -250,7 +251,8 @@
         img.onload = () => {
           const canvas = document.createElement('canvas'); const MAX = 1000; let w = img.width, h = img.height;
           if (w > h && w > MAX) { h *= MAX/w; w = MAX; } else if (h > w && h > MAX) { w *= MAX/h; h = MAX; }
-          canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           const data = canvas.toDataURL('image/jpeg', 0.4);
           if (currentImgId === 'global-bg') {
             document.body.style.backgroundImage = `url(${data})`; document.body.style.backgroundSize = 'cover'; document.body.style.backgroundAttachment = 'fixed';
@@ -264,7 +266,7 @@
       reader.readAsDataURL(file);
     };
 
-    /* 🌟 모든 게시판 스크롤 기능 보강 설계 */
+    /* 🌟 모든 게시판에 지피티 솔루션(min-h-0) 강제 적용 */
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
@@ -277,13 +279,13 @@
           </div>
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
-             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden">
+             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden min-h-0">
                 <div class="absolute top-4 right-6 flex space-x-2">
                     <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-col'))">STYLE</button>
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="custom-scroll pr-4">
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4 min-h-0">
                     <p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p>
                 </div>
              </div>
@@ -330,17 +332,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v6', mainClone.innerHTML); await dbSet('menu_v6', menuLayout); await dbSet('txt_v6', txts); await dbSet('sty_v6', stys); await dbSet('img_v6', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v6', document.getElementById('global-bg').src);
-        alert("✅ 모든 게시판의 스크롤 설정이 완벽하게 저장되었습니다.");
+        await dbSet('lay_v10', mainClone.innerHTML); await dbSet('menu_v10', menuLayout); await dbSet('txt_v10', txts); await dbSet('sty_v10', stys); await dbSet('img_v10', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v10', document.getElementById('global-bg').src);
+        alert("✅ 스크롤 솔루션이 완벽하게 박제되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v6'); if(!lay) return;
+      const lay = await dbGet('lay_v10'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v6'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v6'), stys = await dbGet('sty_v6'), imgs = await dbGet('img_v6'), bg = await dbGet('bg_v6');
+      const menuLay = await dbGet('menu_v10'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v10'), stys = await dbGet('sty_v10'), imgs = await dbGet('img_v10'), bg = await dbGet('bg_v10');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
