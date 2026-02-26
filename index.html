@@ -23,29 +23,19 @@
   </script>
   
   <style data-purpose="custom-styles">
-    /* 🌟 스크롤 해결 공식 */
+    /* 🌟 스크롤 영역 강제 인식 */
     html, body {
-      height: 100% !important;
-      min-height: 100% !important;
-      overflow-x: hidden;
-      overflow-y: auto !important;
-      background-color: #d0e4e0;
-      margin: 0; padding: 0;
+      height: 100% !important; min-height: 100% !important;
+      overflow-x: hidden; overflow-y: auto !important;
+      background-color: #d0e4e0; margin: 0; padding: 0;
       scroll-behavior: smooth;
     }
-
     body { font-family: 'Noto Serif KR', serif; -webkit-font-smoothing: antialiased; min-height: 150vh; }
 
-    .main-wrapper {
-      margin-top: 65vh !important;
-      position: relative;
-      z-index: 10;
-      display: block !important;
-    }
-
+    .main-wrapper { margin-top: 65vh !important; position: relative; z-index: 10; display: block !important; }
     header { z-index: 99999 !important; position: fixed; top: 0; left: 0; right: 0; background: transparent; }
 
-    /* 버튼 디자인 유지 */
+    /* 버튼 디자인 보존 */
     .minimal-btn {
       width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
       border-radius: 999px; font-size: 0.75rem; color: rgba(26, 65, 66, 0.4);
@@ -57,30 +47,18 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 [수정] 메인 타이틀: In Silentio 전용 디자인 */
+    /* 🌟 [디자인] In Silentio 주홍 필기체 (100% 유지) */
     #intro-main-title {
         font-family: 'Allura', cursive !important;
-        /* 색상: 더 붉은 주홍빛 (#FF4500) */
-        color: #FF4500 !important; 
-        /* 반투명 효과 (0.75) */
-        opacity: 0.75 !important;
-        /* 음영: 미세한 회색 음영 (#333333) */
-        text-shadow: 
-          0.3px 0.3px 0px #333333, 
-          -0.3px -0.3px 0px #333333,
-          0px 0px 6px rgba(51, 51, 51, 0.1) !important;
-        /* 크기: 밑의 글씨(13px)보다 3.5배 큰 46px */
-        font-size: 46px !important; 
-        line-height: 1; 
-        display: block;
-        margin-bottom: 2rem;
-        word-break: keep-all;
+        color: #FF4500 !important; /* 붉은 주홍 */
+        opacity: 0.75 !important; /* 반투명 */
+        /* 회색 가는 음영 */
+        text-shadow: 0.3px 0.3px 0px #333333, -0.3px -0.3px 0px #333333, 0px 0px 6px rgba(51, 51, 51, 0.1) !important;
+        font-size: 46px !important; /* 본문의 3.5배 */
+        line-height: 1; display: block; margin-bottom: 2rem; word-break: keep-all;
     }
 
-    #header-title {
-        font-size: 11px; letter-spacing: 0.4em; font-weight: bold; opacity: 0.6; color: #3A4B7C !important;
-        text-transform: uppercase;
-    }
+    #header-title { font-size: 11px; letter-spacing: 0.4em; font-weight: bold; opacity: 0.6; color: #3A4B7C !important; text-transform: uppercase; }
 
     /* 본문 디자인 보존 */
     .text-target {
@@ -89,18 +67,11 @@
       letter-spacing: 0.05em; white-space: pre-wrap; word-break: break-word; font-size: 13px !important;
     }
 
-    /* 까만 설명판 디자인 보존 */
-    .desc-panel {
-      background: rgba(15, 15, 20, 0.95) !important; backdrop-filter: blur(20px) !important;
-      display: flex; flex-direction: column; height: auto !important; min-height: 100%;
-    }
+    /* 까만 설명판 보존 */
+    .desc-panel { background: rgba(15, 15, 20, 0.95) !important; backdrop-filter: blur(20px) !important; display: flex; flex-direction: column; height: auto !important; min-height: 100%; }
     .desc-panel .text-target { color: #C9B078 !important; font-weight: 300 !important; text-shadow: none !important; }
 
-    /* 검색 하이라이트 및 스크롤 마진 */
-    .search-highlight { 
-      background-color: rgba(255, 215, 0, 0.6); color: #000 !important; border-radius: 2px;
-      scroll-margin-top: 200px;
-    }
+    .search-highlight { background-color: rgba(255, 215, 0, 0.6); color: #000 !important; border-radius: 2px; scroll-margin-top: 250px; }
 
     .line-clamp-folded { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .view-more-btn { color: #C9B078; font-size: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; text-decoration: underline; opacity: 0.7; }
@@ -110,10 +81,7 @@
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
     .glass-panel { background: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; }
 
-    #search-input {
-      background: transparent; border: none; border-bottom: 1px solid rgba(58, 75, 124, 0.1);
-      font-size: 10px; letter-spacing: 0.2em; padding: 4px 0; color: #3A4B7C; font-weight: bold; width: 100px;
-    }
+    #search-input { background: transparent; border: none; border-bottom: 1px solid rgba(58, 75, 124, 0.1); font-size: 10px; letter-spacing: 0.2em; padding: 4px 0; color: #3A4B7C; font-weight: bold; width: 100px; }
     .search-btn { font-size: 9px; font-weight: bold; color: #3A4B7C; opacity: 0.4; cursor: pointer; padding-left: 10px; }
   </style>
 </head>
@@ -126,9 +94,7 @@
   </div>
 
   <header class="py-8 px-10 flex justify-between items-center">
-    <div class="logo-container">
-        <h1 id="header-title">In Silentio</h1>
-    </div>
+    <div class="logo-container"><h1 id="header-title">In Silentio</h1></div>
     <div class="flex items-center space-x-3 pointer-events-auto">
       <input type="text" id="search-input" placeholder="SEARCH..." 
              oninput="if(this.value==='') performSearch(false)" 
@@ -153,7 +119,7 @@
         <div class="w-12 h-[1px] bg-black/5 mb-12"></div>
         <div class="w-full px-4">
             <div class="text-container line-clamp-folded">
-              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">제목이 In Silentio로 변경되었으며, 요청하신 대로 크기가 3.5배 커지고 붉은 주홍빛에 회색 음영, 반투명 효과가 적용되었습니다. Allura 필기체는 유지되었습니다.</p>
+              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">제목 동기화 및 자동 펼침 검색 기능이 적용되었습니다. Allura 필기체는 100% 보존됩니다.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -166,16 +132,16 @@
           <div class="absolute inset-0 bg-white/5 flex items-center justify-center rounded-[2rem] overflow-hidden">
             <img id="art-1" src="" class="art-image opacity-0 transition-opacity">
           </div>
-          <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all flex flex-col space-y-2">
-             <div class="flex space-x-3"><button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
-             <button class="text-[9px] font-bold tracking-widest opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
+          <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all">
+             <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
+             <button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
           </div>
           <div class="slide-panel absolute inset-0 w-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 rounded-l-[2rem]" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 px-10 py-12 flex flex-col desc-panel relative rounded-r-[2rem]">
                 <div class="absolute top-6 right-8"><button class="text-[9px] text-[#C9B078] font-bold opacity-70" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0 searchable">[작품 제목]</h4>
-                <div class="text-container line-clamp-folded"><p class="text-[13px] leading-loose text-target searchable">내용 입력</p></div>
+                <div class="text-container line-clamp-folded"><p class="text-[13px] leading-loose text-target searchable">긴 내용을 입력해도 ENTER 시 이 키워드 위치로 게시판이 펼쳐지며 이동합니다.</p></div>
                 <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
              </div>
           </div>
@@ -187,7 +153,7 @@
   <div id="text-editor-modal" class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-md z-[200000] px-6">
     <div class="bg-white w-full max-w-md p-10 rounded-[3rem] shadow-2xl pointer-events-auto">
       <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest text-black">EDIT CONTENT</h3>
-      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black" placeholder="첫 줄 제목, 다음 줄부터 본문"></textarea>
+      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black" placeholder="첫 줄 제목, 다음 줄 본문"></textarea>
       <div class="flex justify-end space-x-6 mt-10">
         <button class="text-xs opacity-30 text-black" onclick="closeTextEditor()">CANCEL</button>
         <button class="text-xs font-bold text-galleryGold" onclick="saveTextChanges()">APPLY</button>
@@ -196,7 +162,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V54';
+    const DB_NAME = 'GalleryStoreDB_Final_V55';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -207,14 +173,16 @@
         document.getElementById('header-title').innerText = introTitle;
     }
 
-    // 키워드 정밀 스크롤
+    // 🌟 [수정] ENTER 검색 시 "자동 펼침" 및 "정밀 이동" 통합
     function performSearch(shouldScroll = false) {
         const query = document.getElementById('search-input').value.toLowerCase().trim();
         const items = document.querySelectorAll('.gallery-item');
-        let firstHighlight = null;
+        let firstMatch = null;
+
         items.forEach(item => {
             const searchTargets = item.querySelectorAll('.searchable');
             let itemMatch = false;
+
             searchTargets.forEach(target => {
                 if (!target.hasAttribute('data-origin')) { target.setAttribute('data-origin', target.innerText); }
                 const originalText = target.getAttribute('data-origin');
@@ -223,15 +191,36 @@
                     const regex = new RegExp(`(${query})`, 'gi');
                     target.innerHTML = originalText.replace(regex, `<span class="search-highlight">$1</span>`);
                     itemMatch = true;
-                    if (!firstHighlight) firstHighlight = target.querySelector('.search-highlight');
                 } else { target.innerText = originalText; }
             });
             item.style.display = (query === "" || itemMatch) ? "block" : "none";
+            if (query !== "" && itemMatch && !firstMatch) firstMatch = item;
         });
-        if (shouldScroll && firstHighlight) { firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+        // 🌟 [핵심] 검색어가 발견되면 게시판을 펼치고 키워드 위치로 이동
+        if (shouldScroll && firstMatch) {
+            const slidePanel = firstMatch.querySelector('.slide-panel');
+            const viewMoreBtn = firstMatch.querySelector('.view-more-btn');
+            
+            // 1. 슬라이드 덮개 열기
+            if (slidePanel && slidePanel.classList.contains('slide-hide')) {
+                const handle = slidePanel.querySelector('.cursor-pointer');
+                if (handle) toggleSlide(handle);
+            }
+            
+            // 2. '자세히 보기' 펼치기
+            if (viewMoreBtn && viewMoreBtn.innerText === "자세히 보기") {
+                toggleViewMore(viewMoreBtn);
+            }
+
+            // 3. 0.3초 뒤 키워드로 정밀 이동 (애니메이션 대기)
+            setTimeout(() => {
+                const highlight = firstMatch.querySelector('.search-highlight');
+                if (highlight) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 350);
+        }
     }
 
-    // 자세히 보기 및 슬라이드
     function toggleViewMore(btn) {
         const container = btn.previousElementSibling;
         const item = btn.closest('.gallery-item') || btn.closest('.glass-panel');
@@ -275,7 +264,6 @@
       reader.readAsDataURL(file);
     };
 
-    // 새 게시판 추가
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
@@ -299,7 +287,6 @@
       grid.insertAdjacentHTML('beforeend', html);
     }
 
-    // 편집기 로직
     const tModal = document.getElementById('text-editor-modal');
     const tArea = document.getElementById('modal-textarea');
     let tTargets = [];
@@ -314,15 +301,14 @@
       const lines = tArea.value.split('\n');
       tTargets.forEach((t, i) => { 
         const newText = (i === tTargets.length -1) ? lines.slice(i).join('\n') : (lines[i] || "");
-        t.innerText = newText;
-        t.setAttribute('data-origin', newText);
+        t.innerText = newText; t.setAttribute('data-origin', newText);
       });
       syncTitles(); performSearch(false); closeTextEditor();
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v54', mainClone.innerHTML); await dbSet('txt_v54', txts); await dbSet('img_v54', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v54', document.getElementById('global-bg').src); alert("✅ In Silentio 전용 디자인 및 정밀 스크롤 기능이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v54'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v54'), imgs = await dbGet('img_v54'), bg = await dbGet('bg_v54'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v55', mainClone.innerHTML); await dbSet('txt_v55', txts); await dbSet('img_v55', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v55', document.getElementById('global-bg').src); alert("✅ 자동 펼침 스크롤 기능이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v55'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v55'), imgs = await dbGet('img_v55'), bg = await dbGet('bg_v55'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
