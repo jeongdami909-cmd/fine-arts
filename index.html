@@ -40,7 +40,7 @@
       transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden; white-space: nowrap; border: 1px solid rgba(255,255,255,0.2);
     }
-    .minimal-btn::before { content: "-"; transition: opacity 0.4s; }
+    .minimal-btn::before { content: "-"; }
     .minimal-btn span { width: 0; opacity: 0; transition: all 0.6s; font-weight: 500; }
     
     .minimal-btn:hover, .minimal-btn:active {
@@ -57,7 +57,7 @@
       word-break: break-word;
     }
 
-    /* 🌟 주홍빛 은빛 필기체 제목 스타일 유지 */
+    /* 🌟 주홍빛 필기체 타이틀 고정 스타일 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important;
@@ -83,6 +83,7 @@
       background: rgba(230, 230, 230, 0.85) !important;
       backdrop-filter: blur(10px);
       border-left: 1px solid rgba(255,255,255,0.3);
+      display: flex; flex-direction: column; height: 100%;
     }
 
     .glass-panel {
@@ -91,11 +92,13 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* 🌟 스크롤바 작동 보장 설정 */
+    /* 🌟 스크롤 해결을 위한 핵심 CSS 🌟 */
     .custom-scroll { 
         overflow-y: auto !important; 
         -webkit-overflow-scrolling: touch; 
-        max-height: 100%; /* 부모 안에서만 높이 차지 */
+        flex-grow: 1;
+        height: 0; /* flexbox에서 스크롤을 활성화하는 트릭 */
+        min-height: 0;
     }
     .custom-scroll::-webkit-scrollbar { width: 2px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
@@ -181,13 +184,13 @@
                 <div class="w-[1px] h-8 bg-black/20"></div>
              </div>
              <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden">
-                <div class="absolute top-6 right-8 flex space-x-2">
-                    <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-1'))">STYLE</button>
-                    <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-1'))">EDIT</button>
+                <div class="absolute top-4 right-6 flex space-x-2">
+                    <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-col'))">STYLE</button>
+                    <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요. 이제 첫 번째 게시판부터 스크롤이 정상 작동합니다.</p>
+                <div class="custom-scroll pr-4">
+                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요. 이제 스크롤이 시원하게 작동합니다.</p>
                 </div>
              </div>
           </div>
@@ -207,9 +210,26 @@
     </div>
   </div>
 
+  <div id="style-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg px-6">
+    <div id="style-bottom-sheet" class="bg-white/90 backdrop-blur-3xl w-full max-w-sm p-10 rounded-[3rem] shadow-2xl">
+      <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">STYLE SETTINGS</h3>
+      <div class="space-y-8">
+        <div class="flex justify-between items-center"><label class="text-[10px] opacity-50 font-bold">COLOR</label><input type="color" id="val-color" class="w-8 h-8 border-none bg-transparent"></div>
+        <div class="flex flex-col gap-3"><label class="text-[10px] opacity-50 font-bold">FONT</label>
+          <select id="val-font" class="text-xs p-0 bg-transparent border-none focus:ring-0">
+            <option value="'Noto Serif KR', serif">Noto Serif</option>
+            <option value="'Gowun Dodum', sans-serif">Gowun Dodum</option>
+            <option value="'Whisper', cursive">Handwriting</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-3"><label class="text-[10px] opacity-50 font-bold">SIZE</label><input type="range" id="val-size" min="10" max="40" class="accent-black/10"></div>
+      </div>
+      <button class="w-full mt-12 text-xs font-bold tracking-widest py-4 border-t border-black/5" onclick="closeStyleEditor()">DONE</button>
+    </div>
+  </div>
+
   <script>
-    /* 🌟 IndexedDB 저장 로직 */
-    const DB_NAME = 'GalleryStoreDB_Final_V5';
+    const DB_NAME = 'GalleryStoreDB_Final_V6';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -244,7 +264,7 @@
       reader.readAsDataURL(file);
     };
 
-    /* 🌟 모든 게시판 스크롤 기능 강제 주입 설계 */
+    /* 🌟 모든 게시판 스크롤 기능 보강 설계 */
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
@@ -258,12 +278,12 @@
           <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 backdrop-blur-sm" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative overflow-hidden">
-                <div class="absolute top-6 right-8 flex space-x-2">
-                    <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-1'))">STYLE</button>
-                    <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-1'))">EDIT</button>
+                <div class="absolute top-4 right-6 flex space-x-2">
+                    <button class="text-[8px] opacity-20" onclick="openStyleEditor(this.closest('.flex-col'))">STYLE</button>
+                    <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4">
+                <div class="custom-scroll pr-4">
                     <p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p>
                 </div>
              </div>
@@ -288,6 +308,18 @@
       closeTextEditor();
     }
 
+    const sModal = document.getElementById('style-editor-modal');
+    let sTargets = [];
+    function openStyleEditor(el) {
+      sTargets = el.classList.contains('text-target') ? [el] : Array.from(el.querySelectorAll('.text-target'));
+      sModal.classList.replace('hidden', 'flex');
+    }
+    function closeStyleEditor() { sModal.classList.replace('flex', 'hidden'); }
+
+    document.getElementById('val-color').oninput = (e) => sTargets.forEach(t => t.style.color = e.target.value);
+    document.getElementById('val-font').onchange = (e) => sTargets.forEach(t => t.style.fontFamily = e.target.value);
+    document.getElementById('val-size').oninput = (e) => sTargets.forEach(t => t.style.fontSize = e.target.value + 'px');
+
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
 
     async function saveToBrowser() {
@@ -298,17 +330,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v5', mainClone.innerHTML); await dbSet('menu_v5', menuLayout); await dbSet('txt_v5', txts); await dbSet('sty_v5', stys); await dbSet('img_v5', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v5', document.getElementById('global-bg').src);
+        await dbSet('lay_v6', mainClone.innerHTML); await dbSet('menu_v6', menuLayout); await dbSet('txt_v6', txts); await dbSet('sty_v6', stys); await dbSet('img_v6', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v6', document.getElementById('global-bg').src);
         alert("✅ 모든 게시판의 스크롤 설정이 완벽하게 저장되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v5'); if(!lay) return;
+      const lay = await dbGet('lay_v6'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v5'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v5'), stys = await dbGet('sty_v5'), imgs = await dbGet('img_v5'), bg = await dbGet('bg_v5');
+      const menuLay = await dbGet('menu_v6'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v6'), stys = await dbGet('sty_v6'), imgs = await dbGet('img_v6'), bg = await dbGet('bg_v6');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
