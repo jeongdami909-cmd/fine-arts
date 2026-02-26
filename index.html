@@ -63,9 +63,9 @@
     }
     .desc-panel .text-target { color: #C9B078 !important; font-weight: 300 !important; text-shadow: none !important; }
 
-    /* 🌟 검색 하이라이트 (삼성 노트/카톡 스타일) */
+    /* 검색 하이라이트 (삼성 노트/카톡 스타일) */
     .search-highlight {
-      background-color: rgba(255, 215, 0, 0.6); /* 골드빛 하이라이트 */
+      background-color: rgba(255, 215, 0, 0.6); 
       color: #000 !important;
       border-radius: 2px;
       text-shadow: none !important;
@@ -81,20 +81,34 @@
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
     .glass-panel { background: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; }
 
-    /* 🌟 검색창 디자인 */
+    /* 검색창 디자인 */
     #search-input {
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(58, 75, 124, 0.2);
+      border-bottom: 1px solid rgba(58, 75, 124, 0.1);
       font-size: 10px;
       letter-spacing: 0.2em;
-      padding: 4px 8px;
+      padding: 4px 0;
       color: #3A4B7C;
       font-weight: bold;
-      width: 120px;
+      width: 100px;
       transition: all 0.4s;
     }
-    #search-input:focus { outline: none; width: 180px; border-bottom: 1px solid #cfa752; }
+    #search-input:focus { outline: none; width: 140px; border-bottom: 1px solid #cfa752; }
+    
+    /* 🌟 ENTER 버튼 전용 스타일 */
+    .search-btn {
+      font-size: 9px;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      color: #3A4B7C;
+      opacity: 0.4;
+      transition: opacity 0.3s;
+      cursor: pointer;
+      border-left: 1px solid rgba(58, 75, 124, 0.1);
+      padding-left: 10px;
+    }
+    .search-btn:hover { opacity: 1; }
   </style>
 </head>
 <body>
@@ -108,9 +122,11 @@
   <header class="py-8 px-10 flex justify-between items-center">
     <div class="logo-container"><h1 class="text-[11px] tracking-[0.4em] font-bold opacity-60" style="color: #3A4B7C !important;">FINE ARTS</h1></div>
     
-    <div class="flex items-center space-x-2">
-      <span class="text-[9px] font-bold opacity-30 tracking-widest">SEARCH</span>
-      <input type="text" id="search-input" placeholder="..." oninput="performSearch()">
+    <div class="flex items-center space-x-3 pointer-events-auto">
+      <input type="text" id="search-input" placeholder="SEARCH..." 
+             oninput="if(this.value==='') performSearch()" 
+             onkeypress="if(event.key === 'Enter') performSearch()">
+      <button onclick="performSearch()" class="search-btn">ENTER</button>
     </div>
   </header>
 
@@ -130,7 +146,7 @@
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="w-full px-6">
             <div class="text-container line-clamp-folded">
-              <p class="text-[13px] leading-loose text-target opacity-80 searchable">검색 키워드를 입력하면 이곳의 텍스트도 함께 찾아집니다.</p>
+              <p class="text-[13px] leading-loose text-target opacity-80 searchable">검색 키워드를 입력하고 ENTER를 눌러보세요.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -156,7 +172,7 @@
                 <div class="absolute top-6 right-8"><button class="text-[9px] text-[#C9B078] font-bold opacity-70" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0 searchable">[작품 제목]</h4>
                 <div class="text-container line-clamp-folded">
-                  <p class="text-[13px] leading-loose text-target searchable">여기에 나라, 시대, 화가 이름을 적어두고 위 검색창에서 찾아보세요. 일치하는 단어에 색깔이 칠해집니다.</p>
+                  <p class="text-[13px] leading-loose text-target searchable">이곳에 나라나 화가 이름을 기록하고 검색해보세요.</p>
                 </div>
                 <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
              </div>
@@ -178,13 +194,13 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V48';
+    const DB_NAME = 'GalleryStoreDB_Final_V49';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
     async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
-    // 🌟 검색 및 하이라이트 핵심 로직
+    // 🌟 [수정] 검색 로직 (ENTER 버튼 및 엔터키 전용)
     function performSearch() {
         const query = document.getElementById('search-input').value.toLowerCase().trim();
         const items = document.querySelectorAll('.gallery-item');
@@ -194,17 +210,13 @@
             let itemMatch = false;
 
             searchTargets.forEach(target => {
-                // 원본 텍스트 보관 (최초 1회)
-                if (!target.hasAttribute('data-origin')) {
-                    target.setAttribute('data-origin', target.innerText);
-                }
+                if (!target.hasAttribute('data-origin')) { target.setAttribute('data-origin', target.innerText); }
                 const originalText = target.getAttribute('data-origin');
 
                 if (query === "") {
                     target.innerText = originalText;
                     itemMatch = true;
                 } else if (originalText.toLowerCase().includes(query)) {
-                    // 키워드 하이라이트 처리
                     const regex = new RegExp(`(${query})`, 'gi');
                     target.innerHTML = originalText.replace(regex, `<span class="search-highlight">$1</span>`);
                     itemMatch = true;
@@ -212,8 +224,6 @@
                     target.innerText = originalText;
                 }
             });
-
-            // 검색 결과에 따른 게시판 노출/숨김
             item.style.display = (query === "" || itemMatch) ? "block" : "none";
         });
     }
@@ -289,7 +299,7 @@
     const tArea = document.getElementById('modal-textarea');
     let tTargets = [];
     function openTextEditor(el) {
-      tTargets = Array.from(el.querySelectorAll('.text-target'));
+      tTargets = Array.from(el.querySelectorAll('.searchable'));
       if(tTargets.length === 0) tTargets = [el];
       tArea.value = tTargets.map(t => t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerText).join('\n');
       tModal.classList.remove('hidden'); tModal.classList.add('flex'); tArea.focus();
@@ -300,14 +310,14 @@
       tTargets.forEach((t, i) => { 
         const newText = (i === tTargets.length -1) ? lines.slice(i).join('\n') : (lines[i] || "");
         t.innerText = newText;
-        if(t.hasAttribute('data-origin')) t.setAttribute('data-origin', newText);
+        t.setAttribute('data-origin', newText);
       });
       performSearch(); closeTextEditor();
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v48', mainClone.innerHTML); await dbSet('txt_v48', txts); await dbSet('img_v48', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v48', document.getElementById('global-bg').src); alert("✅ 검색 및 하이라이트 기능이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v48'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v48'), imgs = await dbGet('img_v48'), bg = await dbGet('bg_v48'); document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v49', mainClone.innerHTML); await dbSet('txt_v49', txts); await dbSet('img_v49', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v49', document.getElementById('global-bg').src); alert("✅ [ENTER] 버튼 및 검색 기능이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v49'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v49'), imgs = await dbGet('img_v49'), bg = await dbGet('bg_v49'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
