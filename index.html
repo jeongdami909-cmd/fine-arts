@@ -57,24 +57,22 @@
       word-break: break-word;
     }
 
-    /* 🌟🌟🌟 NEW: 특별한 필기체 타이틀 스타일 🌟🌟🌟 */
-    .intro-title-special {
+    /* 🌟🌟🌟 게시판 첫 제목: 필기체 + 주홍빛 + 은빛 (강제 적용) 🌟🌟🌟 */
+    #intro-main-title {
         font-family: 'Whisper', cursive !important;
-        /* 부드러운 코랄 주홍빛 */
-        color: #EE8A6E !important; 
-        /* 은은한 은빛 광택 및 깊이감 */
-        text-shadow: 0 0 2px rgba(255,255,255,0.3), 2px 2px 5px rgba(160, 170, 180, 0.4) !important;
-        font-size: 2.8rem !important;
-        font-weight: 500;
-        letter-spacing: 0.05em;
-        line-height: 1.2;
+        color: #FF7F50 !important; /* 은은한 주홍 코랄 */
+        /* 은빛 광택 효과 (여러 겹의 그림자로 은은한 금속 느낌) */
+        text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 2px 2px 4px rgba(192,192,192,0.5) !important;
+        font-size: 3.2rem !important;
+        font-weight: 400 !important;
+        line-height: 1.1 !important;
+        display: block !important;
     }
 
     .main-wrapper { margin-top: 65vh; }
 
     .gallery-item { background: transparent !important; box-shadow: none !important; }
     
-    /* 🌟 그림 잘림 방지 */
     .art-frame { 
       background: rgba(255,255,255,0.05) !important; 
       border: 1px solid rgba(255,255,255,0.1); 
@@ -103,7 +101,6 @@
     .slide-panel { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
 
-    .draggable { cursor: grab; }
     .diary-modal-bg { background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); }
   </style>
 </head>
@@ -140,12 +137,12 @@
         <div class="p-6 space-y-6 custom-scroll max-h-[60vh] overflow-y-auto" id="menu-list">
           <div class="space-y-3">
             <div class="flex justify-between items-center group">
-              <a href="javascript:void(0)" class="text-xs font-bold text-target opacity-80">[상위 카테고리 1]</a>
+              <a href="javascript:void(0)" class="text-xs font-bold text-target opacity-80">[상위 카테고리]</a>
               <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
             </div>
             <div class="pl-4 space-y-2 border-l border-white/10">
               <div class="flex justify-between items-center group">
-                <a href="javascript:void(0)" class="text-[11px] text-target opacity-60 hover:opacity-100 transition-all">- [하위 메뉴 1]</a>
+                <a href="javascript:void(0)" class="text-[11px] text-target opacity-60 hover:opacity-100 transition-all">- [하위 메뉴]</a>
                 <button class="text-[8px] opacity-0 group-hover:opacity-30 transition-opacity" onclick="openTextEditor(this.previousElementSibling)">EDIT</button>
               </div>
             </div>
@@ -161,7 +158,7 @@
         <div class="absolute top-6 right-8 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity">
           <button class="text-[9px] opacity-30" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
         </div>
-        <h2 class="mb-8 text-target leading-relaxed intro-title-special">[소개글 타이틀]</h2>
+        <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
         <div class="max-h-[250px] overflow-y-auto custom-scroll w-full px-6">
             <p class="text-[13px] leading-loose text-target opacity-60">여기에 긴 안내글을 작성하세요.</p>
@@ -185,9 +182,7 @@
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-1'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요.</p>
-                </div>
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4"><p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p></div>
              </div>
           </div>
         </div>
@@ -206,27 +201,9 @@
     </div>
   </div>
 
-  <div id="style-editor-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center diary-modal-bg px-6">
-    <div id="style-bottom-sheet" class="bg-white/90 backdrop-blur-3xl w-full max-w-sm p-10 rounded-[3rem] shadow-2xl">
-      <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">STYLE SETTINGS</h3>
-      <div class="space-y-8">
-        <div class="flex justify-between items-center"><label class="text-[10px] opacity-50 font-bold">COLOR</label><input type="color" id="val-color" class="w-8 h-8 border-none bg-transparent"></div>
-        <div class="flex flex-col gap-3"><label class="text-[10px] opacity-50 font-bold">FONT</label>
-          <select id="val-font" class="text-xs p-0 bg-transparent border-none focus:ring-0">
-            <option value="'Noto Serif KR', serif">Noto Serif</option>
-            <option value="'Gowun Dodum', sans-serif">Gowun Dodum</option>
-            <option value="'Whisper', cursive">Handwriting</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-3"><label class="text-[10px] opacity-50 font-bold">SIZE</label><input type="range" id="val-size" min="10" max="40" class="accent-black/10"></div>
-      </div>
-      <button class="w-full mt-12 text-xs font-bold tracking-widest py-4 border-t border-black/5" onclick="closeStyleEditor()">DONE</button>
-    </div>
-  </div>
-
   <script>
-    /* 🌟 IndexedDB 저장 로직 (유지) */
-    const DB_NAME = 'GalleryStoreDB_Final';
+    /* 🌟 IndexedDB 창고 로직 (유지) */
+    const DB_NAME = 'GalleryStoreDB_Final_V2';
     const STORE_NAME = 'GalleryAssets';
     function openDB() {
       return new Promise((res, rej) => {
@@ -249,7 +226,7 @@
       });
     }
 
-    /* ---------------- 디자인 로직 ---------------- */
+    /* ---------------- 디자인 및 기능 로직 ---------------- */
     document.getElementById('menu-toggle').onclick = (e) => {
         e.stopPropagation();
         document.getElementById('dropdown-menu').classList.toggle('hidden');
@@ -336,18 +313,6 @@
       closeTextEditor();
     }
 
-    const sModal = document.getElementById('style-editor-modal');
-    let sTargets = [];
-    function openStyleEditor(el) {
-      sTargets = el.classList.contains('text-target') ? [el] : Array.from(el.querySelectorAll('.text-target'));
-      sModal.classList.replace('hidden', 'flex');
-    }
-    function closeStyleEditor() { sModal.classList.replace('flex', 'hidden'); }
-
-    document.getElementById('val-color').oninput = (e) => sTargets.forEach(t => t.style.color = e.target.value);
-    document.getElementById('val-font').onchange = (e) => sTargets.forEach(t => t.style.fontFamily = e.target.value);
-    document.getElementById('val-size').oninput = (e) => sTargets.forEach(t => t.style.fontSize = e.target.value + 'px');
-
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
 
     async function saveToBrowser() {
@@ -359,40 +324,30 @@
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
         
-        await dbSet('lay_data', mainClone.innerHTML);
-        await dbSet('menu_lay', menuLayout);
-        await dbSet('txt_data', txts);
-        await dbSet('sty_data', stys);
-        await dbSet('img_data', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_data', document.getElementById('global-bg').src);
+        await dbSet('lay_data_v2', mainClone.innerHTML);
+        await dbSet('menu_lay_v2', menuLayout);
+        await dbSet('txt_data_v2', txts);
+        await dbSet('sty_data_v2', stys);
+        await dbSet('img_data_v2', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_data_v2', document.getElementById('global-bg').src);
         
         alert("✅ 저장 완료.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_data');
+      const lay = await dbGet('lay_data_v2');
       if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_lay');
+      const menuLay = await dbGet('menu_lay_v2');
       if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_data'), stys = await dbGet('sty_data'), imgs = await dbGet('img_data'), bg = await dbGet('bg_data');
+      const txts = await dbGet('txt_data_v2'), stys = await dbGet('sty_data_v2'), imgs = await dbGet('img_data_v2'), bg = await dbGet('bg_data_v2');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
     }
 
     window.onload = loadFromBrowser;
-
-    function makeDraggable(elmnt) {
-      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      elmnt.onmousedown = dragMouseDown; elmnt.ontouchstart = dragTouchStart; 
-      function dragMouseDown(e) { if(e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') return; e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
-      function dragTouchStart(e) { if(e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') return; var touch = e.touches[0]; pos3 = touch.clientX; pos4 = touch.clientY; document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag; }
-      function elementDrag(e) { e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
-      function elementTouchDrag(e) { var touch = e.touches[0]; pos1 = pos3 - touch.clientX; pos2 = pos4 - touch.clientY; pos3 = touch.clientX; pos4 = touch.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; }
-      function closeDragElement() { document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null; }
-    }
   </script>
 </body>
 </html>
