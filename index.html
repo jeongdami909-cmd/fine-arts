@@ -23,16 +23,32 @@
   </script>
   
   <style data-purpose="custom-styles">
-    /* 🌟 스크롤 부드럽게 적용 */
-    html { scroll-behavior: smooth; }
-    html, body { height: auto !important; min-height: 100%; background-color: #d0e4e0; margin: 0; padding: 0; }
-    body { font-family: 'Noto Serif KR', serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    /* 🌟 [GPT/클로드 해결: 5457, 5469] 모바일 스크롤 영역 인식 오류 해결 */
+    html, body {
+      height: 100% !important;
+      min-height: 100% !important;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      background-color: #d0e4e0;
+      margin: 0; padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Serif KR', serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 150vh; 
+    }
+
+    /* 🌟 [GPT 해결: 5469] margin-top 방식으로 스크롤 영역 확보 */
+    .main-wrapper {
+      margin-top: 65vh !important;
+      position: relative;
+      z-index: 10;
+      display: block !important;
+    }
 
     header { z-index: 99999 !important; position: fixed; top: 0; left: 0; right: 0; background: transparent; }
 
-    .main-wrapper { padding-top: 65vh; position: relative; z-index: 10; }
-
-    /* 버튼 디자인 유지 */
     .minimal-btn {
       width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
       border-radius: 999px; font-size: 0.75rem; color: rgba(26, 65, 66, 0.4);
@@ -44,21 +60,29 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 주홍빛 + 은빛 제목 */
+    /* 🌟 [핵심] 주홍빛 + 은빛 필기체 타이틀 디자인 */
     #intro-main-title {
-        font-family: 'Whisper', cursive !important; color: #FF7F50 !important; 
-        text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 0px 0px 8px rgba(192,192,192,0.4) !important;
-        font-size: 3.2rem !important; line-height: 1.1; display: block;
+        font-family: 'Whisper', cursive !important;
+        color: #FF7F50 !important; 
+        text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 0px 0px 10px rgba(192,192,192,0.4) !important;
+        font-size: 3.5rem !important; line-height: 1.1; display: block;
+        transition: all 0.3s ease;
+    }
+
+    /* 상단 헤더 타이틀 스타일 (연동 대상) */
+    #header-title {
+        font-size: 11px; tracking: 0.4em; font-weight: bold; opacity: 0.6; color: #3A4B7C !important;
+        text-transform: uppercase;
     }
 
     /* 본문 스타일 */
     .text-target {
       color: #3A4B7C !important; font-weight: 100 !important;
-      text-shadow: 0.5px 0.5px 0px rgba(212, 175, 55, 0.2) !important;
+      text-shadow: 0.5px 0.5px 0px rgba(212, 175, 55, 0.1) !important;
       letter-spacing: 0.05em; white-space: pre-wrap; word-break: break-word; font-size: 13px !important;
     }
 
-    /* 까만 설명판 */
+    /* 까만 설명판 덮개 */
     .desc-panel {
       background: rgba(15, 15, 20, 0.95) !important; backdrop-filter: blur(20px) !important;
       display: flex; flex-direction: column; height: auto !important; min-height: 100%;
@@ -66,22 +90,14 @@
     .desc-panel .text-target { color: #C9B078 !important; font-weight: 300 !important; text-shadow: none !important; }
 
     /* 검색 하이라이트 */
-    .search-highlight {
-      background-color: rgba(255, 215, 0, 0.6); 
-      color: #000 !important;
-      border-radius: 2px;
-      text-shadow: none !important;
-    }
+    .search-highlight { background-color: rgba(255, 215, 0, 0.6); color: #000 !important; border-radius: 2px; }
 
-    /* 자세히 보기 */
+    /* 자세히 보기 로직 */
     .line-clamp-folded { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .view-more-btn { color: #C9B078; font-size: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; text-decoration: underline; opacity: 0.7; }
 
-    /* 카드 레이아웃 및 🌟 스크롤 시 위치 보정 */
-    .gallery-item { 
-      transition: all 0.5s ease; min-height: 450px; height: 450px; overflow: hidden; 
-      scroll-margin-top: 120px; /* 스크롤 시 상단 헤더에 가려지지 않게 여백 추가 */
-    }
+    /* 카드 레이아웃 */
+    .gallery-item { transition: all 0.5s ease; min-height: 450px; height: 450px; overflow: hidden; scroll-margin-top: 120px; }
     .slide-panel { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; position: absolute; top:0; right:0; width:100%; }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
     .glass-panel { background: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; }
@@ -89,16 +105,9 @@
     /* 검색창 디자인 */
     #search-input {
       background: transparent; border: none; border-bottom: 1px solid rgba(58, 75, 124, 0.1);
-      font-size: 10px; letter-spacing: 0.2em; padding: 4px 0; color: #3A4B7C; font-weight: bold;
-      width: 100px; transition: all 0.4s;
+      font-size: 10px; letter-spacing: 0.2em; padding: 4px 0; color: #3A4B7C; font-weight: bold; width: 100px;
     }
-    #search-input:focus { outline: none; width: 140px; border-bottom: 1px solid #cfa752; }
-    
-    .search-btn {
-      font-size: 9px; font-weight: bold; letter-spacing: 0.1em; color: #3A4B7C;
-      opacity: 0.4; transition: opacity 0.3s; cursor: pointer; border-left: 1px solid rgba(58, 75, 124, 0.1); padding-left: 10px;
-    }
-    .search-btn:hover { opacity: 1; }
+    .search-btn { font-size: 9px; font-weight: bold; color: #3A4B7C; opacity: 0.4; cursor: pointer; padding-left: 10px; }
   </style>
 </head>
 <body>
@@ -110,7 +119,9 @@
   </div>
 
   <header class="py-8 px-10 flex justify-between items-center">
-    <div class="logo-container"><h1 class="text-[11px] tracking-[0.4em] font-bold opacity-60" style="color: #3A4B7C !important;">FINE ARTS</h1></div>
+    <div class="logo-container">
+        <h1 id="header-title">FINE ARTS</h1>
+    </div>
     
     <div class="flex items-center space-x-3 pointer-events-auto">
       <input type="text" id="search-input" placeholder="SEARCH..." 
@@ -128,15 +139,15 @@
     </div>
 
     <section class="mb-24">
-      <div class="glass-panel rounded-[2.5rem] p-12 relative flex flex-col items-center text-center mx-auto max-w-lg group" id="main-desc-box">
-        <div class="absolute top-6 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="text-[9px] opacity-40 hover:opacity-100 font-bold" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
+      <div class="glass-panel rounded-[3rem] p-16 relative flex flex-col items-center text-center mx-auto max-w-xl group" id="main-desc-box">
+        <div class="absolute top-8 right-10 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="text-[10px] opacity-40 hover:opacity-100 font-bold tracking-tighter" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
         </div>
-        <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[메인 타이틀]</h2>
-        <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
-        <div class="w-full px-6">
+        <h2 id="intro-main-title" class="mb-10 text-target searchable" data-origin="FINE ARTS">FINE ARTS</h2>
+        <div class="w-12 h-[1px] bg-black/5 mb-12"></div>
+        <div class="w-full px-4">
             <div class="text-container line-clamp-folded">
-              <p class="text-[13px] leading-loose text-target opacity-80 searchable">검색 키워드를 입력하고 ENTER를 누르면 해당 위치로 이동합니다.</p>
+              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">이곳의 제목을 수정하면 상단 헤더 타이틀도 함께 바뀝니다. 필기체와 주홍빛 디자인이 적용되었습니다.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -149,20 +160,16 @@
           <div class="absolute inset-0 bg-white/5 flex items-center justify-center rounded-[2rem] overflow-hidden">
             <img id="art-1" src="" class="art-image opacity-0 transition-opacity">
           </div>
-          <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all flex flex-col space-y-2">
-             <div class="flex space-x-3">
-                <button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
-                <button class="text-[9px] font-bold tracking-widest opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
-             </div>
+          <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all">
+             <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
+             <button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
           </div>
           <div class="slide-panel absolute inset-0 w-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 rounded-l-[2rem]" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
              <div class="flex-1 px-10 py-12 flex flex-col desc-panel relative rounded-r-[2rem]">
                 <div class="absolute top-6 right-8"><button class="text-[9px] text-[#C9B078] font-bold opacity-70" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0 searchable">[작품 제목]</h4>
-                <div class="text-container line-clamp-folded">
-                  <p class="text-[13px] leading-loose text-target searchable">나라, 이름 등을 검색하면 이곳으로 화면이 자동 이동합니다.</p>
-                </div>
+                <div class="text-container line-clamp-folded"><p class="text-[13px] leading-loose text-target searchable">내용을 입력하세요.</p></div>
                 <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
              </div>
           </div>
@@ -183,53 +190,41 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V50';
+    const DB_NAME = 'GalleryStoreDB_Final_V51';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
     async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
-    // 🌟 [수정] 검색 결과로 자동 스크롤 기능 통합
+    // 🌟 [기능] 상단 헤더와 소개글 제목 동기화 로직
+    function syncTitles() {
+        const introTitle = document.getElementById('intro-main-title').innerText;
+        document.getElementById('header-title').innerText = introTitle;
+    }
+
     function performSearch(shouldScroll = false) {
         const query = document.getElementById('search-input').value.toLowerCase().trim();
         const items = document.querySelectorAll('.gallery-item');
         let firstMatch = null;
-        
         items.forEach(item => {
             const searchTargets = item.querySelectorAll('.searchable');
             let itemMatch = false;
-
             searchTargets.forEach(target => {
                 if (!target.hasAttribute('data-origin')) { target.setAttribute('data-origin', target.innerText); }
                 const originalText = target.getAttribute('data-origin');
-
-                if (query === "") {
-                    target.innerText = originalText;
-                    itemMatch = true;
-                } else if (originalText.toLowerCase().includes(query)) {
+                if (query === "") { target.innerText = originalText; itemMatch = true; }
+                else if (originalText.toLowerCase().includes(query)) {
                     const regex = new RegExp(`(${query})`, 'gi');
                     target.innerHTML = originalText.replace(regex, `<span class="search-highlight">$1</span>`);
                     itemMatch = true;
-                } else {
-                    target.innerText = originalText;
-                }
+                } else { target.innerText = originalText; }
             });
-
-            if (query !== "" && itemMatch) {
-                item.style.display = "block";
-                if (!firstMatch) firstMatch = item; // 첫 번째 일치 항목 저장
-            } else {
-                item.style.display = query === "" ? "block" : "none";
-            }
+            if (query !== "" && itemMatch) { item.style.display = "block"; if (!firstMatch) firstMatch = item; }
+            else { item.style.display = query === "" ? "block" : "none"; }
         });
-
-        // 🌟 [추가] 엔터 시 첫 번째 결과로 부드럽게 이동
-        if (shouldScroll && firstMatch) {
-            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (shouldScroll && firstMatch) { firstMatch.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     }
 
-    // 자세히 보기 토글
     function toggleViewMore(btn) {
         const container = btn.previousElementSibling;
         const item = btn.closest('.gallery-item') || btn.closest('.glass-panel');
@@ -313,12 +308,13 @@
         t.innerText = newText;
         t.setAttribute('data-origin', newText);
       });
+      syncTitles(); // 🌟 수정 후 상단 타이틀 즉시 동기화
       performSearch(false); closeTextEditor();
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v50', mainClone.innerHTML); await dbSet('txt_v50', txts); await dbSet('img_v50', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v50', document.getElementById('global-bg').src); alert("✅ 자동 스크롤 기능이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v50'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v50'), imgs = await dbGet('img_v50'), bg = await dbGet('bg_v50'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v51', mainClone.innerHTML); await dbSet('txt_v51', txts); await dbSet('img_v51', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v51', document.getElementById('global-bg').src); alert("✅ 타이틀 연동 및 필기체 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v51'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v51'), imgs = await dbGet('img_v51'), bg = await dbGet('bg_v51'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
