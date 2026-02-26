@@ -23,13 +23,10 @@
   </script>
   
   <style data-purpose="custom-styles">
-    /* 🌟 모바일 페이지 높이 및 스크롤 영역 강제 인식 */
     html, body {
       height: auto !important;
-      min-height: 100% !important;
-      overflow-y: auto !important;
+      min-height: 100%;
       background-color: #d0e4e0;
-      margin: 0; padding: 0;
     }
 
     body {
@@ -38,20 +35,17 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 메뉴 버튼 클릭 절대 보장 레이어 */
+    /* 🌟 메뉴 클릭 보장 레이어 */
     header { z-index: 99999 !important; position: fixed; top: 0; left: 0; right: 0; }
-    #dropdown-menu { z-index: 100000 !important; pointer-events: auto !important; }
-    .diary-modal-bg { z-index: 200000 !important; }
+    #dropdown-menu { z-index: 100000 !important; }
 
-    /* 🌟 스크롤 영역 확보를 위한 margin-top */
     .main-wrapper {
-      margin-top: 65vh !important;
+      padding-top: 65vh;
       position: relative;
       z-index: 10;
-      display: block !important;
     }
 
-    /* 상단 버튼 디자인 유지 */
+    /* 버튼 디자인 유지 */
     .minimal-btn {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -65,7 +59,7 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 디자인 보존: 제목 주홍빛 + 은빛 광채 */
+    /* 주홍빛 + 은빛 제목 (보존) */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important; 
@@ -73,43 +67,45 @@
         font-size: 3.2rem !important; line-height: 1.1; display: block;
     }
 
-    /* 디자인 보존: 얇은 인디고 본문 + 골드 테두리 */
+    /* 얇은 인디고 본문 (보존) */
     .text-target {
       color: #3A4B7C !important; font-weight: 100 !important;
       text-shadow: 0.5px 0.5px 0px rgba(212, 175, 55, 0.2) !important;
       letter-spacing: 0.05em; white-space: pre-wrap; word-break: break-word;
-      font-size: 13px !important; /* 모든 본문 13px 통일 */
+      font-size: 13px !important;
     }
 
-    /* 디자인 보존: 작품 설명판 불투명 어두운 덮개 */
+    /* 불투명 덮개 배경 (보존) */
     .desc-panel {
       background: rgba(15, 15, 20, 0.95) !important;
       backdrop-filter: blur(20px) !important;
       display: flex; flex-direction: column;
-      height: 100% !important; min-height: 0 !important;
+      min-height: 100%;
     }
     .desc-panel .text-target {
-        color: #C9B078 !important; /* 앤티크 골드 */
+        color: #C9B078 !important; /* 골드 */
         font-weight: 300 !important; text-shadow: none !important;
     }
 
-    /* 🌟 [핵심해결] 모든 게시판 스크롤 엔진 강제화 🌟 */
-    .scroll-engine {
-        overflow-y: auto !important; 
-        -webkit-overflow-scrolling: touch !important;
-        flex: 1 1 auto !important;
-        min-height: 0 !important;
-        max-height: 280px !important; /* 모든 게시판의 높이 한계 통일 */
+    /* 🌟 [결정적 변화] 스크롤 대신 길이를 늘리는 엔진 🌟 */
+    .content-area {
+        overflow: visible !important; 
+        height: auto !important; 
+        min-height: 100px;
     }
 
-    #main-desc-box .scroll-engine { max-height: 250px !important; }
-
-    .custom-scroll::-webkit-scrollbar { width: 2px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(201, 176, 120, 0.2); }
-
     .glass-panel { background: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; }
-    .slide-panel { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); min-height: 0 !important; }
-    .gallery-item { overflow: visible !important; } 
+
+    /* 슬라이드 패널이 열리면 게시판 전체 높이가 내용만큼 늘어납니다 */
+    .slide-panel { 
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+    }
+    .gallery-item { 
+        transition: min-height 0.6s; 
+        min-height: 450px; 
+        height: auto !important; /* 자동 확장 허용 */
+    }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
     .category-tag { font-size: 8px; color: #cfa752; opacity: 0.6; margin-top: 4px; }
   </style>
@@ -132,15 +128,14 @@
         <div class="w-4 h-[1px] bg-current"></div>
       </button>
       <div id="dropdown-menu" class="hidden absolute right-0 mt-6 w-72 bg-white/95 backdrop-blur-2xl border border-black/5 shadow-2xl rounded-2xl overflow-hidden">
-        <div class="p-6 bg-black/5 text-[9px] font-bold tracking-[0.2em] opacity-40 border-b">DIRECTORY</div>
-        <div id="menu-list" class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+        <div id="menu-list" class="p-6 space-y-6">
           <button onclick="filterCategory('all')" class="text-xs font-bold text-gray-800 text-left w-full">ALL WORKS</button>
         </div>
       </div>
     </div>
   </header>
 
-  <main class="px-6 md:px-12 max-w-6xl mx-auto main-wrapper min-h-screen block" id="main-content">
+  <main class="px-6 md:px-12 max-w-6xl mx-auto main-wrapper" id="main-content">
     <div class="fixed top-20 right-4 md:right-8 z-[100] flex flex-col items-end space-y-3">
       <button class="minimal-btn" onclick="addNewBoard()"><span>작품 추가</span></button>
       <button class="minimal-btn" onclick="triggerFileUpload('global-bg')"><span>배경 설정</span></button>
@@ -154,33 +149,33 @@
         </div>
         <h2 id="intro-main-title" class="mb-8 text-target leading-relaxed">[소개글 타이틀]</h2>
         <div class="w-8 h-[1px] bg-black/10 mb-10"></div>
-        <div class="scroll-engine w-full px-6">
-            <p class="text-[13px] leading-loose text-target opacity-80">메인 홍보 게시판입니다. 이제 스크롤이 시원하게 작동합니다.</p>
+        <div class="content-area w-full px-6">
+            <p class="text-[13px] leading-loose text-target opacity-80">여기에 안내글을 작성하세요. 이제 스크롤 대신 카드가 아래로 늘어납니다.</p>
         </div>
       </div>
     </section>
 
     <section class="pb-40">
-      <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        <div class="relative w-full h-[450px] gallery-item group" data-category="all">
-          <div class="absolute inset-0 rounded-[2rem] overflow-hidden bg-white/5 flex items-center justify-center">
+      <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
+        <div class="relative w-full gallery-item group rounded-[2rem] overflow-hidden" data-category="all">
+          <div class="absolute inset-0 bg-white/5 flex items-center justify-center">
             <img id="art-1" src="" class="art-image opacity-0 transition-opacity">
           </div>
-          <div class="absolute top-6 left-6 z-20 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all">
+          <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all">
              <div class="flex space-x-3">
                 <button class="text-[9px] font-bold tracking-widest opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
                 <button class="text-[9px] font-bold tracking-widest opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button>
              </div>
           </div>
-          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide overflow-hidden rounded-[2rem]">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
-             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative min-h-0">
-                <div class="absolute top-4 right-6 flex space-x-2">
+             <div class="flex-1 px-10 py-12 flex flex-col desc-panel relative">
+                <div class="absolute top-4 right-6">
                     <button class="text-[8px] opacity-20 hover:opacity-100" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="scroll-engine pr-4">
-                  <p class="text-[13px] leading-loose text-target">이 구조가 모든 게시판에 동일하게 적용됩니다. 이제 세 번째, 네 번째 게시판도 완벽하게 스크롤됩니다.</p>
+                <div class="content-area">
+                  <p class="text-[13px] leading-loose text-target">이제 스크롤 걱정 없이 글을 길게 쓰셔도 됩니다. 내용에 맞춰 카드가 아래로 시원하게 늘어납니다.</p>
                 </div>
              </div>
           </div>
@@ -192,7 +187,7 @@
   <div id="text-editor-modal" class="fixed inset-0 hidden items-center justify-center diary-modal-bg px-6">
     <div class="bg-white w-full max-w-md p-10 rounded-[3rem] shadow-2xl pointer-events-auto">
       <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">EDIT CONTENT</h3>
-      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black" placeholder="내용을 입력하세요..."></textarea>
+      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black"></textarea>
       <div class="flex justify-end space-x-6 mt-10">
         <button class="text-xs opacity-30" onclick="closeTextEditor()">CANCEL</button>
         <button class="text-xs font-bold text-galleryGold" onclick="saveTextChanges()">APPLY</button>
@@ -201,7 +196,7 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V43';
+    const DB_NAME = 'GalleryStoreDB_Final_V44';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
@@ -211,17 +206,27 @@
     const dropdownMenu = document.getElementById('dropdown-menu');
     menuToggle.onclick = (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); };
     document.onclick = () => dropdownMenu.classList.add('hidden');
-    dropdownMenu.onclick = (e) => e.stopPropagation();
 
     function filterCategory(cat) {
         document.querySelectorAll('.gallery-item').forEach(item => {
             const itemCat = item.getAttribute('data-category') || 'all';
             item.style.display = (cat === 'all' || itemCat === cat) ? 'block' : 'none';
         });
-        dropdownMenu.classList.add('hidden');
     }
 
-    function toggleSlide(handle) { handle.closest('.slide-panel').classList.toggle('slide-hide'); }
+    function toggleSlide(handle) {
+        const item = handle.closest('.gallery-item');
+        const panel = handle.closest('.slide-panel');
+        panel.classList.toggle('slide-hide');
+        
+        // 🌟 [핵심] 열릴 때 카드 높이를 내용에 맞게 조정
+        if (!panel.classList.contains('slide-hide')) {
+            item.style.height = 'auto';
+            item.style.minHeight = '450px';
+        } else {
+            item.style.height = '450px';
+        }
+    }
 
     const fileInput = document.getElementById('hidden-file-input');
     let currentImgId = null;
@@ -245,23 +250,22 @@
       reader.readAsDataURL(file);
     };
 
-    /* 🌟 [수정] 새로 추가되는 모든 게시판도 100% 동일한 스크롤 엔진 장착 */
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
       const html = `
-        <div class="relative w-full h-[450px] gallery-item group" data-category="all" style="overflow: visible !important;">
-          <div class="absolute inset-0 rounded-[2rem] overflow-hidden bg-white/5 flex items-center justify-center"><img id="${id}" src="" class="art-image opacity-0 transition-opacity"></div>
-          <div class="absolute top-6 left-6 z-20 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all">
+        <div class="relative w-full gallery-item group rounded-[2rem] overflow-hidden" data-category="all" style="min-height: 450px;">
+          <div class="absolute inset-0 bg-white/5 flex items-center justify-center"><img id="${id}" src="" class="art-image opacity-0 transition-opacity"></div>
+          <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all">
              <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40 hover:opacity-100" onclick="triggerFileUpload('${id}')">PHOTO</button>
              <button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
           </div>
-          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide overflow-hidden rounded-[2rem]">
+          <div class="slide-panel absolute inset-0 w-full h-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
-             <div class="flex-1 h-full px-10 py-12 flex flex-col desc-panel relative min-h-0">
-                <div class="absolute top-4 right-6 flex space-x-2"><button class="text-[8px] opacity-20 hover:opacity-100" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
+             <div class="flex-1 px-10 py-12 flex flex-col desc-panel relative">
+                <div class="absolute top-4 right-6"><button class="text-[8px] opacity-20 hover:opacity-100" onclick="openTextEditor(this.closest('.flex-col'))">EDIT</button></div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="scroll-engine pr-4"><p class="text-[13px] leading-loose text-target">내용 입력</p></div>
+                <div class="content-area"><p class="text-[13px] leading-loose text-target">내용 입력</p></div>
              </div>
           </div>
         </div>`;
@@ -286,8 +290,8 @@
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v43', mainClone.innerHTML); await dbSet('txt_v43', txts); await dbSet('img_v43', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v43', document.getElementById('global-bg').src); alert("✅ 스크롤 요건이 통일되어 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v43'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v43'), imgs = await dbGet('img_v43'), bg = await dbGet('bg_v43'); document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v44', mainClone.innerHTML); await dbSet('txt_v44', txts); await dbSet('img_v44', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v44', document.getElementById('global-bg').src); alert("✅ 자동 확장 게시판 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v44'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v44'), imgs = await dbGet('img_v44'), bg = await dbGet('bg_v44'); document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; }); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
