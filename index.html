@@ -36,10 +36,10 @@
     #gallery-section { scroll-margin-top: 120px; }
     ::-webkit-scrollbar { width: 0px; }
 
-    /* 🌟 글 늘여서 자세히 보기 (에러 방지용 절대 속성) */
+    /* 🌟 글 늘여서 자세히 보기 */
     .collapsed-text {
       display: -webkit-box !important;
-      -webkit-line-clamp: 3; /* 평소 3줄 */
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
       max-height: 6em;
@@ -48,7 +48,7 @@
     .expanded-text {
       display: block !important;
       overflow: visible !important;
-      max-height: none !important; /* 높이 제한 해제 */
+      max-height: none !important;
     }
     
     .intro-handwriting { font-family: 'Whisper', cursive; color: #FF6347; font-size: 1.5rem; opacity: 0.7; }
@@ -57,20 +57,26 @@
     /* 첫 소개칸 투명 */
     .intro-panel { background: transparent !important; border: none !important; }
 
-    /* 작품 설명창 (반투명 및 내부 스크롤 강화) */
+    /* 🌟 작품 설명창 (은은한 반투명 유리창 느낌 강화) */
     .glass-panel-light {
-      background: rgba(255, 255, 255, 0.95) !important;
-      backdrop-filter: blur(25px) !important;
-      border-left: 0.5px solid rgba(255, 255, 255, 0.5) !important;
+      /* 투명도를 높여 배경이 은은하게 비치게 (0.95 -> 0.5) */
+      background: rgba(255, 255, 255, 0.5) !important;
+      /* 블러를 강화하여 더 은은하고 부드럽게 (25px -> 35px) */
+      backdrop-filter: blur(35px) !important;
+      /* 유리 단면의 빛 반사 느낌 */
+      border-left: 1px solid rgba(255, 255, 255, 0.4) !important;
+      border-top: 0.5px solid rgba(255, 255, 255, 0.3) !important;
+      /* 입체감을 위한 은은한 그림자 */
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1) !important;
     }
 
-    /* 🌟 버튼: 클릭 인식률 상향 및 겹침 방지 */
+    /* 🌟 버튼 */
     .mini-icon-btn {
       font-size: 14px; width: 36px; height: 36px;
       background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.8);
       color: #1a4142; cursor: pointer; opacity: 0.7; transition: all 0.2s;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; z-index: 150; /* 최상단 레이어 */
+      border-radius: 50%; z-index: 150;
     }
     .mini-icon-btn:hover { opacity: 1; background: white; border-color: #cfa752; }
 
@@ -91,7 +97,6 @@
     .draggable:active { cursor: grabbing; }
     .diary-modal-bg { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(12px); }
 
-    /* 🌟 부드러운 내부 스크롤바 */
     .custom-scroll::-webkit-scrollbar { width: 3px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
   </style>
@@ -235,7 +240,6 @@
 
     function toggleSlide(handle) { handle.closest('.slide-panel').classList.toggle('slide-hide'); }
 
-    // 🌟 글 늘이기/줄이기 (높이 제한 해제 로직)
     function toggleExpand(btn) {
       const p = btn.closest('div').querySelector('p.text-target');
       if (!p) return;
@@ -346,27 +350,27 @@
       try {
         const gridClone = document.getElementById('gallery-grid').cloneNode(true);
         gridClone.querySelectorAll('img').forEach(img => img.src = ""); 
-        localStorage.setItem('gallery_grid_final_v14', gridClone.innerHTML);
+        localStorage.setItem('gallery_grid_final_v15', gridClone.innerHTML);
         const textMap={}; const styleMap={};
         document.querySelectorAll('.text-target').forEach((el, i) => { textMap[i]=el.innerHTML; styleMap[i]=el.getAttribute('style')||''; });
-        localStorage.setItem('gallery_texts_final_v14', JSON.stringify(textMap));
-        localStorage.setItem('gallery_styles_final_v14', JSON.stringify(styleMap));
+        localStorage.setItem('gallery_texts_final_v15', JSON.stringify(textMap));
+        localStorage.setItem('gallery_styles_final_v15', JSON.stringify(styleMap));
         const imgMap={}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgMap[img.id]=img.src; });
-        localStorage.setItem('gallery_images_final_v14', JSON.stringify(imgMap));
-        localStorage.setItem('gallery_bg_final_v14', document.getElementById('global-bg').src);
+        localStorage.setItem('gallery_images_final_v15', JSON.stringify(imgMap));
+        localStorage.setItem('gallery_bg_final_v15', document.getElementById('global-bg').src);
         alert("✅ SITE LOCKED.");
       } catch(e) { alert("ERROR: MEMORY FULL."); }
     }
 
     function loadFromBrowser() {
-      const layout = localStorage.getItem('gallery_grid_final_v14');
+      const layout = localStorage.getItem('gallery_grid_final_v15');
       if (layout) document.getElementById('gallery-grid').innerHTML = layout;
-      const texts = JSON.parse(localStorage.getItem('gallery_texts_final_v14'));
-      const styles = JSON.parse(localStorage.getItem('gallery_styles_final_v14'));
+      const texts = JSON.parse(localStorage.getItem('gallery_texts_final_v15'));
+      const styles = JSON.parse(localStorage.getItem('gallery_styles_final_v15'));
       if (texts) document.querySelectorAll('.text-target').forEach((el, i) => { if(texts[i]) el.innerHTML=texts[i]; if(styles[i]) el.setAttribute('style', styles[i]); });
-      const imgs = JSON.parse(localStorage.getItem('gallery_images_final_v14'));
+      const imgs = JSON.parse(localStorage.getItem('gallery_images_final_v15'));
       if (imgs) Object.keys(imgs).forEach(id => { const img=document.getElementById(id); if(img) img.src=imgs[id]; });
-      const bg = localStorage.getItem('gallery_bg_final_v14');
+      const bg = localStorage.getItem('gallery_bg_final_v15');
       if (bg && bg.startsWith('data:image')) {
         document.body.style.backgroundImage = `url('${bg}')`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed';
         document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block';
