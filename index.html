@@ -57,7 +57,7 @@
       word-break: break-word;
     }
 
-    /* 🌟 메인 제목 스타일 유지 */
+    /* 🌟 주홍빛 은빛 필기체 제목 스타일 유지 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important;
@@ -91,8 +91,12 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* 🌟 스크롤바 디자인 */
-    .custom-scroll { overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
+    /* 🌟 스크롤바 작동 보장 설정 */
+    .custom-scroll { 
+        overflow-y: auto !important; 
+        -webkit-overflow-scrolling: touch; 
+        max-height: 100%; /* 부모 안에서만 높이 차지 */
+    }
     .custom-scroll::-webkit-scrollbar { width: 2px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
 
@@ -183,7 +187,7 @@
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
                 <div class="flex-1 overflow-y-auto custom-scroll pr-4">
-                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요.</p>
+                  <p class="text-[12px] leading-loose text-gray-500 text-target">내용을 입력하세요. 이제 첫 번째 게시판부터 스크롤이 정상 작동합니다.</p>
                 </div>
              </div>
           </div>
@@ -204,16 +208,10 @@
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V2';
+    /* 🌟 IndexedDB 저장 로직 */
+    const DB_NAME = 'GalleryStoreDB_Final_V5';
     const STORE_NAME = 'GalleryAssets';
-    function openDB() {
-      return new Promise((res, rej) => {
-        const req = indexedDB.open(DB_NAME, 1);
-        req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME);
-        req.onsuccess = (e) => res(e.target.result);
-        req.onerror = rej;
-      });
-    }
+    function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
     async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
@@ -225,17 +223,14 @@
     function triggerFileUpload(id) { currentImgId = id; fileInput.click(); }
 
     fileInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
+      const file = e.target.files[0]; if (!file) return;
       const reader = new FileReader();
       reader.onload = (ev) => {
         const img = new Image();
         img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX = 1000; let w = img.width, h = img.height;
+          const canvas = document.createElement('canvas'); const MAX = 1000; let w = img.width, h = img.height;
           if (w > h && w > MAX) { h *= MAX/w; w = MAX; } else if (h > w && h > MAX) { w *= MAX/h; h = MAX; }
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           const data = canvas.toDataURL('image/jpeg', 0.4);
           if (currentImgId === 'global-bg') {
             document.body.style.backgroundImage = `url(${data})`; document.body.style.backgroundSize = 'cover'; document.body.style.backgroundAttachment = 'fixed';
@@ -249,7 +244,7 @@
       reader.readAsDataURL(file);
     };
 
-    /* 🌟 탭 추가 시 스크롤 기능 강제 주입 로직 🌟 */
+    /* 🌟 모든 게시판 스크롤 기능 강제 주입 설계 */
     function addNewBoard() {
       const grid = document.getElementById('gallery-grid');
       const id = 'art-' + Date.now();
@@ -268,7 +263,9 @@
                     <button class="text-[8px] opacity-20" onclick="openTextEditor(this.closest('.flex-1'))">EDIT</button>
                 </div>
                 <h4 class="text-lg font-serif mb-6 mt-6 text-target shrink-0">[작품 제목]</h4>
-                <div class="flex-1 overflow-y-auto custom-scroll pr-4"><p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p></div>
+                <div class="flex-1 overflow-y-auto custom-scroll pr-4">
+                    <p class="text-[12px] leading-loose text-gray-500 text-target">내용 입력</p>
+                </div>
              </div>
           </div>
         </div>`;
@@ -301,17 +298,17 @@
         const txts = {}, stys = {}, imgs = {};
         document.querySelectorAll('.text-target').forEach((t, i) => { txts[i] = t.innerHTML; stys[i] = t.getAttribute('style') || ''; });
         document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; });
-        await dbSet('lay_v3', mainClone.innerHTML); await dbSet('menu_v3', menuLayout); await dbSet('txt_v3', txts); await dbSet('sty_v3', stys); await dbSet('img_v3', imgs);
-        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v3', document.getElementById('global-bg').src);
-        alert("✅ 모든 게시판의 스크롤 기능이 활성화된 채 저장되었습니다.");
+        await dbSet('lay_v5', mainClone.innerHTML); await dbSet('menu_v5', menuLayout); await dbSet('txt_v5', txts); await dbSet('sty_v5', stys); await dbSet('img_v5', imgs);
+        if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v5', document.getElementById('global-bg').src);
+        alert("✅ 모든 게시판의 스크롤 설정이 완벽하게 저장되었습니다.");
       } catch(e) { alert("⚠️ 저장 실패"); }
     }
 
     async function loadFromBrowser() {
-      const lay = await dbGet('lay_v3'); if(!lay) return;
+      const lay = await dbGet('lay_v5'); if(!lay) return;
       document.getElementById('main-content').innerHTML = lay;
-      const menuLay = await dbGet('menu_v3'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
-      const txts = await dbGet('txt_v3'), stys = await dbGet('sty_v3'), imgs = await dbGet('img_v3'), bg = await dbGet('bg_v3');
+      const menuLay = await dbGet('menu_v5'); if(menuLay) document.getElementById('menu-list').innerHTML = menuLay;
+      const txts = await dbGet('txt_v5'), stys = await dbGet('sty_v5'), imgs = await dbGet('img_v5'), bg = await dbGet('bg_v5');
       document.querySelectorAll('.text-target').forEach((t, i) => { if(txts && txts[i]) t.innerHTML = txts[i]; if(stys && stys[i]) t.setAttribute('style', stys[i]); });
       if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } });
       if(bg) { document.body.style.backgroundImage = `url(${bg})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; }
