@@ -23,7 +23,7 @@
   </script>
   
   <style data-purpose="custom-styles">
-    /* 🌟 [GPT/클로드 해결: 5457, 5469] 모바일 스크롤 영역 인식 오류 해결 */
+    /* 🌟 [GPT/클로드 해결] 모바일 스크롤 영역 인식 오류 해결 */
     html, body {
       height: 100% !important;
       min-height: 100% !important;
@@ -31,6 +31,7 @@
       overflow-y: auto !important;
       background-color: #d0e4e0;
       margin: 0; padding: 0;
+      scroll-behavior: smooth;
     }
 
     body {
@@ -39,7 +40,7 @@
       min-height: 150vh; 
     }
 
-    /* 🌟 [GPT 해결: 5469] margin-top 방식으로 스크롤 영역 확보 */
+    /* 🌟 [GPT 해결] margin-top 방식으로 스크롤 영역 확보 */
     .main-wrapper {
       margin-top: 65vh !important;
       position: relative;
@@ -49,6 +50,7 @@
 
     header { z-index: 99999 !important; position: fixed; top: 0; left: 0; right: 0; background: transparent; }
 
+    /* 버튼 디자인 유지 */
     .minimal-btn {
       width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
       border-radius: 999px; font-size: 0.75rem; color: rgba(26, 65, 66, 0.4);
@@ -60,18 +62,21 @@
     .minimal-btn:hover { width: 100px; color: rgba(26, 65, 66, 0.8); background: rgba(255, 255, 255, 0.6); }
     .minimal-btn:hover span { width: auto; opacity: 1; margin-left: 4px; }
 
-    /* 🌟 [핵심] 주홍빛 + 은빛 필기체 타이틀 디자인 */
+    /* 🌟 [핵심수정] 주홍빛 + 은빛 필기체 메인 타이틀 디자인 */
     #intro-main-title {
         font-family: 'Whisper', cursive !important;
         color: #FF7F50 !important; 
-        text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 0px 0px 10px rgba(192,192,192,0.4) !important;
-        font-size: 3.5rem !important; line-height: 1.1; display: block;
-        transition: all 0.3s ease;
+        text-shadow: 1px 1px 0px rgba(255,255,255,0.8), 0px 0px 15px rgba(192,192,192,0.4) !important;
+        font-size: 3.8rem !important; 
+        line-height: 1; 
+        display: block;
+        margin-bottom: 2rem;
+        word-break: keep-all;
     }
 
-    /* 상단 헤더 타이틀 스타일 (연동 대상) */
+    /* 상단 헤더 타이틀 (실시간 동기화 대상) */
     #header-title {
-        font-size: 11px; tracking: 0.4em; font-weight: bold; opacity: 0.6; color: #3A4B7C !important;
+        font-size: 11px; letter-spacing: 0.4em; font-weight: bold; opacity: 0.6; color: #3A4B7C !important;
         text-transform: uppercase;
     }
 
@@ -89,14 +94,11 @@
     }
     .desc-panel .text-target { color: #C9B078 !important; font-weight: 300 !important; text-shadow: none !important; }
 
-    /* 검색 하이라이트 */
+    /* 하이라이트 및 자세히 보기 */
     .search-highlight { background-color: rgba(255, 215, 0, 0.6); color: #000 !important; border-radius: 2px; }
-
-    /* 자세히 보기 로직 */
     .line-clamp-folded { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .view-more-btn { color: #C9B078; font-size: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; text-decoration: underline; opacity: 0.7; }
 
-    /* 카드 레이아웃 */
     .gallery-item { transition: all 0.5s ease; min-height: 450px; height: 450px; overflow: hidden; scroll-margin-top: 120px; }
     .slide-panel { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; position: absolute; top:0; right:0; width:100%; }
     .slide-hide { transform: translateX(calc(100% - 2.5rem)); }
@@ -141,13 +143,15 @@
     <section class="mb-24">
       <div class="glass-panel rounded-[3rem] p-16 relative flex flex-col items-center text-center mx-auto max-w-xl group" id="main-desc-box">
         <div class="absolute top-8 right-10 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="text-[10px] opacity-40 hover:opacity-100 font-bold tracking-tighter" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
+          <button class="text-[10px] opacity-40 hover:opacity-100 font-bold" onclick="openTextEditor(this.closest('#main-desc-box'))">EDIT</button>
         </div>
-        <h2 id="intro-main-title" class="mb-10 text-target searchable" data-origin="FINE ARTS">FINE ARTS</h2>
+        
+        <h2 id="intro-main-title" class="searchable" data-origin="FINE ARTS">FINE ARTS</h2>
+        
         <div class="w-12 h-[1px] bg-black/5 mb-12"></div>
         <div class="w-full px-4">
             <div class="text-container line-clamp-folded">
-              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">이곳의 제목을 수정하면 상단 헤더 타이틀도 함께 바뀝니다. 필기체와 주홍빛 디자인이 적용되었습니다.</p>
+              <p class="text-[14px] leading-relaxed text-target opacity-80 searchable">지피티와 클로드의 최종 수술로 타이틀 동기화와 편집 오류가 완벽하게 해결되었습니다. 이제 제목을 바꾸면 헤더도 함께 바뀝니다.</p>
             </div>
             <button class="view-more-btn" onclick="toggleViewMore(this)">자세히 보기</button>
         </div>
@@ -162,7 +166,7 @@
           </div>
           <div class="absolute top-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-all">
              <div class="flex space-x-3"><button class="text-[9px] font-bold opacity-40 hover:opacity-100" onclick="triggerFileUpload('art-1')">PHOTO</button>
-             <button class="text-[9px] font-bold opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
+             <button class="text-[9px] font-bold tracking-widest opacity-20 text-red-500" onclick="deleteElement(this.closest('.gallery-item'))">DEL</button></div>
           </div>
           <div class="slide-panel absolute inset-0 w-full flex z-10 slide-hide">
              <div class="w-10 h-full flex items-center justify-center cursor-pointer bg-black/5 rounded-l-[2rem]" onclick="toggleSlide(this)"><div class="w-[1px] h-8 bg-black/20"></div></div>
@@ -178,25 +182,25 @@
     </section>
   </main>
 
-  <div id="text-editor-modal" class="fixed inset-0 hidden items-center justify-center bg-black/30 backdrop-blur-md z-[200000] px-6">
+  <div id="text-editor-modal" class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-md z-[200000] px-6">
     <div class="bg-white w-full max-w-md p-10 rounded-[3rem] shadow-2xl pointer-events-auto">
-      <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest">EDIT CONTENT</h3>
-      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black"></textarea>
+      <h3 class="text-sm font-bold mb-8 opacity-40 tracking-widest text-black">EDIT CONTENT</h3>
+      <textarea id="modal-textarea" class="w-full h-64 p-4 border border-gray-100 focus:ring-0 resize-none font-serif text-sm leading-relaxed text-black" placeholder="첫 줄은 제목, 다음 줄부터 본문입니다."></textarea>
       <div class="flex justify-end space-x-6 mt-10">
-        <button class="text-xs opacity-30" onclick="closeTextEditor()">CANCEL</button>
+        <button class="text-xs opacity-30 text-black" onclick="closeTextEditor()">CANCEL</button>
         <button class="text-xs font-bold text-galleryGold" onclick="saveTextChanges()">APPLY</button>
       </div>
     </div>
   </div>
 
   <script>
-    const DB_NAME = 'GalleryStoreDB_Final_V51';
+    const DB_NAME = 'GalleryStoreDB_Final_V52';
     const STORE_NAME = 'GalleryAssets';
     function openDB() { return new Promise((res, rej) => { const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); req.onsuccess = (e) => res(e.target.result); req.onerror = rej; }); }
     async function dbSet(k, v) { const db = await openDB(); const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(v, k); }
     async function dbGet(k) { const db = await openDB(); return new Promise(res => { const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).get(k); req.onsuccess = () => res(req.result); }); }
 
-    // 🌟 [기능] 상단 헤더와 소개글 제목 동기화 로직
+    // 🌟 [기능] 실시간 타이틀 동기화
     function syncTitles() {
         const introTitle = document.getElementById('intro-main-title').innerText;
         document.getElementById('header-title').innerText = introTitle;
@@ -308,15 +312,14 @@
         t.innerText = newText;
         t.setAttribute('data-origin', newText);
       });
-      syncTitles(); // 🌟 수정 후 상단 타이틀 즉시 동기화
+      syncTitles(); // 🌟 제목 수정 후 헤더 즉시 연동
       performSearch(false); closeTextEditor();
     }
 
     function deleteElement(el) { if(confirm('Delete?')) el.remove(); }
-    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v51', mainClone.innerHTML); await dbSet('txt_v51', txts); await dbSet('img_v51', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v51', document.getElementById('global-bg').src); alert("✅ 타이틀 연동 및 필기체 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
-    async function loadFromBrowser() { const lay = await dbGet('lay_v51'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v51'), imgs = await dbGet('img_v51'), bg = await dbGet('bg_v51'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
+    async function saveToBrowser() { try { const mainClone = document.getElementById('main-content').cloneNode(true); mainClone.querySelectorAll('img').forEach(img => { if(img.src.startsWith('data:image')) img.src = ''; }); const txts = {}; document.querySelectorAll('.searchable').forEach((t, i) => { txts[i] = t.hasAttribute('data-origin') ? t.getAttribute('data-origin') : t.innerHTML; }); const imgs = {}; document.querySelectorAll('img').forEach(img => { if(img.id && img.src.startsWith('data:image')) imgs[img.id] = img.src; }); await dbSet('lay_v52', mainClone.innerHTML); await dbSet('txt_v52', txts); await dbSet('img_v52', imgs); if(document.getElementById('global-bg').src.startsWith('data:image')) await dbSet('bg_v52', document.getElementById('global-bg').src); alert("✅ 타이틀 연동 및 편집 버그 해결 버전이 저장되었습니다."); } catch(e) { alert("⚠️ 저장 실패"); } }
+    async function loadFromBrowser() { const lay = await dbGet('lay_v52'); if(!lay) return; document.getElementById('main-content').innerHTML = lay; const txts = await dbGet('txt_v52'), imgs = await dbGet('img_v52'), bg = await dbGet('bg_v52'); document.querySelectorAll('.searchable').forEach((t, i) => { if(txts && txts[i]) { t.innerText = txts[i]; t.setAttribute('data-origin', txts[i]); } }); syncTitles(); if(imgs) Object.keys(imgs).forEach(id => { const el = document.getElementById(id); if(el) { el.src = imgs[id]; el.style.opacity="1"; } }); if(bg) { document.getElementById('global-bg').src=bg; document.getElementById('global-bg').style.display='block'; document.body.style.backgroundImage = `url(${bg})`; } }
     window.onload = loadFromBrowser;
   </script>
 </body>
 </html>
-
